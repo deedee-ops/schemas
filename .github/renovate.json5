@@ -33,7 +33,7 @@
     {
       "description": "bjw-s app-template",
       "fileMatch": [
-        "bjw-s.io/apptemplate.json"
+        "custom/bjw-s-apptemplate.json"
       ],
       "matchStrings": [
         "https://raw\\.githubusercontent\\.com/(?<depName>\\S+)/common-(?<currentValue>\\d+\\.\\d+\\.\\d+)"
