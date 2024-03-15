@@ -11,9 +11,6 @@
     ":automergeBranch",
     "helpers:pinGitHubActionDigests"
   ],
-  "platform": "github",
-  "onboarding": false,
-  "requireConfig": "optional",
   "suppressNotifications": ["prIgnoreNotification"],
   "rebaseWhen": "conflicted",
   "commitBodyTable": true,
@@ -26,6 +23,24 @@
       "ignoreTests": true,
       "automergeType": "branch",
       "matchUpdateTypes": ["minor", "patch"]
+    }, {
+      "description": "Auto merge minor versions",
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true,
+    }
+  ],
+  "regexManagers": [
+    {
+      "description": "bjw-s app-template",
+      "fileMatch": [
+        "bjw-s.io/apptemplate.json"
+      ],
+      "matchStrings": [
+        "https://raw\\.githubusercontent\\.com/(?<depName>\\S+)/common-(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "github-tags",
+      "versioningTemplate": "semver-coerced",
+      "extractVersionTemplate": "^common-?(?<version>.*)$"
     }
   ]
 }
