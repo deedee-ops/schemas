@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+set -e
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 # Create temp folder for CRDs
 TMP_CRD_DIR=$HOME/.datree/crds
 mkdir -p "$TMP_CRD_DIR"
@@ -37,7 +41,7 @@ if [ $NUM_OF_CRDS == 0 ]; then
 fi
 
 # Convert crds to jsonSchema
-python3 /opt/openapi2jsonschema.py "$TMP_CRD_DIR"/*.yaml
+python3 "${SCRIPT_DIR}/openapi2jsonschema.py" "$TMP_CRD_DIR"/*.yaml
 conversionResult=$?
 
 # Copy and rename files to support kubeval
@@ -60,4 +64,3 @@ if [ $conversionResult == 0 ]; then
 fi
 
 rm -rf "$TMP_CRD_DIR"
-chown -R "$PUID:$PGID" /crds

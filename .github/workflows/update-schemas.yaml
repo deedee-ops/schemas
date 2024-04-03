@@ -1,0 +1,59 @@
+# yamllint disable rule:comments
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Update schemas"
+
+'on':
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  render-readme:
+    name: Update schemas
+    runs-on: gha-runner-scale-set
+    steps:
+      - name: Generate Token
+        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        id: generate-token
+        with:
+          app_id: "${{ secrets.BOT_APP_ID }}"
+          private_key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      # Custom action image doesn't have git, so checkout action will download repo via api,
+      # which means `.git` will be missing, which means commmit action later in the chain will fail.
+      # To avoid that, let's install git beforehead.
+      - name: Install git
+        run: |
+          sudo apt-get update && sudo apt-get install --yes --no-install-recommends git
+
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          token: "${{ steps.generate-token.outputs.token }}"
+
+      - name: Setup Python
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
+        with:
+          python-version: '3.11'
+          cache: 'pip'  # caching pip dependencies
+
+      - name: Install Requirements
+        run: |
+          pip install -r ./.github/scripts/requirements.txt && pip freeze
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@3e0aec4d80787158d308d7b364cb1b702e7feb7f # v4.0.0
+
+      - name: Refresh schemas
+        run: |
+          ./.github/scripts/crd-extractor.sh
+
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@8756aa072ef5b4a080af5dc8fef36c5d586e521d # v5.0.0
+        with:
+          commit_message: "feat: update schemas"
+          commit_user_name: "RoboDexo2000[bot]"
+          commit_user_email: "150604236+RoboDexo2000[bot]@users.noreply.github.com"
+          commit_author: "RoboDexo2000 <150604236+RoboDexo2000[bot]@users.noreply.github.com>"
+# yamllint enable rule:comments
