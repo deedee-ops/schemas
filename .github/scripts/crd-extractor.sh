@@ -60,6 +60,7 @@ if [ $ORGANIZE_BY_GROUP == true ]; then
 fi
 
 if [ $conversionResult == 0 ]; then
+    cp -r "${SCHEMAS_DIR}"/* "${SCRIPT_DIR}/../.."
     printf "Succesfully converted %s CRDs to JSON schema\n" "${NUM_OF_CRDS}"
 fi
 
