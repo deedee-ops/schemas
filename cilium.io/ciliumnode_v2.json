@@ -96,6 +96,10 @@
           "type": "object",
           "additionalProperties": false
         },
+        "bootid": {
+          "description": "BootID is a unique node identifier generated on boot",
+          "type": "string"
+        },
         "encryption": {
           "description": "Encryption is the encryption configuration of the node.",
           "properties": {

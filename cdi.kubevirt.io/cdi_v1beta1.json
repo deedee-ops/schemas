@@ -152,7 +152,7 @@
               "description": "ResourceRequirements describes the compute resource requirements.",
               "properties": {
                 "claims": {
-                  "description": "Claims lists the names of resources, defined in spec.resourceClaims, that are used by this container. \n This is an alpha field and requires enabling the DynamicResourceAllocation feature gate. \n This field is immutable.",
+                  "description": "Claims lists the names of resources, defined in spec.resourceClaims, that are used by this container. \n This is an alpha field and requires enabling the DynamicResourceAllocation feature gate. \n This field is immutable. It can only be set for containers.",
                   "items": {
                     "description": "ResourceClaim references one entry in PodSpec.ResourceClaims.",
                     "properties": {
@@ -202,7 +202,7 @@
                     "pattern": "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
                     "x-kubernetes-int-or-string": true
                   },
-                  "description": "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+                  "description": "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
                   "type": "object"
                 }
               },
@@ -282,6 +282,70 @@
           "type": "object",
           "additionalProperties": false
         },
+        "customizeComponents": {
+          "description": "CustomizeComponents defines patches for components deployed by the CDI operator.",
+          "properties": {
+            "flags": {
+              "description": "Configure the value used for deployment and daemonset resources",
+              "properties": {
+                "api": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "controller": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "uploadProxy": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object",
+              "additionalProperties": false
+            },
+            "patches": {
+              "items": {
+                "description": "CustomizeComponentsPatch defines a patch for some resource.",
+                "properties": {
+                  "patch": {
+                    "type": "string"
+                  },
+                  "resourceName": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "resourceType": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": {
+                    "description": "PatchType defines the patch type.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "patch",
+                  "resourceName",
+                  "resourceType",
+                  "type"
+                ],
+                "type": "object",
+                "additionalProperties": false
+              },
+              "type": "array",
+              "x-kubernetes-list-type": "atomic"
+            }
+          },
+          "type": "object",
+          "additionalProperties": false
+        },
         "imagePullPolicy": {
           "description": "PullPolicy describes a policy for if/when to pull a container image",
           "enum": [
@@ -292,7 +356,7 @@
           "type": "string"
         },
         "infra": {
-          "description": "Rules on which nodes CDI infrastructure pods will be scheduled",
+          "description": "Selectors and tolerations that should apply to cdi infrastructure components",
           "properties": {
             "affinity": {
               "description": "affinity enables pod affinity/anti-affinity placement expanding the types of constraints that can be expressed with nodeSelector. affinity is going to be applied to the relevant kind of pods in parallel with nodeSelector See https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity",
@@ -985,6 +1049,16 @@
               "type": "object",
               "additionalProperties": false
             },
+            "apiServerReplicas": {
+              "description": "ApiserverReplicas set Replicas for cdi-apiserver",
+              "format": "int32",
+              "type": "integer"
+            },
+            "deploymentReplicas": {
+              "description": "DeploymentReplicas set Replicas for cdi-deployment",
+              "format": "int32",
+              "type": "integer"
+            },
             "nodeSelector": {
               "additionalProperties": {
                 "type": "string"
@@ -1023,6 +1097,11 @@
                 "additionalProperties": false
               },
               "type": "array"
+            },
+            "uploadProxyReplicas": {
+              "description": "UploadproxyReplicas set Replicas for cdi-uploadproxy",
+              "format": "int32",
+              "type": "integer"
             }
           },
           "type": "object",

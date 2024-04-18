@@ -2,11 +2,11 @@
   "description": "CephFilesystemSubVolumeGroup represents a Ceph Filesystem SubVolumeGroup",
   "properties": {
     "apiVersion": {
-      "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+      "description": "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
       "type": "string"
     },
     "kind": {
-      "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+      "description": "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
       "type": "string"
     },
     "metadata": {
@@ -15,8 +15,12 @@
     "spec": {
       "description": "Spec represents the specification of a Ceph Filesystem SubVolumeGroup",
       "properties": {
+        "dataPoolName": {
+          "description": "The data pool name for the Ceph Filesystem subvolume group layout, if the default CephFS pool is not desired.",
+          "type": "string"
+        },
         "filesystemName": {
-          "description": "FilesystemName is the name of Ceph Filesystem SubVolumeGroup volume name. Typically it's the name of the CephFilesystem CR. If not coming from the CephFilesystem CR, it can be retrieved from the list of Ceph Filesystem volumes with `ceph fs volume ls`. To learn more about Ceph Filesystem abstractions see https://docs.ceph.com/en/latest/cephfs/fs-volumes/#fs-volumes-and-subvolumes",
+          "description": "FilesystemName is the name of Ceph Filesystem SubVolumeGroup volume name. Typically it's the name of\nthe CephFilesystem CR. If not coming from the CephFilesystem CR, it can be retrieved from the\nlist of Ceph Filesystem volumes with `ceph fs volume ls`. To learn more about Ceph Filesystem\nabstractions see https://docs.ceph.com/en/latest/cephfs/fs-volumes/#fs-volumes-and-subvolumes",
           "type": "string",
           "x-kubernetes-validations": [
             {
@@ -36,7 +40,7 @@
           ]
         },
         "pinning": {
-          "description": "Pinning configuration of CephFilesystemSubVolumeGroup, reference https://docs.ceph.com/en/latest/cephfs/fs-volumes/#pinning-subvolumes-and-subvolume-groups only one out of (export, distributed, random) can be set at a time",
+          "description": "Pinning configuration of CephFilesystemSubVolumeGroup,\nreference https://docs.ceph.com/en/latest/cephfs/fs-volumes/#pinning-subvolumes-and-subvolume-groups\nonly one out of (export, distributed, random) can be set at a time",
           "properties": {
             "distributed": {
               "maximum": 1,
@@ -65,6 +69,19 @@
             }
           ],
           "additionalProperties": false
+        },
+        "quota": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Quota size of the Ceph Filesystem subvolume group.",
+          "pattern": "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+          "x-kubernetes-int-or-string": true
         }
       },
       "required": [
