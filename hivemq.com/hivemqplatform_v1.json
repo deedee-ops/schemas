@@ -785,6 +785,18 @@
                                             "type": "object",
                                             "additionalProperties": false
                                           },
+                                          "matchLabelKeys": {
+                                            "items": {
+                                              "type": "string"
+                                            },
+                                            "type": "array"
+                                          },
+                                          "mismatchLabelKeys": {
+                                            "items": {
+                                              "type": "string"
+                                            },
+                                            "type": "array"
+                                          },
                                           "namespaceSelector": {
                                             "properties": {
                                               "matchExpressions": {
@@ -875,6 +887,18 @@
                                         },
                                         "type": "object",
                                         "additionalProperties": false
+                                      },
+                                      "matchLabelKeys": {
+                                        "items": {
+                                          "type": "string"
+                                        },
+                                        "type": "array"
+                                      },
+                                      "mismatchLabelKeys": {
+                                        "items": {
+                                          "type": "string"
+                                        },
+                                        "type": "array"
                                       },
                                       "namespaceSelector": {
                                         "properties": {
@@ -968,6 +992,18 @@
                                             "type": "object",
                                             "additionalProperties": false
                                           },
+                                          "matchLabelKeys": {
+                                            "items": {
+                                              "type": "string"
+                                            },
+                                            "type": "array"
+                                          },
+                                          "mismatchLabelKeys": {
+                                            "items": {
+                                              "type": "string"
+                                            },
+                                            "type": "array"
+                                          },
                                           "namespaceSelector": {
                                             "properties": {
                                               "matchExpressions": {
@@ -1058,6 +1094,18 @@
                                         },
                                         "type": "object",
                                         "additionalProperties": false
+                                      },
+                                      "matchLabelKeys": {
+                                        "items": {
+                                          "type": "string"
+                                        },
+                                        "type": "array"
+                                      },
+                                      "mismatchLabelKeys": {
+                                        "items": {
+                                          "type": "string"
+                                        },
+                                        "type": "array"
                                       },
                                       "namespaceSelector": {
                                         "properties": {
@@ -1318,6 +1366,15 @@
                                         "type": "object",
                                         "additionalProperties": false
                                       },
+                                      "sleep": {
+                                        "properties": {
+                                          "seconds": {
+                                            "type": "integer"
+                                          }
+                                        },
+                                        "type": "object",
+                                        "additionalProperties": false
+                                      },
                                       "tcpSocket": {
                                         "properties": {
                                           "host": {
@@ -1392,6 +1449,15 @@
                                           },
                                           "scheme": {
                                             "type": "string"
+                                          }
+                                        },
+                                        "type": "object",
+                                        "additionalProperties": false
+                                      },
+                                      "sleep": {
+                                        "properties": {
+                                          "seconds": {
+                                            "type": "integer"
                                           }
                                         },
                                         "type": "object",
@@ -2241,6 +2307,15 @@
                                         "type": "object",
                                         "additionalProperties": false
                                       },
+                                      "sleep": {
+                                        "properties": {
+                                          "seconds": {
+                                            "type": "integer"
+                                          }
+                                        },
+                                        "type": "object",
+                                        "additionalProperties": false
+                                      },
                                       "tcpSocket": {
                                         "properties": {
                                           "host": {
@@ -2315,6 +2390,15 @@
                                           },
                                           "scheme": {
                                             "type": "string"
+                                          }
+                                        },
+                                        "type": "object",
+                                        "additionalProperties": false
+                                      },
+                                      "sleep": {
+                                        "properties": {
+                                          "seconds": {
+                                            "type": "integer"
                                           }
                                         },
                                         "type": "object",
@@ -3173,6 +3257,15 @@
                                         "type": "object",
                                         "additionalProperties": false
                                       },
+                                      "sleep": {
+                                        "properties": {
+                                          "seconds": {
+                                            "type": "integer"
+                                          }
+                                        },
+                                        "type": "object",
+                                        "additionalProperties": false
+                                      },
                                       "tcpSocket": {
                                         "properties": {
                                           "host": {
@@ -3247,6 +3340,15 @@
                                           },
                                           "scheme": {
                                             "type": "string"
+                                          }
+                                        },
+                                        "type": "object",
+                                        "additionalProperties": false
+                                      },
+                                      "sleep": {
+                                        "properties": {
+                                          "seconds": {
+                                            "type": "integer"
                                           }
                                         },
                                         "type": "object",
@@ -4570,18 +4672,6 @@
                                           },
                                           "resources": {
                                             "properties": {
-                                              "claims": {
-                                                "items": {
-                                                  "properties": {
-                                                    "name": {
-                                                      "type": "string"
-                                                    }
-                                                  },
-                                                  "type": "object",
-                                                  "additionalProperties": false
-                                                },
-                                                "type": "array"
-                                              },
                                               "limits": {
                                                 "additionalProperties": {
                                                   "anyOf": [
@@ -4648,6 +4738,9 @@
                                             "additionalProperties": false
                                           },
                                           "storageClassName": {
+                                            "type": "string"
+                                          },
+                                          "volumeAttributesClassName": {
                                             "type": "string"
                                           },
                                           "volumeMode": {
@@ -4910,6 +5003,57 @@
                                   "sources": {
                                     "items": {
                                       "properties": {
+                                        "clusterTrustBundle": {
+                                          "properties": {
+                                            "labelSelector": {
+                                              "properties": {
+                                                "matchExpressions": {
+                                                  "items": {
+                                                    "properties": {
+                                                      "key": {
+                                                        "type": "string"
+                                                      },
+                                                      "operator": {
+                                                        "type": "string"
+                                                      },
+                                                      "values": {
+                                                        "items": {
+                                                          "type": "string"
+                                                        },
+                                                        "type": "array"
+                                                      }
+                                                    },
+                                                    "type": "object",
+                                                    "additionalProperties": false
+                                                  },
+                                                  "type": "array"
+                                                },
+                                                "matchLabels": {
+                                                  "additionalProperties": {
+                                                    "type": "string"
+                                                  },
+                                                  "type": "object"
+                                                }
+                                              },
+                                              "type": "object",
+                                              "additionalProperties": false
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "optional": {
+                                              "type": "boolean"
+                                            },
+                                            "path": {
+                                              "type": "string"
+                                            },
+                                            "signerName": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "type": "object",
+                                          "additionalProperties": false
+                                        },
                                         "configMap": {
                                           "properties": {
                                             "items": {
@@ -5440,18 +5584,6 @@
                           },
                           "resources": {
                             "properties": {
-                              "claims": {
-                                "items": {
-                                  "properties": {
-                                    "name": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "type": "object",
-                                  "additionalProperties": false
-                                },
-                                "type": "array"
-                              },
                               "limits": {
                                 "additionalProperties": {
                                   "anyOf": [
@@ -5518,6 +5650,9 @@
                             "additionalProperties": false
                           },
                           "storageClassName": {
+                            "type": "string"
+                          },
+                          "volumeAttributesClassName": {
                             "type": "string"
                           },
                           "volumeMode": {
@@ -5599,6 +5734,21 @@
                             },
                             "type": "array"
                           },
+                          "currentVolumeAttributesClassName": {
+                            "type": "string"
+                          },
+                          "modifyVolumeStatus": {
+                            "properties": {
+                              "status": {
+                                "type": "string"
+                              },
+                              "targetVolumeAttributesClassName": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object",
+                            "additionalProperties": false
+                          },
                           "phase": {
                             "type": "string"
                           }
@@ -5629,7 +5779,8 @@
         "crdVersion": {
           "description": "The CRD version this custom resource was created with",
           "enum": [
-            "V1_2_0"
+            "V1_2_0",
+            "V1_3_0"
           ],
           "type": "string"
         },
