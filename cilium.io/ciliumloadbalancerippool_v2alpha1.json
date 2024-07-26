@@ -44,27 +44,6 @@
           },
           "type": "array"
         },
-        "cidrs": {
-          "description": "Cidrs is a list of CIDRs comprising this IP Pool Deprecated: please use the `blocks` field instead. This field will be removed in a future release. https://github.com/cilium/cilium/issues/28590",
-          "items": {
-            "description": "CiliumLoadBalancerIPPoolIPBlock describes a single IP block.",
-            "properties": {
-              "cidr": {
-                "format": "cidr",
-                "type": "string"
-              },
-              "start": {
-                "type": "string"
-              },
-              "stop": {
-                "type": "string"
-              }
-            },
-            "type": "object",
-            "additionalProperties": false
-          },
-          "type": "array"
-        },
         "disabled": {
           "default": false,
           "description": "Disabled, if set to true means that no new IPs will be allocated from this pool. Existing allocations will not be removed from services.",
@@ -97,7 +76,8 @@
                     "items": {
                       "type": "string"
                     },
-                    "type": "array"
+                    "type": "array",
+                    "x-kubernetes-list-type": "atomic"
                   }
                 },
                 "required": [
@@ -107,7 +87,8 @@
                 "type": "object",
                 "additionalProperties": false
               },
-              "type": "array"
+              "type": "array",
+              "x-kubernetes-list-type": "atomic"
             },
             "matchLabels": {
               "additionalProperties": {
