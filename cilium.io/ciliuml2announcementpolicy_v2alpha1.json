@@ -57,8 +57,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "type": "array",
-                    "x-kubernetes-list-type": "atomic"
+                    "type": "array"
                   }
                 },
                 "required": [
@@ -68,8 +67,7 @@
                 "type": "object",
                 "additionalProperties": false
               },
-              "type": "array",
-              "x-kubernetes-list-type": "atomic"
+              "type": "array"
             },
             "matchLabels": {
               "additionalProperties": {
@@ -112,8 +110,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "type": "array",
-                    "x-kubernetes-list-type": "atomic"
+                    "type": "array"
                   }
                 },
                 "required": [
@@ -123,8 +120,7 @@
                 "type": "object",
                 "additionalProperties": false
               },
-              "type": "array",
-              "x-kubernetes-list-type": "atomic"
+              "type": "array"
             },
             "matchLabels": {
               "additionalProperties": {
