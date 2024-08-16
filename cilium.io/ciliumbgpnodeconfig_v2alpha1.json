@@ -226,17 +226,13 @@
           "x-kubernetes-list-type": "map"
         }
       },
-      "required": [
-        "bgpInstances"
-      ],
       "type": "object",
       "additionalProperties": false
     }
   },
   "required": [
     "metadata",
-    "spec",
-    "status"
+    "spec"
   ],
   "type": "object"
 }
