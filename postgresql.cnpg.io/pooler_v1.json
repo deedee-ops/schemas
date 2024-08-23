@@ -301,6 +301,10 @@
                   },
                   "description": "Map of string keys and values that can be used to organize and categorize\n(scope and select) objects. May match selectors of replication controllers\nand services.\nMore info: http://kubernetes.io/docs/user-guide/labels",
                   "type": "object"
+                },
+                "name": {
+                  "description": "The name of the resource. Only supported for certain types",
+                  "type": "string"
                 }
               },
               "type": "object",
@@ -503,6 +507,10 @@
                   },
                   "description": "Map of string keys and values that can be used to organize and categorize\n(scope and select) objects. May match selectors of replication controllers\nand services.\nMore info: http://kubernetes.io/docs/user-guide/labels",
                   "type": "object"
+                },
+                "name": {
+                  "description": "The name of the resource. Only supported for certain types",
+                  "type": "string"
                 }
               },
               "type": "object",
