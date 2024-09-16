@@ -4,6 +4,6 @@
   "type": "object",
   "additionalProperties": {
     "type": "object",
-    "$ref": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.2.1/charts/library/common/values.schema.json"
+    "$ref": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.4.0/charts/library/common/values.schema.json"
   }
 }
