@@ -542,8 +542,6 @@
         }
       },
       "required": [
-        "dataPool",
-        "metadataPool",
         "zoneGroup"
       ],
       "type": "object",
