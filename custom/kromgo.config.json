@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/kashalls/kromgo/cmd/kromgo/init/configuration/kromgo-config",
+  "$ref": "#/$defs/KromgoConfig",
+  "$defs": {
+    "Badge": {
+      "properties": {
+        "font": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "font",
+        "size"
+      ]
+    },
+    "KromgoConfig": {
+      "properties": {
+        "prometheus": {
+          "type": "string"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "#/$defs/Metric"
+          },
+          "type": "array"
+        },
+        "badge": {
+          "$ref": "#/$defs/Badge"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "metrics"
+      ]
+    },
+    "Metric": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "query": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "suffix": {
+          "type": "string"
+        },
+        "colors": {
+          "items": {
+            "$ref": "#/$defs/MetricColor"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "query"
+      ]
+    },
+    "MetricColor": {
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "color": {
+          "type": "string"
+        },
+        "valueOverride": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "min",
+        "max"
+      ]
+    }
+  }
+}
