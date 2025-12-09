@@ -1,0 +1,2803 @@
+{
+  "type": "object",
+  "required": [
+    "repositories"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "constants": {
+      "type": "object",
+      "description": "Constants to use in the configuration file. Within option values,\nall occurrences of the constant name in curly braces will be\nreplaced with the constant value. For example, if you have a\nconstant named \"app_name\" with the value \"myapp\", then the string\n\"{app_name}\" will be replaced with \"myapp\" in the configuration\nfile.\n",
+      "example": {
+        "app_name": "myapp",
+        "user": "myuser"
+      }
+    },
+    "source_directories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of source directories and files to back up. Globs and tildes\nare expanded. Do not backslash spaces in path names. Be aware that\nby default, Borg treats missing source directories as warnings\nrather than errors. If you'd like to change that behavior, see\nhttps://torsion.org/borgmatic/how-to/customize-warnings-and-errors/\nor the \"source_directories_must_exist\" option.\n",
+      "example": [
+        "/home",
+        "/etc",
+        "/var/log/syslog*",
+        "/home/user/path with spaces"
+      ]
+    },
+    "source_directories_must_exist": {
+      "type": "boolean",
+      "description": "If true, then source directories (and root pattern paths) must\nexist. If they don't, an error is raised. Defaults to false.\n",
+      "example": true
+    },
+    "repositories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "The local path or Borg URL of the repository.",
+            "example": "ssh://user@backupserver/./sourcehostname.borg"
+          },
+          "label": {
+            "type": "string",
+            "description": "An optional label for the repository, used in logging\nand to make selecting the repository easier on the\ncommand-line.\n",
+            "example": "backupserver"
+          },
+          "encryption": {
+            "type": "string",
+            "description": "The encryption mode with which to create the repository,\nonly used for the repo-create action. To see the\navailable encryption modes, run \"borg init --help\" with\nBorg 1 or \"borg repo-create --help\" with Borg 2.\n",
+            "example": "repokey-blake2"
+          },
+          "append_only": {
+            "type": "boolean",
+            "description": "Whether the repository should be created append-only,\nonly used for the repo-create action. Defaults to false.\n",
+            "example": true
+          },
+          "storage_quota": {
+            "type": "string",
+            "description": "The storage quota with which to create the repository,\nonly used for the repo-create action. Defaults to no\nquota.\n",
+            "example": "5G"
+          },
+          "make_parent_directories": {
+            "type": "boolean",
+            "description": "Whether any missing parent directories of the repository\npath should be created, only used for the repo-create\naction. Defaults to false. (This option is supported \nfor Borg 1.x only.)\n",
+            "example": true
+          }
+        }
+      },
+      "description": "A required list of local or remote repositories with paths and\noptional labels (which can be used with the --repository flag to\nselect a repository). Tildes are expanded. Multiple repositories are\nbacked up to in sequence. Borg placeholders can be used. See the\noutput of \"borg help placeholders\" for details. See ssh_command for\nSSH options like identity file or port. If systemd service is used,\nthen add local repository paths in the systemd service file to the\nReadWritePaths list.\n",
+      "example": [
+        {
+          "path": "ssh://user@backupserver/./sourcehostname.borg",
+          "label": "backupserver"
+        },
+        {
+          "path": "/mnt/backup",
+          "label": "local"
+        }
+      ]
+    },
+    "working_directory": {
+      "type": "string",
+      "description": "Working directory to use when running actions, useful for backing up\nusing relative source directory paths. Does not currently apply to\nborgmatic configuration file paths or includes. Tildes are expanded.\nSee http://borgbackup.readthedocs.io/en/stable/usage/create.html for\ndetails. Defaults to not set.\n",
+      "example": "/path/to/working/directory"
+    },
+    "one_file_system": {
+      "type": "boolean",
+      "description": "Stay in same file system; do not cross mount points beyond the given\nsource directories. Defaults to false.\n",
+      "example": true
+    },
+    "numeric_ids": {
+      "type": "boolean",
+      "description": "Only store/extract numeric user and group identifiers. Defaults to\nfalse.\n",
+      "example": true
+    },
+    "atime": {
+      "type": "boolean",
+      "description": "Store atime into archive. Defaults to true in Borg < 1.2, false in\nBorg 1.2+.\n",
+      "example": false
+    },
+    "ctime": {
+      "type": "boolean",
+      "description": "Store ctime into archive. Defaults to true.",
+      "example": false
+    },
+    "birthtime": {
+      "type": "boolean",
+      "description": "Store birthtime (creation date) into archive. Defaults to true.\n",
+      "example": false
+    },
+    "read_special": {
+      "type": "boolean",
+      "description": "Use Borg's --read-special flag to allow backup of block and other\nspecial devices. Use with caution, as it will lead to problems if\nused when backing up special devices such as /dev/zero. Defaults to\nfalse. But when a database hook is used, the setting here is ignored\nand read_special is considered true.\n",
+      "example": true
+    },
+    "flags": {
+      "type": "boolean",
+      "description": "Record filesystem flags (e.g. NODUMP, IMMUTABLE) in archive.\nDefaults to true.\n",
+      "example": false
+    },
+    "files_cache": {
+      "type": "string",
+      "description": "Mode in which to operate the files cache. See\nhttp://borgbackup.readthedocs.io/en/stable/usage/create.html for\ndetails. Defaults to \"ctime,size,inode\".\n",
+      "example": "ctime,size,inode"
+    },
+    "local_path": {
+      "type": "string",
+      "description": "Alternate Borg local executable. Defaults to \"borg\".\n",
+      "example": "borg1"
+    },
+    "remote_path": {
+      "type": "string",
+      "description": "Alternate Borg remote executable. Defaults to \"borg\".\n",
+      "example": "borg1"
+    },
+    "patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Any paths matching these patterns are included/excluded from\nbackups. Recursion root patterns (\"R ...\") are effectively the same\nas \"source_directories\"; they tell Borg which paths to backup\n(modulo any excludes). Globs are expanded. (Tildes are not.) See\nthe output of \"borg help patterns\" for more details. Quote any value\nif it contains leading punctuation, so it parses correctly.\n",
+      "example": [
+        "R /",
+        "- /home/*/.cache",
+        "+ /home/susan",
+        "- /home/*"
+      ]
+    },
+    "patterns_from": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Read include/exclude patterns from one or more separate named files,\none pattern per line. See the output of \"borg help patterns\" for\nmore details.\n",
+      "example": [
+        "/etc/borgmatic/patterns"
+      ]
+    },
+    "exclude_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Any paths matching these patterns are excluded from backups. Globs\nand tildes are expanded. Note that a glob pattern must either start\nwith a glob or be an absolute path. Do not backslash spaces in path\nnames. See the output of \"borg help patterns\" for more details.\n",
+      "example": [
+        "*.pyc",
+        "/home/*/.cache",
+        "*/.vim*.tmp",
+        "/etc/ssl",
+        "/home/user/path with spaces"
+      ]
+    },
+    "exclude_from": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Read exclude patterns from one or more separate named files, one\npattern per line. See the output of \"borg help patterns\" for more\ndetails.\n",
+      "example": [
+        "/etc/borgmatic/excludes"
+      ]
+    },
+    "exclude_caches": {
+      "type": "boolean",
+      "description": "Exclude directories that contain a CACHEDIR.TAG file. See\nhttp://www.brynosaurus.com/cachedir/spec.html for details. Defaults\nto false.\n",
+      "example": true
+    },
+    "exclude_if_present": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Exclude directories that contain a file with the given filenames.\nDefaults to not set.\n",
+      "example": [
+        ".nobackup"
+      ]
+    },
+    "keep_exclude_tags": {
+      "type": "boolean",
+      "description": "If true, the exclude_if_present filename is included in backups.\nDefaults to false, meaning that the exclude_if_present filename is\nomitted from backups.\n",
+      "example": true
+    },
+    "exclude_nodump": {
+      "type": "boolean",
+      "description": "Exclude files with the NODUMP flag. Defaults to false. (This option\nis supported for Borg 1.x only.)\n",
+      "example": true
+    },
+    "borgmatic_source_directory": {
+      "type": "string",
+      "description": "Deprecated. Only used for locating database dumps and bootstrap\nmetadata within backup archives created prior to deprecation.\nReplaced by user_runtime_directory and user_state_directory.\nDefaults to ~/.borgmatic\n",
+      "example": "/tmp/borgmatic"
+    },
+    "user_runtime_directory": {
+      "type": "string",
+      "description": "Path for storing temporary runtime data like streaming database\ndumps and bootstrap metadata. borgmatic automatically creates and\nuses a \"borgmatic\" subdirectory here. Defaults to $XDG_RUNTIME_DIR\nor $TMPDIR or $TEMP or /run/user/$UID.\n",
+      "example": "/run/user/1001"
+    },
+    "user_state_directory": {
+      "type": "string",
+      "description": "Path for storing borgmatic state files like records of when checks\nlast ran. borgmatic automatically creates and uses a \"borgmatic\"\nsubdirectory here. If you change this option, borgmatic must\ncreate the check records again (and therefore re-run checks).\nDefaults to $XDG_STATE_HOME or ~/.local/state.\n",
+      "example": "/var/lib/borgmatic"
+    },
+    "encryption_passcommand": {
+      "type": "string",
+      "description": "The standard output of this command is used to unlock the encryption\nkey. Only use on repositories that were initialized with\npasscommand/repokey/keyfile encryption. Note that if both\nencryption_passcommand and encryption_passphrase are set, then\nencryption_passphrase takes precedence. This can also be used to\naccess encrypted systemd service credentials. Defaults to not set.\nFor more details, see:\nhttps://torsion.org/borgmatic/how-to/provide-your-passwords/\n",
+      "example": "secret-tool lookup borg-repository repo-name"
+    },
+    "encryption_passphrase": {
+      "type": "string",
+      "description": "Passphrase to unlock the encryption key with. Only use on\nrepositories that were initialized with passphrase/repokey/keyfile\nencryption. Quote the value if it contains punctuation, so it parses\ncorrectly. And backslash any quote or backslash literals as well.\nDefaults to not set. Supports the \"{credential ...}\" syntax.\n",
+      "example": "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+    },
+    "checkpoint_interval": {
+      "type": "integer",
+      "description": "Number of seconds between each checkpoint during a long-running\nbackup. See https://borgbackup.readthedocs.io/en/stable/faq.html for\ndetails. Defaults to checkpoints every 1800 seconds (30 minutes).\n",
+      "example": 1800
+    },
+    "checkpoint_volume": {
+      "type": "integer",
+      "description": "Number of backed up bytes between each checkpoint during a\nlong-running backup. Only supported with Borg 2+. See\nhttps://borgbackup.readthedocs.io/en/stable/faq.html for details.\nDefaults to only time-based checkpointing (see\n\"checkpoint_interval\") instead of volume-based checkpointing.\n",
+      "example": 1048576
+    },
+    "chunker_params": {
+      "type": "string",
+      "description": "Specify the parameters passed to the chunker (CHUNK_MIN_EXP,\nCHUNK_MAX_EXP, HASH_MASK_BITS, HASH_WINDOW_SIZE). See\nhttps://borgbackup.readthedocs.io/en/stable/internals.html for\ndetails. Defaults to \"19,23,21,4095\".\n",
+      "example": "19,23,21,4095"
+    },
+    "compression": {
+      "type": "string",
+      "description": "Type of compression to use when creating archives. (Compression\nlevel can be added separated with a comma, like \"zstd,7\".) See\nhttp://borgbackup.readthedocs.io/en/stable/usage/create.html for\ndetails. Defaults to \"lz4\".\n",
+      "example": "lz4"
+    },
+    "recompress": {
+      "type": "string",
+      "enum": [
+        "if-different",
+        "always",
+        "never"
+      ],
+      "description": "Mode for recompressing data chunks according to MODE. \nPossible modes are:\n * \"if-different\": Recompress if the current compression\nis with a different compression algorithm.\n * \"always\": Recompress even if the current compression\nis with the same compression algorithm. Use this to change\nthe compression level.\n * \"never\": Do not recompress. Use this option to explicitly\nprevent recompression.\nSee https://borgbackup.readthedocs.io/en/stable/usage/recreate.html\nfor details. Defaults to \"never\".\n",
+      "example": "if-different"
+    },
+    "upload_rate_limit": {
+      "type": "integer",
+      "description": "Remote network upload rate limit in kiBytes/second. Defaults to\nunlimited.\n",
+      "example": 100
+    },
+    "upload_buffer_size": {
+      "type": "integer",
+      "description": "Size of network upload buffer in MiB. Defaults to no buffer.\n",
+      "example": 160
+    },
+    "retries": {
+      "type": "integer",
+      "description": "Number of times to retry a failing backup before giving up. Defaults\nto 0 (i.e., does not attempt retry).\n",
+      "example": 3
+    },
+    "retry_wait": {
+      "type": "integer",
+      "description": "Wait time between retries (in seconds) to allow transient issues\nto pass. Increases after each retry by that same wait time as a\nform of backoff. Defaults to 0 (no wait).\n",
+      "example": 10
+    },
+    "temporary_directory": {
+      "type": "string",
+      "description": "Directory where temporary Borg files are stored. Defaults to\n$TMPDIR. See \"Resource Usage\" at\nhttps://borgbackup.readthedocs.io/en/stable/usage/general.html for\ndetails.\n",
+      "example": "/path/to/tmpdir"
+    },
+    "ssh_command": {
+      "type": "string",
+      "description": "Command to use instead of \"ssh\". This can be used to specify ssh\noptions. Defaults to not set.\n",
+      "example": "ssh -i /path/to/private/key"
+    },
+    "borg_base_directory": {
+      "type": "string",
+      "description": "Base path used for various Borg directories. Defaults to $HOME,\n~$USER, or ~.\n",
+      "example": "/path/to/base"
+    },
+    "borg_config_directory": {
+      "type": "string",
+      "description": "Path for Borg configuration files. Defaults to\n$borg_base_directory/.config/borg\n",
+      "example": "/path/to/base/config"
+    },
+    "borg_cache_directory": {
+      "type": "string",
+      "description": "Path for Borg cache files. Defaults to\n$borg_base_directory/.cache/borg\n",
+      "example": "/path/to/base/cache"
+    },
+    "use_chunks_archive": {
+      "type": "boolean",
+      "description": "Enables or disables the use of chunks.archive.d for faster cache\nresyncs in Borg. If true, value is set to \"yes\" (default) else\nit's set to \"no\", reducing disk usage but slowing resyncs.\n",
+      "example": true
+    },
+    "borg_files_cache_ttl": {
+      "type": "integer",
+      "description": "Maximum time to live (ttl) for entries in the Borg files cache.\n",
+      "example": 20
+    },
+    "borg_security_directory": {
+      "type": "string",
+      "description": "Path for Borg security and encryption nonce files. Defaults to\n$borg_config_directory/security\n",
+      "example": "/path/to/base/config/security"
+    },
+    "borg_keys_directory": {
+      "type": "string",
+      "description": "Path for Borg encryption key files. Defaults to\n$borg_config_directory/keys\n",
+      "example": "/path/to/base/config/keys"
+    },
+    "borg_key_file": {
+      "type": "string",
+      "description": "Path for the Borg repository key file, for use with a repository\ncreated with \"keyfile\" encryption.\n",
+      "example": "/path/to/base/config/keyfile"
+    },
+    "borg_exit_codes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "treat_as"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "integer",
+            "not": {
+              "enum": [
+                0
+              ]
+            },
+            "description": "The exit code for an existing Borg warning or error.\n",
+            "example": 100
+          },
+          "treat_as": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning"
+            ],
+            "description": "Whether to consider the exit code as an error or as a\nwarning in borgmatic.\n",
+            "example": "error"
+          }
+        }
+      },
+      "description": "A list of Borg exit codes that should be elevated to errors or\nsquashed to warnings as indicated. By default, Borg error exit codes\n(2 to 99) are treated as errors while warning exit codes (1 and\n100+) are treated as warnings. Exit codes other than 1 and 2 are\nonly present in Borg 1.4.0+.\n",
+      "example": [
+        {
+          "code": 13,
+          "treat_as": "warning"
+        },
+        {
+          "code": 100,
+          "treat_as": "error"
+        }
+      ]
+    },
+    "umask": {
+      "type": "integer",
+      "description": "Umask used for when executing Borg or calling hooks. Defaults to\n0077 for Borg or the umask that borgmatic is run with for hooks.\n",
+      "example": 63
+    },
+    "lock_wait": {
+      "type": "integer",
+      "description": "Maximum seconds to wait for acquiring a repository/cache lock.\nDefaults to 1.\n",
+      "example": 5
+    },
+    "archive_name_format": {
+      "type": "string",
+      "description": "Name of the archive to create. Borg placeholders can be used. See\nthe output of \"borg help placeholders\" for details. Defaults to\n\"{hostname}-{now:%Y-%m-%dT%H:%M:%S.%f}\" with Borg 1 and\n\"{hostname}\" with Borg 2, as Borg 2 does not require unique\narchive names; identical archive names form a common \"series\" that\ncan be targeted together. When running actions like repo-list,\ninfo, or check, borgmatic automatically tries to match only\narchives created with this name format.\n",
+      "example": "{hostname}-documents-{now}"
+    },
+    "match_archives": {
+      "type": "string",
+      "description": "A Borg pattern for filtering down the archives used by borgmatic\nactions that operate on multiple archives. For Borg 1.x, use a shell\npattern here and see the output of \"borg help placeholders\" for\ndetails. For Borg 2.x, see the output of \"borg help match-archives\".\nIf match_archives is not specified, borgmatic defaults to deriving\nthe match_archives value from archive_name_format.\n",
+      "example": "sh:{hostname}-*"
+    },
+    "relocated_repo_access_is_ok": {
+      "type": "boolean",
+      "description": "Bypass Borg error about a repository that has been moved. Defaults\nto false.\n",
+      "example": true
+    },
+    "unknown_unencrypted_repo_access_is_ok": {
+      "type": "boolean",
+      "description": "Bypass Borg error about a previously unknown unencrypted repository.\nDefaults to false.\n",
+      "example": true
+    },
+    "debug_passphrase": {
+      "type": "boolean",
+      "description": "When set true, display debugging information that includes \npassphrases used and passphrase related environment variables set. \nDefaults to false.\n",
+      "example": true
+    },
+    "display_passphrase": {
+      "type": "boolean",
+      "description": "When set true, always shows passphrase and its hex UTF-8 byte\nsequence. Defaults to false.\n",
+      "example": true
+    },
+    "check_i_know_what_i_am_doing": {
+      "type": "boolean",
+      "description": "Bypass Borg confirmation about check with repair option. Defaults to\nfalse and an interactive prompt from Borg.\n",
+      "example": true
+    },
+    "extra_borg_options": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "break_lock": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg break-lock\".\n",
+          "example": "--extra-option"
+        },
+        "check": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg check\".\n",
+          "example": "--extra-option"
+        },
+        "compact": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg compact\".\n",
+          "example": "--extra-option"
+        },
+        "create": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg create\".\n",
+          "example": "--extra-option"
+        },
+        "delete": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg delete\".\n",
+          "example": "--extra-option"
+        },
+        "export_tar": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg export-tar\".\n",
+          "example": "--extra-option"
+        },
+        "extract": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg extract\".\n",
+          "example": "--extra-option"
+        },
+        "key_export": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg key export\".\n",
+          "example": "--extra-option"
+        },
+        "key_import": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg key import\".\n",
+          "example": "--extra-option"
+        },
+        "key_change_passphrase": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg key\nchange-passphrase\".\n",
+          "example": "--extra-option"
+        },
+        "info": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg info\".\n",
+          "example": "--extra-option"
+        },
+        "init": {
+          "type": "string",
+          "description": "Deprecated. Use \"repo_create\" instead. Extra command-line\noptions to pass to \"borg init\" / \"borg repo-create\".\n",
+          "example": "--extra-option"
+        },
+        "list": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg list\".\n",
+          "example": "--extra-option"
+        },
+        "mount": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg mount\".\n",
+          "example": "--extra-option"
+        },
+        "prune": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg prune\".\n",
+          "example": "--extra-option"
+        },
+        "recreate": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg recreate\".\n",
+          "example": "--extra-option"
+        },
+        "rename": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg rename\".\n",
+          "example": "--extra-option"
+        },
+        "repo_create": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg init\" / \"borg\nrepo-create\".\n",
+          "example": "--extra-option"
+        },
+        "repo_delete": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg repo-delete\".\n",
+          "example": "--extra-option"
+        },
+        "repo_info": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg repo-info\".\n",
+          "example": "--extra-option"
+        },
+        "repo_list": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg repo-list\".\n",
+          "example": "--extra-option"
+        },
+        "transfer": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg transfer\".\n",
+          "example": "--extra-option"
+        },
+        "umount": {
+          "type": "string",
+          "description": "Extra command-line options to pass to \"borg umount\".\n",
+          "example": "--extra-option"
+        }
+      },
+      "description": "Additional options to pass directly to particular Borg commands,\nhandy for Borg options that borgmatic does not yet support natively.\nNote that borgmatic does not perform any validation on these\noptions. Running borgmatic with \"--verbosity 2\" shows the exact Borg\ncommand-line invocation.\n"
+    },
+    "keep_within": {
+      "type": "string",
+      "description": "Keep all archives within this time interval. See \"skip_actions\" for\ndisabling pruning altogether.\n",
+      "example": "3H"
+    },
+    "keep_secondly": {
+      "type": "integer",
+      "description": "Number of secondly archives to keep.",
+      "example": 60
+    },
+    "keep_minutely": {
+      "type": "integer",
+      "description": "Number of minutely archives to keep.",
+      "example": 60
+    },
+    "keep_hourly": {
+      "type": "integer",
+      "description": "Number of hourly archives to keep.",
+      "example": 24
+    },
+    "keep_daily": {
+      "type": "integer",
+      "description": "Number of daily archives to keep.",
+      "example": 7
+    },
+    "keep_weekly": {
+      "type": "integer",
+      "description": "Number of weekly archives to keep.",
+      "example": 4
+    },
+    "keep_monthly": {
+      "type": "integer",
+      "description": "Number of monthly archives to keep.",
+      "example": 6
+    },
+    "keep_yearly": {
+      "type": "integer",
+      "description": "Number of yearly archives to keep.",
+      "example": 1
+    },
+    "keep_13weekly": {
+      "type": "integer",
+      "description": "Number of quarterly archives to keep (13 week strategy).",
+      "example": 13
+    },
+    "keep_3monthly": {
+      "type": "integer",
+      "description": "Number of quarterly archives to keep (3 month strategy).",
+      "example": 3
+    },
+    "prefix": {
+      "type": "string",
+      "description": "Deprecated. When pruning or checking archives, only consider archive\nnames starting with this prefix. Borg placeholders can be used. See\nthe output of \"borg help placeholders\" for details. If a prefix is\nnot specified, borgmatic defaults to matching archives based on the\narchive_name_format (see above).\n",
+      "example": "sourcehostname"
+    },
+    "compact_threshold": {
+      "type": "integer",
+      "description": "Minimum saved space percentage threshold for compacting a segment,\ndefaults to 10.\n",
+      "example": 20
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          {
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "enum": [
+                  "archives",
+                  "data",
+                  "extract",
+                  "disabled"
+                ],
+                "description": "Name of the consistency check to run:\n * \"repository\" checks the consistency of the\nrepository.\n * \"archives\" checks all of the archives.\n * \"data\" verifies the integrity of the data\nwithin the archives and implies the \"archives\"\ncheck as well.\n * \"spot\" checks that some percentage of source\nfiles are found in the most recent archive (with\nidentical contents).\n * \"extract\" does an extraction dry-run of the\nmost recent archive.\n * See \"skip_actions\" for disabling checks\naltogether.\n",
+                "example": "spot"
+              },
+              "frequency": {
+                "type": "string",
+                "description": "How frequently to run this type of consistency\ncheck (as a best effort). The value is a number\nfollowed by a unit of time. E.g., \"2 weeks\" to\nrun this consistency check no more than every\ntwo weeks for a given repository or \"1 month\" to\nrun it no more than monthly. Defaults to\n\"always\": running this check every time checks\nare run.\n",
+                "example": "2 weeks"
+              },
+              "only_run_on": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "After the \"frequency\" duration has elapsed, only\nrun this check if the current day of the week\nmatches one of these values (the name of a day of\nthe week in the current locale). \"weekday\" and\n\"weekend\" are also accepted. Defaults to running\nthe check on any day of the week.\n",
+                "example": [
+                  "Saturday",
+                  "Sunday"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "enum": [
+                  "repository"
+                ],
+                "description": "Name of the consistency check to run:\n * \"repository\" checks the consistency of the\nrepository.\n * \"archives\" checks all of the archives.\n * \"data\" verifies the integrity of the data\nwithin the archives and implies the \"archives\"\ncheck as well.\n * \"spot\" checks that some percentage of source\nfiles are found in the most recent archive (with\nidentical contents).\n * \"extract\" does an extraction dry-run of the\nmost recent archive.\n * See \"skip_actions\" for disabling checks\naltogether.\n",
+                "example": "spot"
+              },
+              "frequency": {
+                "type": "string",
+                "description": "How frequently to run this type of consistency\ncheck (as a best effort). The value is a number\nfollowed by a unit of time. E.g., \"2 weeks\" to\nrun this consistency check no more than every\ntwo weeks for a given repository or \"1 month\" to\nrun it no more than monthly. Defaults to\n\"always\": running this check every time checks\nare run.\n",
+                "example": "2 weeks"
+              },
+              "only_run_on": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "After the \"frequency\" duration has elapsed, only\nrun this check if the current day of the week\nmatches one of these values (the name of a day of\nthe week in the current locale). \"weekday\" and\n\"weekend\" are also accepted. Defaults to running\nthe check on any day of the week.\n",
+                "example": [
+                  "Saturday",
+                  "Sunday"
+                ]
+              },
+              "max_duration": {
+                "type": "integer",
+                "description": "How many seconds to check the repository before\ninterrupting the check. Useful for splitting a\nlong-running repository check into multiple\npartial checks. Defaults to no interruption. Only\napplies to the \"repository\" check, does not check\nthe repository index and is not compatible with\nthe \"--repair\" flag.\n",
+                "example": 3600
+              }
+            }
+          },
+          {
+            "required": [
+              "name",
+              "count_tolerance_percentage",
+              "data_sample_percentage",
+              "data_tolerance_percentage"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "enum": [
+                  "spot"
+                ],
+                "description": "Name of the consistency check to run:\n * \"repository\" checks the consistency of the\nrepository.\n * \"archives\" checks all of the archives.\n * \"data\" verifies the integrity of the data\nwithin the archives and implies the \"archives\"\ncheck as well.\n * \"spot\" checks that some percentage of source\nfiles are found in the most recent archive (with\nidentical contents).\n * \"extract\" does an extraction dry-run of the\nmost recent archive.\n * See \"skip_actions\" for disabling checks\naltogether.\n",
+                "example": "repository"
+              },
+              "frequency": {
+                "type": "string",
+                "description": "How frequently to run this type of consistency\ncheck (as a best effort). The value is a number\nfollowed by a unit of time. E.g., \"2 weeks\" to\nrun this consistency check no more than every\ntwo weeks for a given repository or \"1 month\" to\nrun it no more than monthly. Defaults to\n\"always\": running this check every time checks\nare run.\n",
+                "example": "2 weeks"
+              },
+              "only_run_on": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "After the \"frequency\" duration has elapsed, only\nrun this check if the current day of the week\nmatches one of these values (the name of a day of\nthe week in the current locale). \"weekday\" and\n\"weekend\" are also accepted. Defaults to running\nthe check on any day of the week.\n",
+                "example": [
+                  "Saturday",
+                  "Sunday"
+                ]
+              },
+              "count_tolerance_percentage": {
+                "type": "number",
+                "description": "The percentage delta between the source\ndirectories file count and the most recent backup\narchive file count that is allowed before the\nentire consistency check fails. This can catch\nproblems like incorrect excludes, inadvertent\ndeletes, etc. Required (and only valid) for the\n\"spot\" check.\n",
+                "example": 10
+              },
+              "data_sample_percentage": {
+                "type": "number",
+                "description": "The percentage of total files in the source\ndirectories to randomly sample and compare to\ntheir corresponding files in the most recent\nbackup archive. Required (and only valid) for the\n\"spot\" check.\n",
+                "example": 1
+              },
+              "data_tolerance_percentage": {
+                "type": "number",
+                "description": "The percentage of total files in the source\ndirectories that can fail a spot check comparison\nwithout failing the entire consistency check. This\ncan catch problems like source files that have\nbeen bulk-changed by malware, backups that have\nbeen tampered with, etc. The value must be lower\nthan or equal to the \"contents_sample_percentage\".\nRequired (and only valid) for the \"spot\" check.\n",
+                "example": 0.5
+              },
+              "xxh64sum_command": {
+                "type": "string",
+                "description": "Command to use instead of \"xxh64sum\" to hash\nsource files, usually found in an OS package named\n\"xxhash\". Do not substitute with a different hash\ntype (SHA, MD5, etc.) or the check will never\nsucceed. Only valid for the \"spot\" check.\n",
+                "example": "/usr/local/bin/xxh64sum"
+              }
+            }
+          }
+        ]
+      },
+      "description": "List of one or more consistency checks to run on a periodic basis\n(if \"frequency\" is set) or every time borgmatic runs checks (if\n\"frequency\" is omitted).\n",
+      "example": [
+        {
+          "name": "archives",
+          "frequency": "2 weeks"
+        },
+        {
+          "name": "repository"
+        }
+      ]
+    },
+    "check_repositories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Paths or labels for a subset of the configured \"repositories\" (see\nabove) on which to run consistency checks. Handy in case some of\nyour repositories are very large, and so running consistency checks\non them would take too long. Defaults to running consistency checks\non all configured repositories.\n",
+      "example": [
+        "user@backupserver:sourcehostname.borg"
+      ]
+    },
+    "check_last": {
+      "type": "integer",
+      "description": "Restrict the number of checked archives to the last n. Applies only\nto the \"archives\" check. Defaults to checking all archives.\n",
+      "example": 3
+    },
+    "color": {
+      "type": "boolean",
+      "description": "Apply color to console output. Defaults to true.\n",
+      "example": false
+    },
+    "verbosity": {
+      "type": "integer",
+      "enum": [
+        -2,
+        -1,
+        0,
+        1,
+        2
+      ],
+      "description": "Display verbose output to the console: -2 (disabled), -1 (errors\nonly), 0 (warnings and responses to actions, the default), 1 (info\nabout steps borgmatic is taking), or 2 (debug).\n",
+      "example": 2
+    },
+    "syslog_verbosity": {
+      "type": "integer",
+      "enum": [
+        -2,
+        -1,
+        0,
+        1,
+        2
+      ],
+      "description": "Log verbose output to syslog: -2 (disabled, the default), -1 (errors\nonly), 0 (warnings and responses to actions), 1 (info about steps\nborgmatic is taking), or 2 (debug).\n",
+      "example": 2
+    },
+    "log_file_verbosity": {
+      "type": "integer",
+      "enum": [
+        -2,
+        -1,
+        0,
+        1,
+        2
+      ],
+      "description": "Log verbose output to file: -2 (disabled), -1 (errors only), 0\n(warnings and responses to actions), 1 (info about steps borgmatic\nis taking, the default), or 2 (debug).\n",
+      "example": 2
+    },
+    "log_file": {
+      "type": "string",
+      "description": "Write log messages to the file at this path.\n",
+      "example": "/var/log/borgmatic/logfile.txt"
+    },
+    "log_file_format": {
+      "type": "string",
+      "description": "Python format string used for log messages written to the log file.\n",
+      "example": "[{asctime}] {levelname}: {prefix}{message}"
+    },
+    "monitoring_verbosity": {
+      "type": "integer",
+      "enum": [
+        -2,
+        -1,
+        0,
+        1,
+        2
+      ],
+      "description": "When a monitoring integration supporting logging is configured, log\nverbose output to it: -2 (disabled), -1 (errors only), 0 (warnings\nand responses to actions), 1 (info about steps borgmatic is taking,\nthe default), or 2 (debug).\n",
+      "example": 2
+    },
+    "log_json": {
+      "type": "boolean",
+      "description": "Write Borg log messages and console output as one JSON object per\nlog line instead of formatted text. Defaults to false.\n",
+      "example": true
+    },
+    "progress": {
+      "type": "boolean",
+      "description": "Display progress as each file or archive is processed when running\nsupported actions. Corresponds to the \"--progress\" flag on those\nactions. Defaults to false.\n",
+      "example": true
+    },
+    "statistics": {
+      "type": "boolean",
+      "description": "Display statistics for an archive when running supported actions.\nCorresponds to the \"--stats\" flag on those actions. Defaults to\nfalse.\n",
+      "example": true
+    },
+    "list_details": {
+      "type": "boolean",
+      "description": "Display details for each file or archive as it is processed when\nrunning supported actions. Corresponds to the \"--list\" flag on those\nactions. Defaults to false.\n",
+      "example": true
+    },
+    "default_actions": {
+      "type": "boolean",
+      "description": "Whether to apply default actions (create, prune, compact and check)\nwhen no arguments are supplied to the borgmatic command. If set to\nfalse, borgmatic displays the help message instead.\n",
+      "example": true
+    },
+    "skip_actions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "repo-create",
+          "transfer",
+          "prune",
+          "compact",
+          "create",
+          "recreate",
+          "check",
+          "delete",
+          "extract",
+          "config",
+          "export-tar",
+          "mount",
+          "umount",
+          "repo-delete",
+          "restore",
+          "repo-list",
+          "list",
+          "repo-info",
+          "info",
+          "break-lock",
+          "key",
+          "borg"
+        ]
+      },
+      "description": "List of one or more actions to skip running for this configuration\nfile, even if specified on the command-line (explicitly or\nimplicitly). This is handy for append-only configurations where you\nnever want to run \"compact\" or checkless configuration where you\nwant to skip \"check\". Defaults to not skipping any actions.\n",
+      "example": [
+        "compact"
+      ]
+    },
+    "before_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute before all the actions for each\nrepository.\n",
+      "example": [
+        "echo Starting actions."
+      ]
+    },
+    "before_backup": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute before creating a backup, run once\nper repository.\n",
+      "example": [
+        "echo Starting a backup."
+      ]
+    },
+    "before_prune": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute before pruning, run once per\nrepository.\n",
+      "example": [
+        "echo Starting pruning."
+      ]
+    },
+    "before_compact": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute before compaction, run once per\nrepository.\n",
+      "example": [
+        "echo Starting compaction."
+      ]
+    },
+    "before_check": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute before consistency checks, run once\nper repository.\n",
+      "example": [
+        "echo Starting checks."
+      ]
+    },
+    "before_extract": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute before extracting a backup, run once\nper repository.\n",
+      "example": [
+        "echo Starting extracting."
+      ]
+    },
+    "after_backup": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute after creating a backup, run once per\nrepository.\n",
+      "example": [
+        "echo Finished a backup."
+      ]
+    },
+    "after_compact": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute after compaction, run once per\nrepository.\n",
+      "example": [
+        "echo Finished compaction."
+      ]
+    },
+    "after_prune": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute after pruning, run once per\nrepository.\n",
+      "example": [
+        "echo Finished pruning."
+      ]
+    },
+    "after_check": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute after consistency checks, run once\nper repository.\n",
+      "example": [
+        "echo Finished checks."
+      ]
+    },
+    "after_extract": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute after extracting a backup, run once\nper repository.\n",
+      "example": [
+        "echo Finished extracting."
+      ]
+    },
+    "after_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute after all actions for each\nrepository.\n",
+      "example": [
+        "echo Finished actions."
+      ]
+    },
+    "on_error": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute when an exception occurs during a\n\"create\", \"prune\", \"compact\", or \"check\" action or an associated\nbefore/after hook.\n",
+      "example": [
+        "echo Error during create/prune/compact/check."
+      ]
+    },
+    "before_everything": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute before running all actions (if one of\nthem is \"create\"). These are collected from all configuration files\nand then run once before all of them (prior to all actions).\n",
+      "example": [
+        "echo Starting actions."
+      ]
+    },
+    "after_everything": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Deprecated. Use \"commands:\" instead. List of one or more shell\ncommands or scripts to execute after running all actions (if one of\nthem is \"create\"). These are collected from all configuration files\nand then run once after all of them (after any action).\n",
+      "example": [
+        "echo Completed actions."
+      ]
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          {
+            "required": [
+              "before",
+              "run"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "before": {
+                "type": "string",
+                "enum": [
+                  "action",
+                  "repository",
+                  "configuration",
+                  "everything"
+                ],
+                "description": "Name for the point in borgmatic's execution that\nthe commands should be run before (required if\n\"after\" isn't set):\n * \"action\" runs before each action for each\nrepository.\n * \"repository\" runs before all actions for each\nrepository.\n * \"configuration\" runs before all actions and\nrepositories in the current configuration file.\n * \"everything\" runs before all configuration\nfiles.\n",
+                "example": "action"
+              },
+              "when": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "repo-create",
+                    "transfer",
+                    "prune",
+                    "compact",
+                    "create",
+                    "recreate",
+                    "check",
+                    "delete",
+                    "extract",
+                    "config",
+                    "export-tar",
+                    "mount",
+                    "umount",
+                    "repo-delete",
+                    "restore",
+                    "repo-list",
+                    "list",
+                    "repo-info",
+                    "info",
+                    "break-lock",
+                    "key",
+                    "borg"
+                  ]
+                },
+                "description": "List of actions for which the commands will be\nrun. Defaults to running for all actions.\n",
+                "example": [
+                  "create",
+                  "prune",
+                  "compact",
+                  "check"
+                ]
+              },
+              "run": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "List of one or more shell commands or scripts to\nrun when this command hook is triggered. Required.\n",
+                "example": [
+                  "echo Doing stuff."
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "after",
+              "run"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "after": {
+                "type": "string",
+                "enum": [
+                  "action",
+                  "repository",
+                  "configuration",
+                  "everything",
+                  "error"
+                ],
+                "description": "Name for the point in borgmatic's execution that\nthe commands should be run after (required if\n\"before\" isn't set):\n * \"action\" runs after each action for each\nrepository.\n * \"repository\" runs after all actions for each\nrepository.\n * \"configuration\" runs after all actions and\nrepositories in the current configuration file.\n * \"everything\" runs after all configuration\nfiles.\n * \"error\" runs after an error occurs.\n",
+                "example": "action"
+              },
+              "when": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "repo-create",
+                    "transfer",
+                    "prune",
+                    "compact",
+                    "create",
+                    "recreate",
+                    "check",
+                    "delete",
+                    "extract",
+                    "config",
+                    "export-tar",
+                    "mount",
+                    "umount",
+                    "repo-delete",
+                    "restore",
+                    "repo-list",
+                    "list",
+                    "repo-info",
+                    "info",
+                    "break-lock",
+                    "key",
+                    "borg"
+                  ]
+                },
+                "description": "Only trigger the hook when borgmatic is run with\nparticular actions listed here. Defaults to\nrunning for all actions.\n",
+                "example": [
+                  "create",
+                  "prune",
+                  "compact",
+                  "check"
+                ]
+              },
+              "states": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "finish",
+                    "fail"
+                  ]
+                },
+                "description": "Only trigger the hook if borgmatic encounters one\nof the states (execution results) listed here,\nwhere:\n * \"finish\": No errors occurred.\n * \"fail\": An error occurred.\nThis state is evaluated only for the scope of the\nconfigured \"action\", \"repository\", etc., rather\nthan for the entire borgmatic run. Only available\nfor \"after\" hooks. Defaults to running the hook\nfor all states.\n",
+                "example": [
+                  "finish"
+                ]
+              },
+              "run": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "List of one or more shell commands or scripts to\nrun when this command hook is triggered. Required.\n",
+                "example": [
+                  "echo Doing stuff."
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "description": "List of one or more command hooks to execute, triggered at\nparticular points during borgmatic's execution. For each command\nhook, specify one of \"before\" or \"after\", not both.\n",
+      "example": [
+        {
+          "before": "action",
+          "when": [
+            "create"
+          ],
+          "run": [
+            "echo Backing up."
+          ]
+        }
+      ]
+    },
+    "bootstrap": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "store_config_files": {
+          "type": "boolean",
+          "description": "Store configuration files used to create a backup inside the\nbackup itself. Defaults to true. Changing this to false\nprevents \"borgmatic bootstrap\" from extracting configuration\nfiles from the backup.\n",
+          "example": false
+        }
+      },
+      "description": "Support for the \"borgmatic bootstrap\" action, used to extract\nborgmatic configuration files from a backup archive.\n"
+    },
+    "postgresql_databases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Database name (required if using this hook). Or \"all\" to\ndump all databases on the host. (Also set the \"format\"\nto dump each database to a separate file instead of one\ncombined file.) Note that using this database hook\nimplicitly enables read_special (see above) to support\ndump and restore streaming.\n",
+            "example": "users"
+          },
+          "label": {
+            "type": "string",
+            "description": "Label to identify the database dump in the backup.\n",
+            "example": "my_backup_label"
+          },
+          "container": {
+            "type": "string",
+            "description": "Container name/id to connect to. When specified the\nhostname is ignored. Requires docker/podman CLI.\n",
+            "example": "debian_stable"
+          },
+          "restore_container": {
+            "type": "string",
+            "description": "Container name/id to restore to. Defaults to the\n\"container\" option.\n",
+            "example": "restore_container"
+          },
+          "hostname": {
+            "type": "string",
+            "description": "Database hostname to connect to. Defaults to connecting\nvia local Unix socket.\n",
+            "example": "database.example.org"
+          },
+          "restore_hostname": {
+            "type": "string",
+            "description": "Database hostname to restore to. Defaults to the\n\"hostname\" option.\n",
+            "example": "database.example.org"
+          },
+          "port": {
+            "type": "integer",
+            "description": "Port to connect to. Defaults to 5432.",
+            "example": 5433
+          },
+          "restore_port": {
+            "type": "integer",
+            "description": "Port to restore to. Defaults to the \"port\" option.\n",
+            "example": 5433
+          },
+          "username": {
+            "type": "string",
+            "description": "Username with which to connect to the database. Defaults\nto the username of the current user. You probably want\nto specify the \"postgres\" superuser here when the\ndatabase name is \"all\". Supports the \"{credential ...}\"\nsyntax.\n",
+            "example": "dbuser"
+          },
+          "restore_username": {
+            "type": "string",
+            "description": "Username with which to restore the database. Defaults to\nthe \"username\" option. Supports the \"{credential ...}\"\nsyntax.\n",
+            "example": "dbuser"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password with which to connect to the database. Omitting\na password will only work if PostgreSQL is configured to\ntrust the configured username without a password or you\ncreate a ~/.pgpass file. Supports the \"{credential ...}\"\nsyntax.\n",
+            "example": "trustsome1"
+          },
+          "restore_password": {
+            "type": "string",
+            "description": "Password with which to connect to the restore database.\nDefaults to the \"password\" option. Supports the\n\"{credential ...}\" syntax.\n",
+            "example": "trustsome1"
+          },
+          "no_owner": {
+            "type": "boolean",
+            "description": "Do not output commands to set ownership of objects to\nmatch the original database. By default, pg_dump and\npg_restore issue ALTER OWNER or SET SESSION\nAUTHORIZATION statements to set ownership of created\nschema elements. These statements will fail unless the\ninitial connection to the database is made by a\nsuperuser.\n",
+            "example": true
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "plain",
+              "custom",
+              "directory",
+              "tar"
+            ],
+            "description": "Database dump output format. One of \"plain\", \"custom\",\n\"directory\", or \"tar\". Defaults to \"custom\" (unlike raw\npg_dump) for a single database. Or, when database name\nis \"all\" and format is blank, dumps all databases to a\nsingle file. But if a format is specified with an \"all\"\ndatabase name, dumps each database to a separate file of\nthat format, allowing more convenient restores of\nindividual databases. See the pg_dump documentation for\nmore about formats.\n",
+            "example": "directory"
+          },
+          "compression": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "description": "Database dump compression level (integer) or method\n(\"gzip\", \"lz4\", \"zstd\", or \"none\") and optional\ncolon-separated detail. Defaults to moderate \"gzip\" for\n\"custom\" and \"directory\" formats and no compression for\nthe \"plain\" format. Compression is not supported for the\n\"tar\" format. Be aware that Borg does its own\ncompression as well, so you may not need it in both\nplaces.\n",
+            "example": "none"
+          },
+          "ssl_mode": {
+            "type": "string",
+            "enum": [
+              "disable",
+              "allow",
+              "prefer",
+              "require",
+              "verify-ca",
+              "verify-full"
+            ],
+            "description": "SSL mode to use to connect to the database server. One\nof \"disable\", \"allow\", \"prefer\", \"require\", \"verify-ca\"\nor \"verify-full\". Defaults to \"disable\".\n",
+            "example": "require"
+          },
+          "ssl_cert": {
+            "type": "string",
+            "description": "Path to a client certificate.\n",
+            "example": "/root/.postgresql/postgresql.crt"
+          },
+          "ssl_key": {
+            "type": "string",
+            "description": "Path to a private client key.\n",
+            "example": "/root/.postgresql/postgresql.key"
+          },
+          "ssl_root_cert": {
+            "type": "string",
+            "description": "Path to a root certificate containing a list of trusted\ncertificate authorities.\n",
+            "example": "/root/.postgresql/root.crt"
+          },
+          "ssl_crl": {
+            "type": "string",
+            "description": "Path to a certificate revocation list.\n",
+            "example": "/root/.postgresql/root.crl"
+          },
+          "pg_dump_command": {
+            "type": "string",
+            "description": "Command to use instead of \"pg_dump\" or \"pg_dumpall\".\nThis can be used to run a specific pg_dump version\n(e.g., one inside a running container). If you run it\nfrom within a container, make sure to mount the path in\nthe \"user_runtime_directory\" option from the host into\nthe container at the same location. Defaults to\n\"pg_dump\" for single database dump or \"pg_dumpall\" to\ndump all databases.\n",
+            "example": "docker exec my_pg_container pg_dump"
+          },
+          "pg_restore_command": {
+            "type": "string",
+            "description": "Command to use instead of \"pg_restore\". This can be used\nto run a specific pg_restore version (e.g., one inside a\nrunning container). Defaults to \"pg_restore\".\n",
+            "example": "docker exec my_pg_container pg_restore"
+          },
+          "psql_command": {
+            "type": "string",
+            "description": "Command to use instead of \"psql\". This can be used to\nrun a specific psql version (e.g., one inside a running\ncontainer). Defaults to \"psql\".\n",
+            "example": "docker exec my_pg_container psql"
+          },
+          "options": {
+            "type": "string",
+            "description": "Additional pg_dump/pg_dumpall options to pass directly\nto the dump command, without performing any validation\non them. See pg_dump documentation for details.\n",
+            "example": "--role=someone"
+          },
+          "list_options": {
+            "type": "string",
+            "description": "Additional psql options to pass directly to the psql\ncommand that lists available databases, without\nperforming any validation on them. See psql\ndocumentation for details.\n",
+            "example": "--role=someone"
+          },
+          "restore_options": {
+            "type": "string",
+            "description": "Additional pg_restore/psql options to pass directly to\nthe restore command, without performing any validation\non them. See pg_restore/psql documentation for details.\n",
+            "example": "--role=someone"
+          },
+          "analyze_options": {
+            "type": "string",
+            "description": "Additional psql options to pass directly to the analyze\ncommand run after a restore, without performing any\nvalidation on them. See psql documentation for details.\n",
+            "example": "--role=someone"
+          }
+        }
+      },
+      "description": "List of one or more PostgreSQL databases to dump before creating a\nbackup, run once per configuration file. The database dumps are\nadded to your source directories at runtime and streamed directly\nto Borg. Requires pg_dump/pg_dumpall/pg_restore commands. See\nhttps://www.postgresql.org/docs/current/app-pgdump.html and\nhttps://www.postgresql.org/docs/current/libpq-ssl.html for\ndetails.\n",
+      "example": [
+        {
+          "name": "users",
+          "hostname": "database.example.org"
+        }
+      ]
+    },
+    "mariadb_databases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Database name (required if using this hook). Or \"all\" to\ndump all databases on the host. Note that using this\ndatabase hook implicitly enables read_special (see\nabove) to support dump and restore streaming.\n",
+            "example": "users"
+          },
+          "skip_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Database names to skip when dumping \"all\" databases.\nIgnored when the database name is not \"all\".\n",
+            "example": [
+              "cache"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "Label to identify the database dump in the backup.\n",
+            "example": "my_backup_label"
+          },
+          "container": {
+            "type": "string",
+            "description": "Container name/id to connect to. When specified the\nhostname is ignored. Requires docker/podman CLI.\n",
+            "example": "debian_stable"
+          },
+          "restore_container": {
+            "type": "string",
+            "description": "Container name/id to restore to. Defaults to the\n\"container\" option.\n",
+            "example": "restore_container"
+          },
+          "hostname": {
+            "type": "string",
+            "description": "Database hostname to connect to. Defaults to connecting\nvia local Unix socket.\n",
+            "example": "database.example.org"
+          },
+          "restore_hostname": {
+            "type": "string",
+            "description": "Database hostname to restore to. Defaults to the\n\"hostname\" option.\n",
+            "example": "database.example.org"
+          },
+          "port": {
+            "type": "integer",
+            "description": "Port to connect to. Defaults to 3306.",
+            "example": 3307
+          },
+          "restore_port": {
+            "type": "integer",
+            "description": "Port to restore to. Defaults to the \"port\" option.\n",
+            "example": 5433
+          },
+          "username": {
+            "type": "string",
+            "description": "Username with which to connect to the database. Defaults\nto the username of the current user. Supports the\n\"{credential ...}\" syntax.\n",
+            "example": "dbuser"
+          },
+          "restore_username": {
+            "type": "string",
+            "description": "Username with which to restore the database. Defaults to\nthe \"username\" option. Supports the \"{credential ...}\"\nsyntax.\n",
+            "example": "dbuser"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password with which to connect to the database. Omitting\na password will only work if MariaDB is configured to\ntrust the configured username without a password.\nSupports the \"{credential ...}\" syntax.\n",
+            "example": "trustsome1"
+          },
+          "restore_password": {
+            "type": "string",
+            "description": "Password with which to connect to the restore database.\nDefaults to the \"password\" option. Supports the\n\"{credential ...}\" syntax.\n",
+            "example": "trustsome1"
+          },
+          "password_transport": {
+            "type": "string",
+            "enum": [
+              "pipe",
+              "environment"
+            ],
+            "description": "How to transmit database passwords from borgmatic to the\nMariaDB client, one of:\n * \"pipe\": Securely transmit passwords via anonymous\n   pipe. Only works if the database client is on the\n   same host as borgmatic. (The server can be\n   somewhere else.) This is the default value.\n * \"environment\": Transmit passwords via environment\n   variable. Potentially less secure than a pipe, but\n   necessary when the database client is elsewhere, e.g.\n   when \"mariadb_dump_command\" is configured to \"exec\"\n   into a container and run a client there.\n"
+          },
+          "tls": {
+            "type": "boolean",
+            "description": "Whether to TLS-encrypt data transmitted between the\nclient and server. The default varies based on the\nMariaDB version.\n",
+            "example": false
+          },
+          "restore_tls": {
+            "type": "boolean",
+            "description": "Whether to TLS-encrypt data transmitted between the\nclient and restore server. The default varies based on\nthe MariaDB version.\n",
+            "example": false
+          },
+          "mariadb_dump_command": {
+            "type": "string",
+            "description": "Command to use instead of \"mariadb-dump\". But set any\nadditional command-line flags in \"options\", not here.\nThis command can be used to run a specific mariadb_dump\nversion (e.g., one inside a running container). If you\nrun it from within a container, make sure to mount the\npath in the \"user_runtime_directory\" option from the\nhost into the container at the same location. Defaults\nto \"mariadb-dump\".\n",
+            "example": "docker exec mariadb_container mariadb-dump"
+          },
+          "mariadb_command": {
+            "type": "string",
+            "description": "Command to run instead of \"mariadb\". But set any\nadditional command-line flags in \"list_options\" or\n\"restore_options\", not here. This command can be used to\nrun a specific mariadb version (e.g., one inside a\nrunning container). Defaults to \"mariadb\".\n",
+            "example": "docker exec mariadb_container mariadb"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "sql"
+            ],
+            "description": "Database dump output format. Currently only \"sql\" is\nsupported. Defaults to \"sql\" for a single database. Or,\nwhen database name is \"all\" and format is blank, dumps\nall databases to a single file. But if a format is\nspecified with an \"all\" database name, dumps each\ndatabase to a separate file of that format, allowing\nmore convenient restores of individual databases.\n",
+            "example": "directory"
+          },
+          "add_drop_database": {
+            "type": "boolean",
+            "description": "Use the \"--add-drop-database\" flag with mariadb-dump,\ncausing the database to be dropped right before restore.\nDefaults to true.\n",
+            "example": false
+          },
+          "options": {
+            "type": "string",
+            "description": "Additional mariadb-dump options to pass directly to the\ndump command, without performing any validation on them.\nSee mariadb-dump documentation for details.\n",
+            "example": "--skip-comments"
+          },
+          "list_options": {
+            "type": "string",
+            "description": "Additional options to pass directly to the mariadb\ncommand that lists available databases, without\nperforming any validation on them. See mariadb command\ndocumentation for details.\n",
+            "example": "--defaults-extra-file=mariadb.cnf"
+          },
+          "restore_options": {
+            "type": "string",
+            "description": "Additional options to pass directly to the mariadb\ncommand that restores database dumps, without\nperforming any validation on them. See mariadb command\ndocumentation for details.\n",
+            "example": "--defaults-extra-file=mariadb.cnf"
+          }
+        }
+      },
+      "description": "List of one or more MariaDB databases to dump before creating a\nbackup, run once per configuration file. The database dumps are\nadded to your source directories at runtime and streamed directly\nto Borg. Requires mariadb-dump/mariadb commands. See\nhttps://mariadb.com/kb/en/library/mysqldump/ for details.\n",
+      "example": [
+        {
+          "name": "users",
+          "hostname": "database.example.org"
+        }
+      ]
+    },
+    "mysql_databases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Database name (required if using this hook). Or \"all\" to\ndump all databases on the host. Note that using this\ndatabase hook implicitly enables read_special (see\nabove) to support dump and restore streaming.\n",
+            "example": "users"
+          },
+          "skip_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Database names to skip when dumping \"all\" databases.\nIgnored when the database name is not \"all\".\n",
+            "example": [
+              "cache"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "Label to identify the database dump in the backup.\n",
+            "example": "my_backup_label"
+          },
+          "container": {
+            "type": "string",
+            "description": "Container name/id to connect to. When specified the\nhostname is ignored. Requires docker/podman CLI.\n",
+            "example": "debian_stable"
+          },
+          "restore_container": {
+            "type": "string",
+            "description": "Container name/id to restore to. Defaults to the\n\"container\" option.\n",
+            "example": "restore_container"
+          },
+          "hostname": {
+            "type": "string",
+            "description": "Database hostname to connect to. Defaults to connecting\nvia local Unix socket.\n",
+            "example": "database.example.org"
+          },
+          "restore_hostname": {
+            "type": "string",
+            "description": "Database hostname to restore to. Defaults to the\n\"hostname\" option.\n",
+            "example": "database.example.org"
+          },
+          "port": {
+            "type": "integer",
+            "description": "Port to connect to. Defaults to 3306.",
+            "example": 3307
+          },
+          "restore_port": {
+            "type": "integer",
+            "description": "Port to restore to. Defaults to the \"port\" option.\n",
+            "example": 5433
+          },
+          "username": {
+            "type": "string",
+            "description": "Username with which to connect to the database. Defaults\nto the username of the current user. Supports the\n\"{credential ...}\" syntax.\n",
+            "example": "dbuser"
+          },
+          "restore_username": {
+            "type": "string",
+            "description": "Username with which to restore the database. Defaults to\nthe \"username\" option. Supports the \"{credential ...}\"\nsyntax.\n",
+            "example": "dbuser"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password with which to connect to the database. Omitting\na password will only work if MySQL is configured to\ntrust the configured username without a password.\nSupports the \"{credential ...}\" syntax.\n",
+            "example": "trustsome1"
+          },
+          "restore_password": {
+            "type": "string",
+            "description": "Password with which to connect to the restore database.\nDefaults to the \"password\" option. Supports the\n\"{credential ...}\" syntax.\n",
+            "example": "trustsome1"
+          },
+          "password_transport": {
+            "type": "string",
+            "enum": [
+              "pipe",
+              "environment"
+            ],
+            "description": "How to transmit database passwords from borgmatic to the\nMySQL client, one of:\n * \"pipe\": Securely transmit passwords via anonymous\n   pipe. Only works if the database client is on the\n   same host as borgmatic. (The server can be\n   somewhere else.) This is the default value.\n * \"environment\": Transmit passwords via environment\n   variable. Potentially less secure than a pipe, but\n   necessary when the database client is elsewhere, e.g.\n   when \"mysql_dump_command\" is configured to \"exec\"\n   into a container and run a client there.\n"
+          },
+          "tls": {
+            "type": "boolean",
+            "description": "Whether to TLS-encrypt data transmitted between the\nclient and server. The default varies based on the\nMySQL installation.\n",
+            "example": false
+          },
+          "restore_tls": {
+            "type": "boolean",
+            "description": "Whether to TLS-encrypt data transmitted between the\nclient and restore server. The default varies based on\nthe MySQL installation.\n",
+            "example": false
+          },
+          "mysql_dump_command": {
+            "type": "string",
+            "description": "Command to use instead of \"mysqldump\". But set any\nadditional command-line flags in \"options\", not here.\nThis command can be used to run a specific mysql_dump\nversion (e.g., one inside a running container). If you\nrun it from within a container, make sure to mount the\npath in the \"user_runtime_directory\" option from the\nhost into the container at the same location. Defaults\nto \"mysqldump\".\n",
+            "example": "docker exec mysql_container mysqldump"
+          },
+          "mysql_command": {
+            "type": "string",
+            "description": "Command to run instead of \"mysql\". But set any\nadditional command-line flags in \"list_options\" or\n\"restore_options\", not here. This command can be used to\nrun a specific mysql version (e.g., one inside a running\ncontainer). Defaults to \"mysql\".\n",
+            "example": "docker exec mysql_container mysql"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "sql"
+            ],
+            "description": "Database dump output format. Currently only \"sql\" is\nsupported. Defaults to \"sql\" for a single database. Or,\nwhen database name is \"all\" and format is blank, dumps\nall databases to a single file. But if a format is\nspecified with an \"all\" database name, dumps each\ndatabase to a separate file of that format, allowing\nmore convenient restores of individual databases.\n",
+            "example": "directory"
+          },
+          "add_drop_database": {
+            "type": "boolean",
+            "description": "Use the \"--add-drop-database\" flag with mysqldump,\ncausing the database to be dropped right before restore.\nDefaults to true.\n",
+            "example": false
+          },
+          "options": {
+            "type": "string",
+            "description": "Additional mysqldump options to pass directly to the\ndump command, without performing any validation on them.\nSee mysqldump documentation for details.\n",
+            "example": "--skip-comments"
+          },
+          "list_options": {
+            "type": "string",
+            "description": "Additional options to pass directly to the mysql\ncommand that lists available databases, without\nperforming any validation on them. See mysql command\ndocumentation for details.\n",
+            "example": "--defaults-extra-file=my.cnf"
+          },
+          "restore_options": {
+            "type": "string",
+            "description": "Additional options to pass directly to the mysql\ncommand that restores database dumps, without\nperforming any validation on them. See mysql command\ndocumentation for details.\n",
+            "example": "--defaults-extra-file=my.cnf"
+          }
+        }
+      },
+      "description": "List of one or more MySQL databases to dump before creating a\nbackup, run once per configuration file. The database dumps are\nadded to your source directories at runtime and streamed directly\nto Borg. Requires mysqldump/mysql commands. See\nhttps://dev.mysql.com/doc/refman/8.0/en/mysqldump.html for\ndetails.\n",
+      "example": [
+        {
+          "name": "users",
+          "hostname": "database.example.org"
+        }
+      ]
+    },
+    "sqlite_databases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "This is used to tag the database dump file with a name.\nIt is not the path to the database file itself. The name\n\"all\" has no special meaning for SQLite databases.\n",
+            "example": "users"
+          },
+          "path": {
+            "type": "string",
+            "description": "Path to the SQLite database file to dump. If relative,\nit is relative to the current working directory. Note\nthat using this database hook implicitly enables\nread_special (see above) to support dump and restore\nstreaming.\n",
+            "example": "/var/lib/sqlite/users.db"
+          },
+          "label": {
+            "type": "string",
+            "description": "Label to identify the database dump in the backup.\n",
+            "example": "my_backup_label"
+          },
+          "restore_path": {
+            "type": "string",
+            "description": "Path to the SQLite database file to restore to. Defaults\nto the \"path\" option.\n",
+            "example": "/var/lib/sqlite/users.db"
+          },
+          "sqlite_command": {
+            "type": "string",
+            "description": "Command to use instead of \"sqlite3\". This can be used to\nrun a specific sqlite3 version (e.g., one inside a\nrunning container). If you run it from within a\ncontainer, make sure to mount the path in the\n\"user_runtime_directory\" option from the host into the\ncontainer at the same location. Defaults to \"sqlite3\".\n",
+            "example": "docker exec sqlite_container sqlite3"
+          },
+          "sqlite_restore_command": {
+            "type": "string",
+            "description": "Command to run when restoring a database instead\nof \"sqlite3\". This can be used to run a specific \nsqlite3 version (e.g., one inside a running container). \nDefaults to \"sqlite3\".\n",
+            "example": "docker exec sqlite_container sqlite3"
+          }
+        }
+      },
+      "description": "List of one or more SQLite databases to dump before creating a\nbackup, run once per configuration file. The database dumps are\nadded to your source directories at runtime and streamed directly to\nBorg. Requires the sqlite3 command. See https://sqlite.org/cli.html\nfor details.\n",
+      "example": [
+        {
+          "name": "users",
+          "path": "/var/lib/db.sqlite"
+        }
+      ]
+    },
+    "mongodb_databases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Database name (required if using this hook). Or \"all\" to\ndump all databases on the host. Note that using this\ndatabase hook implicitly enables read_special (see\nabove) to support dump and restore streaming.\n",
+            "example": "users"
+          },
+          "label": {
+            "type": "string",
+            "description": "Label to identify the database dump in the backup.\n",
+            "example": "my_backup_label"
+          },
+          "container": {
+            "type": "string",
+            "description": "Container name/id to connect to. When specified the\nhostname is ignored. Requires docker/podman CLI.\n",
+            "example": "debian_stable"
+          },
+          "restore_container": {
+            "type": "string",
+            "description": "Container name/id to restore to. Defaults to the\n\"container\" option.\n",
+            "example": "restore_container"
+          },
+          "hostname": {
+            "type": "string",
+            "description": "Database hostname to connect to. Defaults to connecting\nto localhost.\n",
+            "example": "database.example.org"
+          },
+          "restore_hostname": {
+            "type": "string",
+            "description": "Database hostname to restore to. Defaults to the\n\"hostname\" option.\n",
+            "example": "database.example.org"
+          },
+          "port": {
+            "type": "integer",
+            "description": "Port to connect to. Defaults to 27017.",
+            "example": 27018
+          },
+          "restore_port": {
+            "type": "integer",
+            "description": "Port to restore to. Defaults to the \"port\" option.\n",
+            "example": 5433
+          },
+          "username": {
+            "type": "string",
+            "description": "Username with which to connect to the database. Skip it\nif no authentication is needed. Supports the\n\"{credential ...}\" syntax.\n",
+            "example": "dbuser"
+          },
+          "restore_username": {
+            "type": "string",
+            "description": "Username with which to restore the database. Defaults to\nthe \"username\" option. Supports the \"{credential ...}\"\nsyntax.\n",
+            "example": "dbuser"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password with which to connect to the database. Skip it\nif no authentication is needed. Supports the\n\"{credential ...}\" syntax.\n",
+            "example": "trustsome1"
+          },
+          "restore_password": {
+            "type": "string",
+            "description": "Password with which to connect to the restore database.\nDefaults to the \"password\" option. Supports the\n\"{credential ...}\" syntax.\n",
+            "example": "trustsome1"
+          },
+          "authentication_database": {
+            "type": "string",
+            "description": "Authentication database where the specified username\nexists. If no authentication database is specified, the\ndatabase provided in \"name\" is used. If \"name\" is \"all\",\nthe \"admin\" database is used.\n",
+            "example": "admin"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "archive",
+              "directory"
+            ],
+            "description": "Database dump output format. One of \"archive\", or\n\"directory\". Defaults to \"archive\". See mongodump\ndocumentation for details. Note that format is ignored\nwhen the database name is \"all\".\n",
+            "example": "directory"
+          },
+          "options": {
+            "type": "string",
+            "description": "Additional mongodump options to pass directly to the\ndump command, without performing any validation on them.\nSee mongodump documentation for details.\n",
+            "example": "--dumpDbUsersAndRoles"
+          },
+          "restore_options": {
+            "type": "string",
+            "description": "Additional mongorestore options to pass directly to the\ndump command, without performing any validation on them.\nSee mongorestore documentation for details.\n",
+            "example": "--restoreDbUsersAndRoles"
+          },
+          "mongodump_command": {
+            "type": "string",
+            "description": "Command to use instead of \"mongodump\". This can be used\nto run a specific mongodump version (e.g., one inside a\nrunning container). If you run it from within a\ncontainer, make sure to mount the path in the\n\"user_runtime_directory\" option from the host into the\ncontainer at the same location.  Defaults to\n\"mongodump\".\n",
+            "example": "docker exec mongodb_container mongodump"
+          },
+          "mongorestore_command": {
+            "type": "string",
+            "description": "Command to run when restoring a database instead of\n\"mongorestore\". This can be used to run a specific\nmongorestore version (e.g., one inside a running\ncontainer). Defaults to \"mongorestore\".\n",
+            "example": "docker exec mongodb_container mongorestore"
+          }
+        }
+      },
+      "description": "List of one or more MongoDB databases to dump before creating a\nbackup, run once per configuration file. The database dumps are\nadded to your source directories at runtime and streamed directly\nto Borg. Requires mongodump/mongorestore commands. See\nhttps://docs.mongodb.com/database-tools/mongodump/ and\nhttps://docs.mongodb.com/database-tools/mongorestore/ for details.\n",
+      "example": [
+        {
+          "name": "users",
+          "hostname": "database.example.org"
+        }
+      ]
+    },
+    "ntfy": {
+      "type": "object",
+      "required": [
+        "topic"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "topic": {
+          "type": "string",
+          "description": "The topic to publish to. See https://ntfy.sh/docs/publish/\nfor details.\n",
+          "example": "topic"
+        },
+        "server": {
+          "type": "string",
+          "description": "The address of your self-hosted ntfy.sh instance.\n",
+          "example": "https://ntfy.your-domain.com"
+        },
+        "username": {
+          "type": "string",
+          "description": "The username used for authentication. Supports the\n\"{credential ...}\" syntax.\n",
+          "example": "testuser"
+        },
+        "password": {
+          "type": "string",
+          "description": "The password used for authentication. Supports the\n\"{credential ...}\" syntax.\n",
+          "example": "fakepassword"
+        },
+        "access_token": {
+          "type": "string",
+          "description": "An ntfy access token to authenticate with instead of\nusername/password. Supports the \"{credential ...}\" syntax.\n",
+          "example": "tk_AgQdq7mVBoFD37zQVN29RhuMzNIz2"
+        },
+        "start": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "The title of the message.\n",
+              "example": "Ping!"
+            },
+            "message": {
+              "type": "string",
+              "description": "The message body to publish.\n",
+              "example": "Your backups have started."
+            },
+            "priority": {
+              "type": "string",
+              "description": "The priority to set.\n",
+              "example": "min"
+            },
+            "tags": {
+              "type": "string",
+              "description": "Tags to attach to the message.\n",
+              "example": "borgmatic"
+            }
+          }
+        },
+        "finish": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "The title of the message.\n",
+              "example": "Ping!"
+            },
+            "message": {
+              "type": "string",
+              "description": "The message body to publish.\n",
+              "example": "Your backups have finished."
+            },
+            "priority": {
+              "type": "string",
+              "description": "The priority to set.\n",
+              "example": "min"
+            },
+            "tags": {
+              "type": "string",
+              "description": "Tags to attach to the message.\n",
+              "example": "borgmatic,+1"
+            }
+          }
+        },
+        "fail": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "The title of the message.\n",
+              "example": "Ping!"
+            },
+            "message": {
+              "type": "string",
+              "description": "The message body to publish.\n",
+              "example": "Your backups have failed."
+            },
+            "priority": {
+              "type": "string",
+              "description": "The priority to set.\n",
+              "example": "max"
+            },
+            "tags": {
+              "type": "string",
+              "description": "Tags to attach to the message.\n",
+              "example": "borgmatic,-1,skull"
+            }
+          }
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "start",
+              "finish",
+              "fail"
+            ],
+            "uniqueItems": true
+          },
+          "description": "List of one or more monitoring states to ping for: \"start\",\n\"finish\", and/or \"fail\". Defaults to pinging for failure\nonly.\n",
+          "example": [
+            "start",
+            "finish"
+          ]
+        }
+      }
+    },
+    "pushover": {
+      "type": "object",
+      "required": [
+        "token",
+        "user"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "Your application's API token. Supports the \"{credential\n...}\" syntax.\n",
+          "example": "7ms6TXHpTokTou2P6x4SodDeentHRa"
+        },
+        "user": {
+          "type": "string",
+          "description": "Your user/group key (or that of your target user), viewable\nwhen logged into your dashboard: often referred to as\nUSER_KEY in Pushover documentation and code examples.\nSupports the \"{credential ...}\" syntax.\n",
+          "example": "hwRwoWsXMBWwgrSecfa9EfPey55WSN"
+        },
+        "start": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "Message to be sent to the user or group. If omitted\nthe default is the name of the state.\n",
+              "example": "A backup job has started."
+            },
+            "priority": {
+              "type": "integer",
+              "description": "A value of -2, -1, 0 (default), 1 or 2 that \nindicates the message priority.\n",
+              "example": 0
+            },
+            "expire": {
+              "type": "integer",
+              "description": "How many seconds your notification will continue \nto be retried (every retry seconds). Defaults to\n600. This settings only applies to priority 2\nnotifications.\n",
+              "example": 600
+            },
+            "retry": {
+              "type": "integer",
+              "description": "The retry parameter specifies how often \n(in seconds) the Pushover servers will send the \nsame notification to the user. Defaults to 30. This\nsettings only applies to priority 2 notifications.\n",
+              "example": 30
+            },
+            "device": {
+              "type": "string",
+              "description": "The name of one of your devices to send just to \nthat device instead of all devices.\n",
+              "example": "pixel8"
+            },
+            "html": {
+              "type": "boolean",
+              "description": "Set to True to enable HTML parsing of the message.\nSet to false for plain text.\n",
+              "example": true
+            },
+            "sound": {
+              "type": "string",
+              "description": "The name of a supported sound to override your \ndefault sound choice. All options can be found \nhere: https://pushover.net/api#sounds \n",
+              "example": "bike"
+            },
+            "title": {
+              "type": "string",
+              "description": "Your message's title, otherwise your app's name is \nused.\n",
+              "example": "A backup job has started."
+            },
+            "ttl": {
+              "type": "integer",
+              "description": "The number of seconds that the message will live, \nbefore being deleted automatically. The ttl \nparameter is ignored for messages with a priority.\nvalue of 2.\n",
+              "example": 3600
+            },
+            "url": {
+              "type": "string",
+              "description": "A supplementary URL to show with your message.\n",
+              "example": "https://pushover.net/apps/xxxxx-borgbackup"
+            },
+            "url_title": {
+              "type": "string",
+              "description": "A title for the URL specified as the url parameter,\notherwise just the URL is shown.\n",
+              "example": "Pushover Link"
+            }
+          }
+        },
+        "finish": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "Message to be sent to the user or group. If omitted\nthe default is the name of the state.\n",
+              "example": "A backup job has finished."
+            },
+            "priority": {
+              "type": "integer",
+              "description": "A value of -2, -1, 0 (default), 1 or 2 that \nindicates the message priority.\n",
+              "example": 0
+            },
+            "expire": {
+              "type": "integer",
+              "description": "How many seconds your notification will continue \nto be retried (every retry seconds). Defaults to\n600. This settings only applies to priority 2\nnotifications.\n",
+              "example": 600
+            },
+            "retry": {
+              "type": "integer",
+              "description": "The retry parameter specifies how often \n(in seconds) the Pushover servers will send the \nsame notification to the user. Defaults to 30. This\nsettings only applies to priority 2 notifications.\n",
+              "example": 30
+            },
+            "device": {
+              "type": "string",
+              "description": "The name of one of your devices to send just to \nthat device instead of all devices.\n",
+              "example": "pixel8"
+            },
+            "html": {
+              "type": "boolean",
+              "description": "Set to True to enable HTML parsing of the message.\nSet to false for plain text.\n",
+              "example": true
+            },
+            "sound": {
+              "type": "string",
+              "description": "The name of a supported sound to override your \ndefault sound choice. All options can be found \nhere: https://pushover.net/api#sounds \n",
+              "example": "bike"
+            },
+            "title": {
+              "type": "string",
+              "description": "Your message's title, otherwise your app's name is \nused.\n",
+              "example": "A backup job has started."
+            },
+            "ttl": {
+              "type": "integer",
+              "description": "The number of seconds that the message will live, \nbefore being deleted automatically. The ttl \nparameter is ignored for messages with a priority.\nvalue of 2.\n",
+              "example": 3600
+            },
+            "url": {
+              "type": "string",
+              "description": "A supplementary URL to show with your message.\n",
+              "example": "https://pushover.net/apps/xxxxx-borgbackup"
+            },
+            "url_title": {
+              "type": "string",
+              "description": "A title for the URL specified as the url parameter,\notherwise just the URL is shown.\n",
+              "example": "Pushover Link"
+            }
+          }
+        },
+        "fail": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "Message to be sent to the user or group. If omitted\nthe default is the name of the state.\n",
+              "example": "A backup job has failed."
+            },
+            "priority": {
+              "type": "integer",
+              "description": "A value of -2, -1, 0 (default), 1 or 2 that \nindicates the message priority.\n",
+              "example": 0
+            },
+            "expire": {
+              "type": "integer",
+              "description": "How many seconds your notification will continue \nto be retried (every retry seconds). Defaults to\n600. This settings only applies to priority 2\nnotifications.\n",
+              "example": 600
+            },
+            "retry": {
+              "type": "integer",
+              "description": "The retry parameter specifies how often \n(in seconds) the Pushover servers will send the \nsame notification to the user. Defaults to 30. This\nsettings only applies to priority 2 notifications.\n",
+              "example": 30
+            },
+            "device": {
+              "type": "string",
+              "description": "The name of one of your devices to send just to \nthat device instead of all devices.\n",
+              "example": "pixel8"
+            },
+            "html": {
+              "type": "boolean",
+              "description": "Set to True to enable HTML parsing of the message.\nSet to false for plain text.\n",
+              "example": true
+            },
+            "sound": {
+              "type": "string",
+              "description": "The name of a supported sound to override your \ndefault sound choice. All options can be found \nhere: https://pushover.net/api#sounds \n",
+              "example": "bike"
+            },
+            "title": {
+              "type": "string",
+              "description": "Your message's title, otherwise your app's name is \nused.\n",
+              "example": "A backup job has started."
+            },
+            "ttl": {
+              "type": "integer",
+              "description": "The number of seconds that the message will live, \nbefore being deleted automatically. The ttl \nparameter is ignored for messages with a priority.\nvalue of 2.\n",
+              "example": 3600
+            },
+            "url": {
+              "type": "string",
+              "description": "A supplementary URL to show with your message.\n",
+              "example": "https://pushover.net/apps/xxxxx-borgbackup"
+            },
+            "url_title": {
+              "type": "string",
+              "description": "A title for the URL specified as the url parameter,\notherwise just the URL is shown.\n",
+              "example": "Pushover Link"
+            }
+          }
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "start",
+              "finish",
+              "fail"
+            ],
+            "uniqueItems": true
+          },
+          "description": "List of one or more monitoring states to ping for: \"start\",\n\"finish\", and/or \"fail\". Defaults to pinging for failure\nonly.\n",
+          "example": [
+            "start",
+            "finish"
+          ]
+        }
+      }
+    },
+    "zabbix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "server"
+      ],
+      "properties": {
+        "itemid": {
+          "type": "integer",
+          "description": "The ID of the Zabbix item used for collecting data.\nUnique across the entire Zabbix system.\n",
+          "example": 55105
+        },
+        "host": {
+          "type": "string",
+          "description": "Host name where the item is stored. Required if \"itemid\"\nis not set.\n",
+          "example": "borg-server"
+        },
+        "key": {
+          "type": "string",
+          "description": "Key of the host where the item is stored. Required if\n\"itemid\" is not set.\n",
+          "example": "borg.status"
+        },
+        "server": {
+          "type": "string",
+          "description": "The API endpoint URL of your Zabbix instance, usually ending\nwith \"/api_jsonrpc.php\". Required.\n",
+          "example": "https://zabbix.your-domain.com"
+        },
+        "username": {
+          "type": "string",
+          "description": "The username used for authentication. Not needed if using\nan API key. Supports the \"{credential ...}\" syntax.\n",
+          "example": "testuser"
+        },
+        "password": {
+          "type": "string",
+          "description": "The password used for authentication. Not needed if using\nan API key. Supports the \"{credential ...}\" syntax.\n",
+          "example": "fakepassword"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "The API key used for authentication. Not needed if using an\nusername/password. Supports the \"{credential ...}\" syntax.\n",
+          "example": "fakekey"
+        },
+        "start": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": [
+                "integer",
+                "string"
+              ],
+              "description": "The value to set the item to on start.\n",
+              "example": "STARTED"
+            }
+          }
+        },
+        "finish": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": [
+                "integer",
+                "string"
+              ],
+              "description": "The value to set the item to on finish.\n",
+              "example": "FINISH"
+            }
+          }
+        },
+        "fail": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": [
+                "integer",
+                "string"
+              ],
+              "description": "The value to set the item to on fail.\n",
+              "example": "ERROR"
+            }
+          }
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "start",
+              "finish",
+              "fail"
+            ],
+            "uniqueItems": true
+          },
+          "description": "List of one or more monitoring states to ping for: \"start\",\n\"finish\", and/or \"fail\". Defaults to pinging for failure\nonly.\n",
+          "example": [
+            "start",
+            "finish"
+          ]
+        }
+      }
+    },
+    "apprise": {
+      "type": "object",
+      "required": [
+        "services"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "url",
+              "label"
+            ],
+            "properties": {
+              "url": {
+                "type": "string",
+                "description": "URL of this Apprise service.",
+                "example": "gotify://hostname/token"
+              },
+              "label": {
+                "type": "string",
+                "description": "Label used in borgmatic logs for this Apprise\nservice.\n",
+                "example": "gotify"
+              }
+            }
+          },
+          "description": "A list of Apprise services to publish to with URLs and\nlabels. The labels are used for logging. A full list of\nservices and their configuration can be found at\nhttps://github.com/caronc/apprise/wiki.\n",
+          "example": [
+            {
+              "url": "kodi://user@hostname",
+              "label": "kodi"
+            },
+            {
+              "url": "line://Token@User",
+              "label": "line"
+            }
+          ]
+        },
+        "send_logs": {
+          "type": "boolean",
+          "description": "Send borgmatic logs to Apprise services as part of the\n\"finish\", \"fail\", and \"log\" states. Defaults to true.\n",
+          "example": false
+        },
+        "logs_size_limit": {
+          "type": "integer",
+          "description": "Number of bytes of borgmatic logs to send to Apprise\nservices. Set to 0 to send all logs and disable this\ntruncation. Defaults to 1500.\n",
+          "example": 100000
+        },
+        "start": {
+          "type": "object",
+          "required": [
+            "body"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Specify the message title. If left unspecified, no\ntitle is sent.\n",
+              "example": "Ping!"
+            },
+            "body": {
+              "type": "string",
+              "description": "Specify the message body.\n",
+              "example": "Starting backup process."
+            }
+          }
+        },
+        "finish": {
+          "type": "object",
+          "required": [
+            "body"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Specify the message title. If left unspecified, no\ntitle is sent.\n",
+              "example": "Ping!"
+            },
+            "body": {
+              "type": "string",
+              "description": "Specify the message body.\n",
+              "example": "Backups successfully made."
+            }
+          }
+        },
+        "fail": {
+          "type": "object",
+          "required": [
+            "body"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Specify the message title. If left unspecified, no\ntitle is sent.\n",
+              "example": "Ping!"
+            },
+            "body": {
+              "type": "string",
+              "description": "Specify the message body.\n",
+              "example": "Your backups have failed."
+            }
+          }
+        },
+        "log": {
+          "type": "object",
+          "required": [
+            "body"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Specify the message title. If left unspecified, no\ntitle is sent.\n",
+              "example": "Ping!"
+            },
+            "body": {
+              "type": "string",
+              "description": "Specify the message body.\n",
+              "example": "Here is some info about your backups."
+            }
+          }
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "start",
+              "finish",
+              "fail",
+              "log"
+            ],
+            "uniqueItems": true
+          },
+          "description": "List of one or more monitoring states to ping for:\n\"start\", \"finish\", \"fail\", and/or \"log\". Defaults to\npinging for failure only. For each selected state,\ncorresponding configuration for the message title and body\nshould be given. If any is left unspecified, a generic\nmessage is emitted instead.\n",
+          "example": [
+            "start",
+            "finish"
+          ]
+        }
+      }
+    },
+    "healthchecks": {
+      "type": "object",
+      "required": [
+        "ping_url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ping_url": {
+          "type": "string",
+          "description": "Healthchecks ping URL or UUID to notify when a backup\nbegins, ends, errors, or to send only logs.\n",
+          "example": "https://hc-ping.com/your-uuid-here"
+        },
+        "verify_tls": {
+          "type": "boolean",
+          "description": "Verify the TLS certificate of the ping URL host. Defaults to\ntrue.\n",
+          "example": false
+        },
+        "send_logs": {
+          "type": "boolean",
+          "description": "Send borgmatic logs to Healthchecks as part of the \"finish\",\n\"fail\", and \"log\" states. Defaults to true.\n",
+          "example": false
+        },
+        "ping_body_limit": {
+          "type": "integer",
+          "description": "Number of bytes of borgmatic logs to send to Healthchecks,\nideally the same as PING_BODY_LIMIT configured on the\nHealthchecks server. Set to 0 to send all logs and disable\nthis truncation. Defaults to 100000.\n",
+          "example": 200000
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "start",
+              "finish",
+              "fail",
+              "log"
+            ],
+            "uniqueItems": true
+          },
+          "description": "List of one or more monitoring states to ping for: \"start\",\n\"finish\", \"fail\", and/or \"log\". Defaults to pinging for all\nstates.\n",
+          "example": [
+            "finish"
+          ]
+        },
+        "create_slug": {
+          "type": "boolean",
+          "description": "Create the check if it does not exist. Only works with\nthe slug URL scheme (https://hc-ping.com/<ping-key>/<slug>\nas opposed to https://hc-ping.com/<uuid>).\nDefaults to false.\n",
+          "example": true
+        }
+      },
+      "description": "Configuration for a monitoring integration with Healthchecks. Create\nan account at https://healthchecks.io (or self-host Healthchecks) if\nyou'd like to use this service. See borgmatic monitoring\ndocumentation for details.\n"
+    },
+    "uptime_kuma": {
+      "type": "object",
+      "required": [
+        "push_url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "push_url": {
+          "type": "string",
+          "description": "Uptime Kuma push URL without query string (do not include the\nquestion mark or anything after it).\n",
+          "example": "https://example.uptime.kuma/api/push/abcd1234"
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "start",
+              "finish",
+              "fail"
+            ],
+            "uniqueItems": true
+          },
+          "description": "List of one or more monitoring states to push for: \"start\",\n\"finish\", and/or \"fail\". Defaults to pushing for all\nstates.\n",
+          "example": [
+            "start",
+            "finish",
+            "fail"
+          ]
+        },
+        "verify_tls": {
+          "type": "boolean",
+          "description": "Verify the TLS certificate of the push URL host. Defaults to\ntrue.\n",
+          "example": false
+        }
+      },
+      "description": "Configuration for a monitoring integration with Uptime Kuma using\nthe Push monitor type.\nSee more information here: https://uptime.kuma.pet\n"
+    },
+    "cronitor": {
+      "type": "object",
+      "required": [
+        "ping_url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ping_url": {
+          "type": "string",
+          "description": "Cronitor ping URL to notify when a backup begins,\nends, or errors.\n",
+          "example": "https://cronitor.link/d3x0c1"
+        }
+      },
+      "description": "Configuration for a monitoring integration with Cronitor. Create an\naccount at https://cronitor.io if you'd like to use this service.\nSee borgmatic monitoring documentation for details.\n"
+    },
+    "pagerduty": {
+      "type": "object",
+      "required": [
+        "integration_key"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "integration_key": {
+          "type": "string",
+          "description": "PagerDuty integration key used to notify PagerDuty when a\nbackup errors. Supports the \"{credential ...}\" syntax.\n",
+          "example": "a177cad45bd374409f78906a810a3074"
+        },
+        "send_logs": {
+          "type": "boolean",
+          "description": "Send borgmatic logs to PagerDuty when a backup errors.\nDefaults to true.\n",
+          "example": false
+        }
+      },
+      "description": "Configuration for a monitoring integration with PagerDuty. Create an\naccount at https://www.pagerduty.com if you'd like to use this\nservice. See borgmatic monitoring documentation for details.\n"
+    },
+    "cronhub": {
+      "type": "object",
+      "required": [
+        "ping_url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ping_url": {
+          "type": "string",
+          "description": "Cronhub ping URL to notify when a backup begins,\nends, or errors.\n",
+          "example": "https://cronhub.io/ping/1f5e3410-254c-5587"
+        }
+      },
+      "description": "Configuration for a monitoring integration with Cronhub. Create an\naccount at https://cronhub.io if you'd like to use this service. See\nborgmatic monitoring documentation for details.\n"
+    },
+    "loki": {
+      "type": "object",
+      "required": [
+        "url",
+        "labels"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "Grafana loki log URL to notify when a backup begins,\nends, or fails.\n",
+          "example": "http://localhost:3100/loki/api/v1/push"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Allows setting custom labels for the logging stream. At\nleast one label is required. \"__hostname\" gets replaced by\nthe machine hostname automatically. \"__config\" gets replaced\nby the name of the configuration file. \"__config_path\" gets\nreplaced by the full path of the configuration file.\n",
+          "example": {
+            "app": "borgmatic",
+            "config": "__config",
+            "hostname": "__hostname"
+          }
+        }
+      },
+      "description": "Configuration for a monitoring integration with Grafana Loki. You\ncan send the logs to a self-hosted instance or create an account at\nhttps://grafana.com/auth/sign-up/create-user. See borgmatic\nmonitoring documentation for details.\n"
+    },
+    "sentry": {
+      "type": "object",
+      "required": [
+        "data_source_name_url",
+        "monitor_slug"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "data_source_name_url": {
+          "type": "string",
+          "description": "Sentry Data Source Name (DSN) URL, associated with a\nparticular Sentry project. Used to construct a cron URL,\nnotified when a backup begins, ends, or errors.\n",
+          "example": "https://5f80ec@o294220.ingest.us.sentry.io/203069"
+        },
+        "monitor_slug": {
+          "type": "string",
+          "description": "Sentry monitor slug, associated with a particular Sentry\nproject monitor. Used along with the data source name URL to\nconstruct a cron URL.\n",
+          "example": "mymonitor"
+        },
+        "environment": {
+          "type": "string",
+          "description": "Sentry monitor environment used in the call to Sentry. If\nnot set, the Sentry default is used.\n",
+          "example": "production"
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "start",
+              "finish",
+              "fail"
+            ],
+            "uniqueItems": true
+          },
+          "description": "List of one or more monitoring states to ping for: \"start\",\n\"finish\", and/or \"fail\". Defaults to pinging for all states.\n",
+          "example": [
+            "start",
+            "finish"
+          ]
+        }
+      },
+      "description": "Configuration for a monitoring integration with Sentry. You can use\na self-hosted instance via https://develop.sentry.dev/self-hosted/\nor create a cloud-hosted account at https://sentry.io. See borgmatic\nmonitoring documentation for details.\n"
+    },
+    "zfs": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "zfs_command": {
+          "type": "string",
+          "description": "Command to use instead of \"zfs\".\n",
+          "example": "/usr/local/bin/zfs"
+        },
+        "mount_command": {
+          "type": "string",
+          "description": "Command to use instead of \"mount\".\n",
+          "example": "/usr/local/bin/mount"
+        },
+        "umount_command": {
+          "type": "string",
+          "description": "Command to use instead of \"umount\".\n",
+          "example": "/usr/local/bin/umount"
+        }
+      },
+      "description": "Configuration for integration with the ZFS filesystem.\n"
+    },
+    "btrfs": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "btrfs_command": {
+          "type": "string",
+          "description": "Command to use instead of \"btrfs\".\n",
+          "example": "/usr/local/bin/btrfs"
+        },
+        "findmnt_command": {
+          "type": "string",
+          "description": "Deprecated and unused. Was the command to use instead of\n\"findmnt\".\n",
+          "example": "/usr/local/bin/findmnt"
+        }
+      },
+      "description": "Configuration for integration with the Btrfs filesystem.\n"
+    },
+    "lvm": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_size": {
+          "type": "string",
+          "description": "Size to allocate for each snapshot taken, including the\nunits to use for that size. Defaults to \"10%ORIGIN\" (10%\nof the size of logical volume being snapshotted). See the\nlvcreate \"--size\" and \"--extents\" documentation for more\ninformation:\nhttps://www.man7.org/linux/man-pages/man8/lvcreate.8.html\n",
+          "example": "5GB"
+        },
+        "lvcreate_command": {
+          "type": "string",
+          "description": "Command to use instead of \"lvcreate\".\n",
+          "example": "/usr/local/bin/lvcreate"
+        },
+        "lvremove_command": {
+          "type": "string",
+          "description": "Command to use instead of \"lvremove\".\n",
+          "example": "/usr/local/bin/lvremove"
+        },
+        "lvs_command": {
+          "type": "string",
+          "description": "Command to use instead of \"lvs\".\n",
+          "example": "/usr/local/bin/lvs"
+        },
+        "lsblk_command": {
+          "type": "string",
+          "description": "Command to use instead of \"lsblk\".\n",
+          "example": "/usr/local/bin/lsblk"
+        },
+        "mount_command": {
+          "type": "string",
+          "description": "Command to use instead of \"mount\".\n",
+          "example": "/usr/local/bin/mount"
+        },
+        "umount_command": {
+          "type": "string",
+          "description": "Command to use instead of \"umount\".\n",
+          "example": "/usr/local/bin/umount"
+        }
+      },
+      "description": "Configuration for integration with Linux LVM (Logical Volume\nManager).\n"
+    },
+    "systemd": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "systemd_creds_command": {
+          "type": "string",
+          "description": "Command to use instead of \"systemd-creds\". Only used as a\nfallback when borgmatic is run outside of a systemd service.\n",
+          "example": "/usr/local/bin/systemd-creds"
+        },
+        "encrypted_credentials_directory": {
+          "type": "string",
+          "description": "Directory containing encrypted credentials for\n\"systemd-creds\" to use instead of\n\"/etc/credstore.encrypted\".\n",
+          "example": "/path/to/credstore.encrypted"
+        }
+      },
+      "description": "Configuration for integration with systemd credentials.\n"
+    },
+    "container": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "secrets_directory": {
+          "type": "string",
+          "description": "Secrets directory to use instead of \"/run/secrets\".\n",
+          "example": "/path/to/secrets"
+        }
+      },
+      "description": "Configuration for integration with Docker or Podman secrets.\n"
+    },
+    "keepassxc": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "keepassxc_cli_command": {
+          "type": "string",
+          "description": "Command to use instead of \"keepassxc-cli\".\n",
+          "example": "/usr/local/bin/keepassxc-cli"
+        },
+        "ask_for_password": {
+          "type": "boolean",
+          "description": "Whether keepassxc-cli should prompt the user for a password.\nDisabling this is only really useful if you're unlocking\nyour KeePassXC database with a key file instead of a\npassword. Defaults to true.\n",
+          "example": false
+        },
+        "key_file": {
+          "type": "string",
+          "description": "Path to a key file for unlocking the KeePassXC database.\n",
+          "example": "/path/to/keyfile"
+        },
+        "yubikey": {
+          "type": "string",
+          "description": "YubiKey slot and optional serial number used to access the\nKeePassXC database. The format is \"<slot[:serial]>\", where:\n * <slot> is the YubiKey slot number (e.g., `1` or `2`).\n * <serial> (optional) is the YubiKey's serial number (e.g.,\n   `7370001`).\n",
+          "example": "1:7370001"
+        }
+      },
+      "description": "Configuration for integration with the KeePassXC password manager.\n"
+    }
+  }
+}

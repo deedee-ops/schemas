@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "sonarr": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "$ref": "#/$defs/sonarr_instance"
+        }
+      }
+    },
+    "radarr": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "$ref": "#/$defs/radarr_instance"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "base_url": {
+      "type": "string",
+      "description": "The base URL of your instance. Basically this is the URL you bookmark to get to the front page."
+    },
+    "delete_old_custom_formats": {
+      "type": "boolean",
+      "description": "If enabled, custom formats that you remove from your YAML configuration OR that are removed from the guide will be deleted from your Radarr instance.",
+      "default": false
+    },
+    "replace_existing_custom_formats": {
+      "type": "boolean",
+      "description": "If disabled, custom formats that Recyclarr didn't explicitly create or know about will not be replaced.",
+      "default": false
+    },
+    "radarr_instance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "base_url": {
+          "$ref": "#/$defs/base_url",
+          "examples": [
+            "http://localhost:7878",
+            "https://radarr.mydomain.com",
+            "https://mydomain.com/radarr"
+          ]
+        },
+        "api_key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The API key from Radarr"
+        },
+        "quality_definition": {
+          "$ref": "config/quality-definition.json"
+        },
+        "quality_profiles": {
+          "$ref": "config/quality-profiles.json"
+        },
+        "delete_old_custom_formats": {
+          "$ref": "#/$defs/delete_old_custom_formats"
+        },
+        "replace_existing_custom_formats": {
+          "$ref": "#/$defs/replace_existing_custom_formats"
+        },
+        "custom_formats": {
+          "$ref": "config/custom-formats.json"
+        },
+        "include": {
+          "$ref": "config/includes.json"
+        },
+        "media_naming": {
+          "$ref": "config/media-naming-radarr.json"
+        }
+      }
+    },
+    "sonarr_instance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "base_url": {
+          "$ref": "#/$defs/base_url",
+          "examples": [
+            "http://localhost:8989",
+            "https://sonarr.mydomain.com",
+            "https://mydomain.com/sonarr"
+          ]
+        },
+        "api_key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The API key from Sonarr."
+        },
+        "quality_definition": {
+          "$ref": "config/quality-definition.json"
+        },
+        "quality_profiles": {
+          "$ref": "config/quality-profiles.json"
+        },
+        "delete_old_custom_formats": {
+          "$ref": "#/$defs/delete_old_custom_formats"
+        },
+        "replace_existing_custom_formats": {
+          "$ref": "#/$defs/replace_existing_custom_formats"
+        },
+        "custom_formats": {
+          "$ref": "config/custom-formats.json"
+        },
+        "include": {
+          "$ref": "config/includes.json"
+        },
+        "media_naming": {
+          "$ref": "config/media-naming-sonarr.json"
+        }
+      }
+    }
+  }
+}

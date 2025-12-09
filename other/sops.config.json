@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": ".sops.yaml schema",
+  "definition": {
+    "azureKVKey": {
+      "type": "object",
+      "properties": {
+        "vaultUrl": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "gcpKmsKey": {
+      "type": "object",
+      "properties": {
+        "resource_id": {
+          "type": "string"
+        }
+      }
+    },
+    "kmsKey": {
+      "type": "object",
+      "properties": {
+        "resource_id": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "context": {
+          "type": "object"
+        },
+        "aws_profile": {
+          "type": "string"
+        }
+      }
+    },
+    "keyGroup": {
+      "type": "object",
+      "properties": {
+        "gcp_kms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definition/gcpKmsKey"
+          }
+        },
+        "azure_keyvault": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definition/azureKVKey"
+          }
+        },
+        "merge": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definition/keyGroup"
+          }
+        },
+        "kms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definition/kmsKey"
+          }
+        },
+        "hc_vault": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "age": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pgp": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "creation_rules": {
+      "type": "object",
+      "properties": {
+        "path_regex": {
+          "type": "string"
+        },
+        "aws_profile": {
+          "type": "string",
+          "description": "The AWS profile to use for requests to AWS"
+        },
+        "age": {
+          "type": "string",
+          "description": "List of age recipients"
+        },
+        "gcp_kms": {
+          "type": "string",
+          "description": "List of GCP KMS resource IDs"
+        },
+        "kms": {
+          "type": "string",
+          "description": "List of KMS ARNs"
+        },
+        "pgp": {
+          "type": "string",
+          "description": "List of PGP fingerprints"
+        },
+        "azure_keyvault": {
+          "type": "string",
+          "description": "List of Azure Key Vault URLs"
+        },
+        "hc_vault_transit_uri": {
+          "type": "string",
+          "description": "List of vault's key URI"
+        },
+        "key_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definition/keyGroup"
+          }
+        },
+        "shamir_threshold": {
+          "type": "number"
+        },
+        "unencrypted_suffix": {
+          "type": "string"
+        },
+        "encrypted_suffix": {
+          "type": "string"
+        },
+        "unencrypted_regex": {
+          "type": "string"
+        },
+        "encrypted_regex": {
+          "type": "string",
+          "examples": ["^(data|stringData)$"]
+        },
+        "unencrypted_comment_regex": {
+          "type": "string"
+        },
+        "encrypted_comment_regex": {
+          "type": "string"
+        },
+        "mac_only_encrypted": {
+          "type": "bool"
+        }
+      }
+    },
+    "destination_rules": {
+      "path_regex": { "type": "string" },
+      "s3_bucket": { "type": "string" },
+      "s3_prefix": { "type": "string" },
+      "gcs_bucket": { "type": "string" },
+      "gcs_prefix": { "type": "string" },
+      "vault_path": { "type": "string" },
+      "vault_address": { "type": "string" },
+      "vault_kv_mount_name": { "type": "string" },
+      "vault_kv_version": { "type": "number" },
+      "recreation_rule": { "$ref": "#/definition/creation_rules" },
+      "omit_extensions": { "type": "bool" }
+    },
+    "stores": {
+      "type": "object",
+      "properties": {
+        "dotenv": {
+          "type": "object"
+        },
+        "ini": {
+          "type": "object"
+        },
+        "json_binary": {
+          "type": "object",
+          "properties": {
+            "indent": {
+              "type": "number"
+            }
+          }
+        },
+        "json": {
+          "type": "object",
+          "properties": {
+            "indent": {
+              "type": "number"
+            }
+          }
+        },
+        "yaml": {
+          "type": "object",
+          "properties": {
+            "indent": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "creation_rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definition/creation_rules"
+      }
+    },
+    "destination_rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definition/destination_rules"
+      }
+    },
+    "stores": {
+      "$ref": "#/definition/stores"
+    }
+  }
+}
