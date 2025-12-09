@@ -58,7 +58,7 @@ jobs:
           node-version: 24.x
 
       - name: Install Python Dependencies
-        run: uv pip install pyyaml
+        run: uv pip install pyyaml requests
 
       - name: Run crd-extractor
         # yamllint disable rule:line-length
@@ -67,6 +67,14 @@ jobs:
 
           rm -rf *
           cp -r /home/runner/.datree/crdSchemas/* .
+          mkdir -p custom
+          curl -o custom/app-template-hr.json https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+          curl -o custom/docker-compose.json https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+          curl -o custom/kromgo.config.json https://raw.githubusercontent.com/kashalls/kromgo/main/config.schema.json
+          curl -o custom/recyclarr.config.json https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json
+          curl -o custom/talos.config.json https://raw.githubusercontent.com/siderolabs/talos/refs/tags/v1.11.5/pkg/machinery/config/schemas/config.schema.json
+
+          python3 -c "import requests, yaml, json; print(json.dumps(yaml.safe_load(requests.get('https://raw.githubusercontent.com/borgmatic-collective/borgmatic/main/borgmatic/config/schema.yaml').text), indent=2))" > custom/borgmatic.config.json
         # yamllint enable rule:line-length
 
       - name: Commit Changes
