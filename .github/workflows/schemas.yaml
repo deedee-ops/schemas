@@ -57,18 +57,78 @@ jobs:
         with:
           node-version: 24.x
 
-      - name: Install Python Dependencies
-        run: uv pip install pyyaml
+      - name: Install Python Dependencies and clean up old manifests
+        run: |-
+          uv pip install pyyaml requests
+          rm -rf *
 
-      - name: Run crd-extractor
-        # yamllint disable rule:line-length
+      # yamllint disable rule:line-length
+      - name: Build k8s raw manifests schemas
+        run: |-
+          for manifest in clusterrolebinding-rbac-v1.json \
+                          clusterrole-rbac-v1.json \
+                          mutatingadmissionpolicy-admissionregistration-v1beta1.json \
+                          mutatingadmissionpolicybinding-admissionregistration-v1beta1.json \
+                          namespace-v1.json \
+                          persistentvolumeclaim.json \
+                          resourceclaimtemplate-resource-v1.json \
+                          rolebinding-rbac-v1.json \
+                          role-rbac-v1.json \
+                          secret-v1.json \
+                          serviceaccount-v1.json \
+                          service-v1.json; do \
+            curl -o "${manifest}" "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/master/${manifest}"
+          done
+
+      - name: Build k8s CRD manifests schemas
         run: |-
           curl -fsSL https://raw.githubusercontent.com/datreeio/CRDs-catalog/43e4407642d4c37683c88711f37caa6c9c20ca40/Utilities/crd-extractor.sh | bash
 
-          rm -rf *
           cp -r /home/runner/.datree/crdSchemas/* .
-        # yamllint enable rule:line-length
 
+      - name: Build other schemas
+        run: |-
+          mkdir -p other
+          curl -o other/app-template-hr.json https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+          curl -o other/docker-compose.json https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+          curl -o other/kromgo.config.json https://raw.githubusercontent.com/kashalls/kromgo/main/config.schema.json
+          curl -o other/recyclarr.config.json https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json
+          curl -o other/talos.config.json https://raw.githubusercontent.com/siderolabs/talos/refs/heads/main/pkg/machinery/config/schemas/config.schema.json
+          curl -o other/markdownlint.config.json https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
+          curl -o other/sops.config.json https://raw.githubusercontent.com/chri11g6/sops-schema/refs/heads/master/sops.schema.json
+
+          cat <<EOF | tee other/labels.json
+          {
+            "\$schema": "http://json-schema.org/draft-07/schema",
+            "\$id": "homelab-labels",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "description": "Name of the label.",
+                      "type": "string"
+                    },
+                    "color": {
+                      "description": "Color of the label.",
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{6}$"
+                    }
+                  },
+                  "required": ["name", "color"]
+                }
+              ],
+              "required": []
+            }
+          }
+          EOF
+
+          python3 -c "import requests, yaml, json; print(json.dumps(yaml.safe_load(requests.get('https://raw.githubusercontent.com/borgmatic-collective/borgmatic/main/borgmatic/config/schema.yaml').text), indent=2))" > other/borgmatic.config.json
+
+      # yamllint enable rule:line-length
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@28e16e81777b558cc906c8750092100bbb34c5e3 # v7.0.0
         with:
