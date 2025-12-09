@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Schemas
+
+'on':
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/schemas.yaml
+
+env:
+  UV_SYSTEM_PYTHON: "1"
+
+permissions:
+  contents: read
+
+jobs:
+  main:
+    name: Schemas
+    runs-on: home-ops-runner
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+        id: app-token
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: true
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@776406bce94f63e41d621b960d78ee25c8b76ede # v4.0.1
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+        with:
+          enable-cache: false
+
+      - name: Setup Python
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: 3.14.x
+
+      - name: Setup Node
+        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        with:
+          node-version: 24.x
+
+      - name: Install Python Dependencies
+        run: uv pip install pyyaml
+
+      - name: Run crd-extractor
+        # yamllint disable rule:line-length
+        run: |-
+          curl -fsSL https://raw.githubusercontent.com/datreeio/CRDs-catalog/43e4407642d4c37683c88711f37caa6c9c20ca40/Utilities/crd-extractor.sh | bash
+
+          rm -rf *
+          cp -r /home/runner/.datree/crdSchemas/* .
+        # yamllint enable rule:line-length
+
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@28e16e81777b558cc906c8750092100bbb34c5e3 # v7.0.0
+        with:
+          commit_message: "feat: update schemas"
+          commit_user_name: "RoboDexo2000[bot]"
+          commit_user_email: "150604236+robodexo2000[bot]@users.noreply.github.com"
+          commit_author: "RoboDexo2000 <150604236+RoboDexo2000[bot]@users.noreply.github.com>"
