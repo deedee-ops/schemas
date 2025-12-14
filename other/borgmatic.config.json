@@ -399,6 +399,16 @@
       "description": "A Borg pattern for filtering down the archives used by borgmatic\nactions that operate on multiple archives. For Borg 1.x, use a shell\npattern here and see the output of \"borg help placeholders\" for\ndetails. For Borg 2.x, see the output of \"borg help match-archives\".\nIf match_archives is not specified, borgmatic defaults to deriving\nthe match_archives value from archive_name_format.\n",
       "example": "sh:{hostname}-*"
     },
+    "file_list_format": {
+      "type": "string",
+      "description": "Borg format for the files listing of the \"list\" action. Corresponds\nto the \"--format\" flag. Defaults to \"{mode} {user:6} {group:6}\n{size:8} {mtime} {path}{extra}{NL}\". With \"--json\", the form of the\nformat is ignored, but the keys used in it are added to the JSON\noutput. See\nhttps://borgbackup.readthedocs.io/en/stable/usage/list.html for\ndetails.\n",
+      "example": "{path}{extra}{NL}"
+    },
+    "archive_list_format": {
+      "type": "string",
+      "description": "Borg format for the archives listing of the \"repo-list\" action.\nCorresponds to the \"--format\" flag. Defaults to \"{archive:<36}\n{time} [{id}]{NL}\". With \"--json\", the form of the format is\nignored, but the keys used in it are added to the JSON output. See\nhttps://borgbackup.readthedocs.io/en/stable/usage/list.html for\ndetails.\n",
+      "example": "{archive}{NL}"
+    },
     "relocated_repo_access_is_ok": {
       "type": "boolean",
       "description": "Bypass Borg error about a repository that has been moved. Defaults\nto false.\n",
@@ -814,7 +824,7 @@
     },
     "log_file_format": {
       "type": "string",
-      "description": "Python format string used for log messages written to the log file.\n",
+      "description": "Python format string used for log messages written to the log file.\nSee https://docs.python.org/3/library/logging.html (and specifically\nthe LogRecord attributes with \"{}-formatting\") for details.\n",
       "example": "[{asctime}] {levelname}: {prefix}{message}"
     },
     "monitoring_verbosity": {
