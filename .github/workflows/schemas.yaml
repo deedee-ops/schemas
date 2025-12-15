@@ -61,6 +61,7 @@ jobs:
         run: |-
           uv pip install pyyaml requests
           rm -rf *
+          mkdir -p other
 
       # yamllint disable rule:line-length
       - name: Build k8s raw manifests schemas
@@ -86,10 +87,20 @@ jobs:
 
           cp -r /home/runner/.datree/crdSchemas/* .
 
+      - name: Build HelmRelease schemas
+        run: |-
+          curl -o other/app-template-hr.json https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+          for ref in https://raw.githubusercontent.com/cert-manager/cert-manager/refs/heads/master/deploy/charts/cert-manager/values.schema.json \
+                     https://raw.githubusercontent.com/external-secrets/external-secrets/refs/heads/main/deploy/charts/external-secrets/values.schema.json \
+                     https://raw.githubusercontent.com/controlplaneio-fluxcd/charts/refs/heads/main/charts/flux-operator/values.schema.json \
+                     https://raw.githubusercontent.com/controlplaneio-fluxcd/charts/refs/heads/main/charts/flux-instance/values.schema.json \
+                     https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json \
+                     https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/heads/master/charts/external-dns/values.schema.json; do \
+            sed "s@{{ refURL }}@${ref}@g" .github/hr.template.json > "other/$(echo "${ref}" | sed -E 's@/[^/]+$@@' | awk -F/ '{print $NF}')-hr.json"
+          done
+
       - name: Build other schemas
         run: |-
-          mkdir -p other
-          curl -o other/app-template-hr.json https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
           curl -o other/docker-compose.json https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
           curl -o other/kromgo.config.json https://raw.githubusercontent.com/kashalls/kromgo/main/config.schema.json
           curl -o other/recyclarr.config.json https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json
