@@ -1459,6 +1459,16 @@
             "description": "Port to restore to. Defaults to the \"port\" option.\n",
             "example": 5433
           },
+          "socket_path": {
+            "type": "string",
+            "description": "Path of a Unix socket to connect to instead of a remote\nhostname. Ignored when \"hostname\" is set and not\n\"localhost\". Defaults to \"/run/mysqld/mysqld.sock\".\n",
+            "example": "database.example.org"
+          },
+          "restore_socket_path": {
+            "type": "string",
+            "description": "Path of a Unix socket to connect to instead of a remote\nhostname. Ignored when \"hostname\" is set and not\n\"localhost\". Defaults to the \"socket_path\" option.\n",
+            "example": "database.example.org"
+          },
           "username": {
             "type": "string",
             "description": "Username with which to connect to the database. Defaults\nto the username of the current user. Supports the\n\"{credential ...}\" syntax.\n",
@@ -1603,6 +1613,16 @@
             "type": "integer",
             "description": "Port to restore to. Defaults to the \"port\" option.\n",
             "example": 5433
+          },
+          "socket_path": {
+            "type": "string",
+            "description": "Path of a Unix socket to connect to instead of a remote\nhostname. Ignored when \"hostname\" is set and not\n\"localhost\". Defaults to \"/run/mysqld/mysqld.sock\".\n",
+            "example": "database.example.org"
+          },
+          "restore_socket_path": {
+            "type": "string",
+            "description": "Path of a Unix socket to connect to instead of a remote\nhostname. Ignored when \"hostname\" is set and not\n\"localhost\". Defaults to the \"socket_path\" option.\n",
+            "example": "database.example.org"
           },
           "username": {
             "type": "string",
