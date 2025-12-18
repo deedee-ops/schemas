@@ -68,6 +68,7 @@ jobs:
         run: |-
           for manifest in clusterrolebinding-rbac-v1.json \
                           clusterrole-rbac-v1.json \
+                          deployment-apps-v1.json \
                           mutatingadmissionpolicy-admissionregistration-v1beta1.json \
                           mutatingadmissionpolicybinding-admissionregistration-v1beta1.json \
                           namespace-v1.json \
@@ -77,7 +78,8 @@ jobs:
                           role-rbac-v1.json \
                           secret-v1.json \
                           serviceaccount-v1.json \
-                          service-v1.json; do \
+                          service-v1.json \
+                          storageclass-storage-v1.json; do
             curl -o "${manifest}" "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/master/${manifest}"
           done
 
