@@ -144,7 +144,7 @@
       "items": {
         "type": "string"
       },
-      "description": "Any paths matching these patterns are included/excluded from\nbackups. Recursion root patterns (\"R ...\") are effectively the same\nas \"source_directories\"; they tell Borg which paths to backup\n(modulo any excludes). Globs are expanded. (Tildes are not.) See\nthe output of \"borg help patterns\" for more details. Quote any value\nif it contains leading punctuation, so it parses correctly.\n",
+      "description": "Any paths matching these patterns are included/excluded from\nbackups. Recursion root patterns (\"R ...\") are effectively the same\nas \"source_directories\"; they tell Borg which paths to backup\n(modulo any excludes). Globs are expanded. (Tildes are not.) See\nthe output of \"borg help patterns\" for more details. Quote any value\nif it contains leading punctuation, so it parses correctly. Also use\nleading slashes in absolute paths, or data source hooks may be\nunable to rewrite patterns as needed.\n",
       "example": [
         "R /",
         "- /home/*/.cache",
