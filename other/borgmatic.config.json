@@ -18,7 +18,7 @@
       "items": {
         "type": "string"
       },
-      "description": "List of source directories and files to back up. Globs and tildes\nare expanded. Do not backslash spaces in path names. Be aware that\nby default, Borg treats missing source directories as warnings\nrather than errors. If you'd like to change that behavior, see\nhttps://torsion.org/borgmatic/how-to/customize-warnings-and-errors/\nor the \"source_directories_must_exist\" option.\n",
+      "description": "List of source directories and files to back up. Globs and tildes\nare expanded. Do not backslash spaces in path names.\n",
       "example": [
         "/home",
         "/etc",
@@ -28,7 +28,7 @@
     },
     "source_directories_must_exist": {
       "type": "boolean",
-      "description": "If true, then source directories (and root pattern paths) must\nexist. If they don't, an error is raised. Defaults to false.\n",
+      "description": "Deprecated. Replaced by borgmatic treating Borg's \"backup file not\nfound\" warning as an error by default. But if\n\"source_directories_must_exist\" is true, then source directories\n(and root pattern paths) must exist before a backup begins. If they\ndon't, borgmatic errors. Defaults to false.\n",
       "example": true
     },
     "repositories": {
@@ -372,7 +372,7 @@
           }
         }
       },
-      "description": "A list of Borg exit codes that should be elevated to errors or\nsquashed to warnings as indicated. By default, Borg error exit codes\n(2 to 99) are treated as errors while warning exit codes (1 and\n100+) are treated as warnings. Exit codes other than 1 and 2 are\nonly present in Borg 1.4.0+.\n",
+      "description": "A list of Borg exit codes that should be elevated to errors or\nsquashed to warnings as indicated. By default, Borg error exit codes\n(2 to 99) are treated as errors and most warning exit codes (1 and\n100+) are treated as errors as well. Exit codes other than 1 and 2\nare only present in Borg 1.4.0+.\n",
       "example": [
         {
           "code": 13,
