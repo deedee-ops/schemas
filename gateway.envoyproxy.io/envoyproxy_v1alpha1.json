@@ -350,6 +350,7 @@
           "description": "LuaValidation determines strictness of the Lua script validation for Lua EnvoyExtensionPolicies\nDefault: Strict",
           "enum": [
             "Strict",
+            "InsecureSyntax",
             "Disabled"
           ],
           "type": "string"
