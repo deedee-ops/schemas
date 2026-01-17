@@ -121,7 +121,7 @@
     },
     "unsafe_skip_path_validation_before_create": {
       "type": "boolean",
-      "description": "Skip pre-backup safety checks: (1) runtime directory exclusion\ndetection, and (2) special file exclusion for database streaming.\nCan significantly improve performance for large filesystems.\n\nUNSAFE because if using data source hooks: Borg may hang on special\nfiles (named pipes, devices), and data from borgmatic data source\nhooks may be silently excluded if your exclude_patterns match the\nruntime directory (see \"user_runtime_directory\" option).\n\nOnly enable if not using data source hooks, or after manually\nverifying your excludes don't affect the runtime directory. Defaults\nto false.\n",
+      "description": "Skip pre-backup safety validation: (1) runtime directory exclusion\ndetection, and (2) special file exclusion for database streaming.\nCan significantly improve performance for large filesystems.\n\nUNSAFE because, when this option is enabled, Borg may hang on\nspecial files (named pipes, devices) and data from borgmatic data\nsource hooks may be silently excluded if your excluded patterns\nmatch the runtime directory (see the \"user_runtime_directory\"\noption).\n\nOnly enable if not using data source hooks and you manually verify\nthat your excludes don't affect the runtime directory. Defaults\nto false.\n",
       "example": true
     },
     "flags": {
