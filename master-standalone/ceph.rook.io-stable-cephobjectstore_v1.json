@@ -610,6 +610,35 @@
                                   "type": "object",
                                   "additionalProperties": false
                                 },
+                                "podCertificate": {
+                                  "properties": {
+                                    "certificateChainPath": {
+                                      "type": "string"
+                                    },
+                                    "credentialBundlePath": {
+                                      "type": "string"
+                                    },
+                                    "keyPath": {
+                                      "type": "string"
+                                    },
+                                    "keyType": {
+                                      "type": "string"
+                                    },
+                                    "maxExpirationSeconds": {
+                                      "format": "int32",
+                                      "type": "integer"
+                                    },
+                                    "signerName": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "keyType",
+                                    "signerName"
+                                  ],
+                                  "type": "object",
+                                  "additionalProperties": false
+                                },
                                 "secret": {
                                   "properties": {
                                     "items": {
@@ -806,7 +835,7 @@
                   "description": "Resources represents the way to specify resource requirements for the ops-log sidecar",
                   "properties": {
                     "claims": {
-                      "description": "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\n\nThis field is immutable. It can only be set for containers.",
+                      "description": "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\nThis field depends on the\nDynamicResourceAllocation feature gate.\n\nThis field is immutable. It can only be set for containers.",
                       "items": {
                         "description": "ResourceClaim references one entry in PodSpec.ResourceClaims.",
                         "properties": {
@@ -1686,7 +1715,7 @@
               "nullable": true,
               "properties": {
                 "claims": {
-                  "description": "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\n\nThis field is immutable. It can only be set for containers.",
+                  "description": "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\nThis field depends on the\nDynamicResourceAllocation feature gate.\n\nThis field is immutable. It can only be set for containers.",
                   "items": {
                     "description": "ResourceClaim references one entry in PodSpec.ResourceClaims.",
                     "properties": {
@@ -2809,6 +2838,13 @@
         },
         "phase": {
           "description": "ConditionType represent a resource's status",
+          "type": "string"
+        },
+        "replicas": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "selector": {
           "type": "string"
         }
       },
