@@ -1926,6 +1926,14 @@
             },
             "priority": {
               "type": "string",
+              "enum": [
+                "max",
+                "urgent",
+                "high",
+                "default",
+                "low",
+                "min"
+              ],
               "description": "The priority to set.\n",
               "example": "min"
             },
@@ -1952,6 +1960,14 @@
             },
             "priority": {
               "type": "string",
+              "enum": [
+                "max",
+                "urgent",
+                "high",
+                "default",
+                "low",
+                "min"
+              ],
               "description": "The priority to set.\n",
               "example": "min"
             },
@@ -1978,6 +1994,14 @@
             },
             "priority": {
               "type": "string",
+              "enum": [
+                "max",
+                "urgent",
+                "high",
+                "default",
+                "low",
+                "min"
+              ],
               "description": "The priority to set.\n",
               "example": "max"
             },
