@@ -436,6 +436,19 @@
         "scaleTargetKind": {
           "type": "string"
         },
+        "triggersActivity": {
+          "additionalProperties": {
+            "description": "TriggerActivityStatus represents the activity status of an external trigger",
+            "properties": {
+              "isActive": {
+                "type": "boolean"
+              }
+            },
+            "type": "object",
+            "additionalProperties": false
+          },
+          "type": "object"
+        },
         "triggersTypes": {
           "type": "string"
         }
