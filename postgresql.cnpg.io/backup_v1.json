@@ -186,6 +186,10 @@
               ],
               "type": "object",
               "additionalProperties": false
+            },
+            "useDefaultAzureCredentials": {
+              "description": "Use the default Azure authentication flow, which includes DefaultAzureCredential.\nThis allows authentication using environment variables and managed identities.",
+              "type": "boolean"
             }
           },
           "type": "object",
@@ -302,6 +306,10 @@
             },
             "podName": {
               "description": "The pod name",
+              "type": "string"
+            },
+            "sessionID": {
+              "description": "The instance manager session ID. This is a unique identifier generated at instance manager\nstartup and changes on every restart (including container reboots). Used to detect if\nthe instance manager was restarted during long-running operations like backups, which\nwould terminate any running backup process.",
               "type": "string"
             }
           },
