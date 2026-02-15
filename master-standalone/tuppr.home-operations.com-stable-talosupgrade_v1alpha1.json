@@ -61,6 +61,89 @@
           },
           "type": "array"
         },
+        "maintenance": {
+          "description": "Maintenance configuration behavior for upgrade operations",
+          "properties": {
+            "windows": {
+              "items": {
+                "properties": {
+                  "duration": {
+                    "description": "How long the window stays open (e.g., \"4h\", \"2h30m\")",
+                    "pattern": "^([0-9]+[smh])+$",
+                    "type": "string"
+                  },
+                  "start": {
+                    "description": "Cron expression (5-field): minute hour day-of-month month day-of-week",
+                    "minLength": 9,
+                    "type": "string"
+                  },
+                  "timezone": {
+                    "default": "UTC",
+                    "description": "IANA timezone (e.g., \"UTC\", \"Europe/Paris\")",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "duration",
+                  "start"
+                ],
+                "type": "object",
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "type": "object",
+          "additionalProperties": false
+        },
+        "nodeSelector": {
+          "description": "NodeSelector defines which nodes should be included in this upgrade.",
+          "properties": {
+            "matchExpressions": {
+              "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+              "items": {
+                "description": "A label selector requirement is a selector that contains values, a key, and an operator that\nrelates the key and values.",
+                "properties": {
+                  "key": {
+                    "description": "key is the label key that the selector applies to.",
+                    "type": "string"
+                  },
+                  "operator": {
+                    "description": "operator represents a key's relationship to a set of values.\nValid operators are In, NotIn, Exists and DoesNotExist.",
+                    "type": "string"
+                  },
+                  "values": {
+                    "description": "values is an array of string values. If the operator is In or NotIn,\nthe values array must be non-empty. If the operator is Exists or DoesNotExist,\nthe values array must be empty. This array is replaced during a strategic\nmerge patch.",
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array",
+                    "x-kubernetes-list-type": "atomic"
+                  }
+                },
+                "required": [
+                  "key",
+                  "operator"
+                ],
+                "type": "object",
+                "additionalProperties": false
+              },
+              "type": "array",
+              "x-kubernetes-list-type": "atomic"
+            },
+            "matchLabels": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels\nmap is equivalent to an element of matchExpressions, whose key field is \"key\", the\noperator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+              "type": "object"
+            }
+          },
+          "type": "object",
+          "x-kubernetes-map-type": "atomic",
+          "additionalProperties": false
+        },
         "policy": {
           "description": "Policy configures upgrade behavior",
           "properties": {
@@ -211,6 +294,11 @@
         },
         "message": {
           "description": "Message provides details about the current state",
+          "type": "string"
+        },
+        "nextMaintenanceWindow": {
+          "description": "NextMaintenanceWindow reflect the next time a maintenance can happen",
+          "format": "date-time",
           "type": "string"
         },
         "observedGeneration": {
