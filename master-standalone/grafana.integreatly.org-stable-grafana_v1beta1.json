@@ -5809,6 +5809,12 @@
                                             },
                                             "signerName": {
                                               "type": "string"
+                                            },
+                                            "userAnnotations": {
+                                              "additionalProperties": {
+                                                "type": "string"
+                                              },
+                                              "type": "object"
                                             }
                                           },
                                           "required": [
@@ -6217,6 +6223,17 @@
               "x-kubernetes-map-type": "atomic",
               "additionalProperties": false
             },
+            "tenantNamespace": {
+              "default": "default",
+              "description": "TenantNamespace is used as the `namespace` value for GrafanaManifest resources in multi-tenant scenarios\ndefaults to `default`",
+              "type": "string",
+              "x-kubernetes-validations": [
+                {
+                  "message": "Value is immutable",
+                  "rule": "self == oldSelf"
+                }
+              ]
+            },
             "tls": {
               "description": "DEPRECATED, use top level `tls` instead.",
               "properties": {
@@ -6252,10 +6269,12 @@
             },
             "url": {
               "description": "URL of the external grafana instance you want to manage.",
+              "pattern": "^https?://.+$",
               "type": "string"
             }
           },
           "required": [
+            "tenantNamespace",
             "url"
           ],
           "type": "object",
@@ -6356,18 +6375,6 @@
                   "type": "array"
                 },
                 "rules": {
-                  "default": [
-                    {
-                      "matches": [
-                        {
-                          "path": {
-                            "type": "PathPrefix",
-                            "value": "/"
-                          }
-                        }
-                      ]
-                    }
-                  ],
                   "description": "Rules are a list of HTTP matchers, filters and actions.\n\n<gateway:experimental:validation:XValidation:message=\"Rule name must be unique within the route\",rule=\"self.all(l1, !has(l1.name) || self.exists_one(l2, has(l2.name) && l1.name == l2.name))\">",
                   "items": {
                     "description": "HTTPRouteRule defines semantics for matching an HTTP request based on\nconditions (matches), processing it (filters), and forwarding the request to\nan API object (backendRefs).",
@@ -9031,7 +9038,7 @@
           "type": "boolean"
         },
         "version": {
-          "description": "Version sets the tag of the default image: docker.io/grafana/grafana.\nAllows full image refs with/without sha256checksum: \"registry/repo/image:tag@sha\"\ndefault: 12.3.0",
+          "description": "Version sets the tag of the default image: docker.io/grafana/grafana.\nAllows full image refs with/without sha256checksum: \"registry/repo/image:tag@sha\"\ndefault: 12.3.3",
           "type": "string"
         }
       },
@@ -9133,6 +9140,12 @@
           "type": "string"
         },
         "libraryPanels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "manifests": {
           "items": {
             "type": "string"
           },
