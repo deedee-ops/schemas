@@ -895,7 +895,8 @@
           "info",
           "break-lock",
           "key",
-          "borg"
+          "borg",
+          "diff"
         ]
       },
       "description": "List of one or more actions to skip running for this configuration\nfile, even if specified on the command-line (explicitly or\nimplicitly). This is handy for append-only configurations where you\nnever want to run \"compact\" or checkless configuration where you\nwant to skip \"check\". Defaults to not skipping any actions.\n",
@@ -1102,7 +1103,8 @@
                     "info",
                     "break-lock",
                     "key",
-                    "borg"
+                    "borg",
+                    "diff"
                   ]
                 },
                 "description": "List of actions for which the commands will be\nrun. Defaults to running for all actions.\n",
@@ -1170,7 +1172,8 @@
                     "info",
                     "break-lock",
                     "key",
-                    "borg"
+                    "borg",
+                    "diff"
                   ]
                 },
                 "description": "Only trigger the hook when borgmatic is run with\nparticular actions listed here. Defaults to\nrunning for all actions.\n",
