@@ -129,6 +129,16 @@
       "description": "Record filesystem flags (e.g. NODUMP, IMMUTABLE) in archive.\nDefaults to true.\n",
       "example": false
     },
+    "files_changed": {
+      "type": "string",
+      "enum": [
+        "ctime",
+        "mtime",
+        "disabled"
+      ],
+      "description": "Threshold for considering a file as changed. See\nhttps://borgbackup.readthedocs.io/en/stable/usage/create.html for\ndetails. Defaults to \"ctime\". E.g., a file is considered changed if\nits ctime has changed since the last backup. (This option is\nsupported for Borg 1.4.2+ only.)\n",
+      "example": "ctime"
+    },
     "files_cache": {
       "type": "string",
       "description": "Mode in which to operate the files cache. See\nhttp://borgbackup.readthedocs.io/en/stable/usage/create.html for\ndetails. Defaults to \"ctime,size,inode\".\n",
@@ -438,6 +448,11 @@
       "type": "boolean",
       "description": "Bypass Borg confirmation about check with repair option. Defaults to\nfalse and an interactive prompt from Borg.\n",
       "example": true
+    },
+    "msgpack_version_check": {
+      "type": "boolean",
+      "description": "Optionally disable the msgpack version check. Default is true; use\nat your own risk. (This option is supported for Borg 1.4.2+ only.)\n",
+      "example": false
     },
     "extra_borg_options": {
       "type": "object",
