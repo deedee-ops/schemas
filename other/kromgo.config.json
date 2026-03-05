@@ -32,6 +32,12 @@
         },
         "badge": {
           "$ref": "#/$defs/Badge"
+        },
+        "templates": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
         }
       },
       "additionalProperties": false,
@@ -58,6 +64,9 @@
           "type": "string"
         },
         "suffix": {
+          "type": "string"
+        },
+        "valueTemplate": {
           "type": "string"
         },
         "colors": {
