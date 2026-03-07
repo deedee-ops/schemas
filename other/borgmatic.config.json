@@ -28,8 +28,8 @@
     },
     "source_directories_must_exist": {
       "type": "boolean",
-      "description": "Deprecated. Replaced by borgmatic treating Borg's \"backup file not\nfound\" warning as an error by default. But if\n\"source_directories_must_exist\" is true, then source directories\n(and root pattern paths) must exist before a backup begins. If they\ndon't, borgmatic errors. Defaults to false.\n",
-      "example": true
+      "description": "When true, source directories (and root pattern paths) must exist\nbefore a backup begins. If they don't, borgmatic errors. Defaults to\ntrue.\n",
+      "example": false
     },
     "repositories": {
       "type": "array",
