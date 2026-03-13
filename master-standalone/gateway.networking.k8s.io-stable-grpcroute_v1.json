@@ -158,10 +158,9 @@
                                       "type": "string"
                                     },
                                     "value": {
-                                      "description": "Value is the value of HTTP Header to be matched.\n\nMust consist of printable US-ASCII characters, optionally separated\nby single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2",
+                                      "description": "Value is the value of HTTP Header to be matched.",
                                       "maxLength": 4096,
                                       "minLength": 1,
-                                      "pattern": "^[!-~]+([\\t ]?[!-~]+)*$",
                                       "type": "string"
                                     }
                                   },
@@ -201,10 +200,9 @@
                                       "type": "string"
                                     },
                                     "value": {
-                                      "description": "Value is the value of HTTP Header to be matched.\n\nMust consist of printable US-ASCII characters, optionally separated\nby single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2",
+                                      "description": "Value is the value of HTTP Header to be matched.",
                                       "maxLength": 4096,
                                       "minLength": 1,
-                                      "pattern": "^[!-~]+([\\t ]?[!-~]+)*$",
                                       "type": "string"
                                     }
                                   },
@@ -343,10 +341,9 @@
                                       "type": "string"
                                     },
                                     "value": {
-                                      "description": "Value is the value of HTTP Header to be matched.\n\nMust consist of printable US-ASCII characters, optionally separated\nby single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2",
+                                      "description": "Value is the value of HTTP Header to be matched.",
                                       "maxLength": 4096,
                                       "minLength": 1,
-                                      "pattern": "^[!-~]+([\\t ]?[!-~]+)*$",
                                       "type": "string"
                                     }
                                   },
@@ -386,10 +383,9 @@
                                       "type": "string"
                                     },
                                     "value": {
-                                      "description": "Value is the value of HTTP Header to be matched.\n\nMust consist of printable US-ASCII characters, optionally separated\nby single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2",
+                                      "description": "Value is the value of HTTP Header to be matched.",
                                       "maxLength": 4096,
                                       "minLength": 1,
-                                      "pattern": "^[!-~]+([\\t ]?[!-~]+)*$",
                                       "type": "string"
                                     }
                                   },
@@ -588,10 +584,9 @@
                                 "type": "string"
                               },
                               "value": {
-                                "description": "Value is the value of HTTP Header to be matched.\n\nMust consist of printable US-ASCII characters, optionally separated\nby single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2",
+                                "description": "Value is the value of HTTP Header to be matched.",
                                 "maxLength": 4096,
                                 "minLength": 1,
-                                "pattern": "^[!-~]+([\\t ]?[!-~]+)*$",
                                 "type": "string"
                               }
                             },
@@ -631,10 +626,9 @@
                                 "type": "string"
                               },
                               "value": {
-                                "description": "Value is the value of HTTP Header to be matched.\n\nMust consist of printable US-ASCII characters, optionally separated\nby single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2",
+                                "description": "Value is the value of HTTP Header to be matched.",
                                 "maxLength": 4096,
                                 "minLength": 1,
-                                "pattern": "^[!-~]+([\\t ]?[!-~]+)*$",
                                 "type": "string"
                               }
                             },
@@ -773,10 +767,9 @@
                                 "type": "string"
                               },
                               "value": {
-                                "description": "Value is the value of HTTP Header to be matched.\n\nMust consist of printable US-ASCII characters, optionally separated\nby single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2",
+                                "description": "Value is the value of HTTP Header to be matched.",
                                 "maxLength": 4096,
                                 "minLength": 1,
-                                "pattern": "^[!-~]+([\\t ]?[!-~]+)*$",
                                 "type": "string"
                               }
                             },
@@ -816,10 +809,9 @@
                                 "type": "string"
                               },
                               "value": {
-                                "description": "Value is the value of HTTP Header to be matched.\n\nMust consist of printable US-ASCII characters, optionally separated\nby single tabs or spaces. See: https://tools.ietf.org/html/rfc7230#section-3.2",
+                                "description": "Value is the value of HTTP Header to be matched.",
                                 "maxLength": 4096,
                                 "minLength": 1,
-                                "pattern": "^[!-~]+([\\t ]?[!-~]+)*$",
                                 "type": "string"
                               }
                             },
