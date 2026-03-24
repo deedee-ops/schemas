@@ -881,7 +881,7 @@
     },
     "default_actions": {
       "type": "boolean",
-      "description": "Whether to apply default actions (create, prune, compact and check)\nwhen no arguments are supplied to the borgmatic command. If set to\nfalse, borgmatic displays the help message instead.\n",
+      "description": "Whether to run default actions (create, prune, compact, and check)\nwhen no arguments are given on the command line. If set to false,\nborgmatic displays the help message instead.\n",
       "example": true
     },
     "skip_actions": {
