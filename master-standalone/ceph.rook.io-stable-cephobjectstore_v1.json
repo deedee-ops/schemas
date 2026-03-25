@@ -2658,11 +2658,11 @@
               "items": {
                 "properties": {
                   "dataNonECPoolName": {
-                    "description": "The data pool used to store ObjectStore data that cannot use erasure coding (ex: multi-part uploads).\nIf dataPoolName is not erasure coded, then there is no need for dataNonECPoolName.",
+                    "description": "The data pool used to store ObjectStore data that cannot use erasure coding (ex: multi-part uploads).\nIf dataPoolName is not erasure coded, then there is no need for dataNonECPoolName.\nWARNING: Do not change this field after creation. Pool names are used in RADOS namespaces and renaming leads to data loss.",
                     "type": "string"
                   },
                   "dataPoolName": {
-                    "description": "The data pool used to store ObjectStore objects data.",
+                    "description": "The data pool used to store ObjectStore objects data.\nWARNING: Do not change this field after creation. Pool names are used in RADOS namespaces and renaming leads to data loss.",
                     "minLength": 1,
                     "type": "string"
                   },
@@ -2671,7 +2671,7 @@
                     "type": "boolean"
                   },
                   "metadataPoolName": {
-                    "description": "The metadata pool used to store ObjectStore bucket index.",
+                    "description": "The metadata pool used to store ObjectStore bucket index.\nWARNING: Do not change this field after creation. Pool names are used in RADOS namespaces and renaming leads to data loss.",
                     "minLength": 1,
                     "type": "string"
                   },
@@ -2686,7 +2686,7 @@
                     "items": {
                       "properties": {
                         "dataPoolName": {
-                          "description": "DataPoolName is the data pool used to store ObjectStore objects data.",
+                          "description": "DataPoolName is the data pool used to store ObjectStore objects data.\nWARNING: Do not change this field after creation. Pool names are used in RADOS namespaces and renaming leads to data loss.",
                           "minLength": 1,
                           "type": "string"
                         },
@@ -2704,6 +2704,7 @@
                       "type": "object",
                       "additionalProperties": false
                     },
+                    "maxItems": 10,
                     "type": "array"
                   }
                 },
