@@ -2672,6 +2672,23 @@
           "description": "Grafana Loki log URL to notify when a backup begins,\nends, or fails.\n",
           "example": "http://localhost:3100/loki/api/v1/push"
         },
+        "tls": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "cert_path": {
+              "type": "string",
+              "description": "Path to a PEM client certificate file for mutual\nTLS authentication.\n",
+              "example": "/etc/borgmatic/loki-client.crt"
+            },
+            "key_path": {
+              "type": "string",
+              "description": "Path to a PEM private key file for the client\ncertificate.\n",
+              "example": "/etc/borgmatic/loki-client.key"
+            }
+          },
+          "description": "TLS options for mutual TLS (mTLS) authentication with Loki.\n"
+        },
         "labels": {
           "type": "object",
           "additionalProperties": {
