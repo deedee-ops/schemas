@@ -1846,6 +1846,13 @@
                   },
                   "description": "The annotations-related configuration to add/set on each rgw service.\nnullable\noptional",
                   "type": "object"
+                },
+                "labels": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "The labels-related configuration to add/set on each rgw service.",
+                  "type": "object"
                 }
               },
               "type": "object",
