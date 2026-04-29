@@ -8,7 +8,7 @@
         "null"
       ],
       "enum": [
-        "admissionregistration.k8s.io/v1beta1"
+        "admissionregistration.k8s.io/v1"
       ]
     },
     "kind": {
@@ -26,7 +26,7 @@
       "description": "metadata is the standard object metadata; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata."
     },
     "spec": {
-      "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master/_definitions.json#/definitions/io.k8s.api.admissionregistration.v1beta1.MutatingAdmissionPolicySpec",
+      "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master/_definitions.json#/definitions/io.k8s.api.admissionregistration.v1.MutatingAdmissionPolicySpec",
       "description": "spec defines the desired behavior of the MutatingAdmissionPolicy."
     }
   },
@@ -35,7 +35,7 @@
     {
       "group": "admissionregistration.k8s.io",
       "kind": "MutatingAdmissionPolicy",
-      "version": "v1beta1"
+      "version": "v1"
     }
   ],
   "$schema": "http://json-schema.org/schema#"
