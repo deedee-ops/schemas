@@ -1,7 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Schemas
-
 'on':
   workflow_dispatch:
   schedule:
@@ -11,13 +10,10 @@ name: Schemas
       - master
     paths:
       - .github/workflows/schemas.yaml
-
 env:
   UV_SYSTEM_PYTHON: "1"
-
 permissions:
   contents: read
-
 jobs:
   main:
     name: Schemas
@@ -32,45 +28,38 @@ jobs:
         with:
           app-id: ${{ secrets.BOT_APP_ID }}
           private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
-
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: true
           token: ${{ steps.app-token.outputs.token }}
-
       - name: Install kubectl
         uses: azure/setup-kubectl@829323503d1be3d00ca8346e5391ca0b07a9ab0d # v5.1.0
-
       - name: Install uv
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           enable-cache: false
-
       - name: Setup Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: 3.14.x
-
       - name: Setup Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 24.x
-
       - name: Install Python Dependencies and clean up old manifests
         run: |-
           uv pip install pyyaml requests
           rm -rf *
           mkdir -p other
-
       # yamllint disable rule:line-length
       - name: Build k8s raw manifests schemas
         run: |-
           for manifest in clusterrolebinding-rbac-v1.json \
                           clusterrole-rbac-v1.json \
                           deployment-apps-v1.json \
-                          mutatingadmissionpolicy-admissionregistration-v1beta1.json \
-                          mutatingadmissionpolicybinding-admissionregistration-v1beta1.json \
+                          mutatingadmissionpolicy-admissionregistration-v1.json \
+                          mutatingadmissionpolicybinding-admissionregistration-v1.json \
                           namespace-v1.json \
                           persistentvolumeclaim-v1.json \
                           resourceclaimtemplate-resource-v1.json \
@@ -82,13 +71,11 @@ jobs:
                           storageclass-storage-v1.json; do
             curl -o "${manifest}" "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/master/${manifest}"
           done
-
       - name: Build k8s CRD manifests schemas
         run: |-
           curl -fsSL https://raw.githubusercontent.com/datreeio/CRDs-catalog/43e4407642d4c37683c88711f37caa6c9c20ca40/Utilities/crd-extractor.sh | bash
 
           cp -r /home/runner/.datree/crdSchemas/* .
-
       - name: Build HelmRelease schemas
         run: |-
           curl -o other/app-template-hr.json https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
@@ -100,7 +87,6 @@ jobs:
                      https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/heads/master/charts/external-dns/values.schema.json; do \
             sed "s@{{ refURL }}@${ref}@g" .github/hr.template.json > "other/$(echo "${ref}" | sed -E 's@/[^/]+$@@' | awk -F/ '{print $NF}')-hr.json"
           done
-
       - name: Build other schemas
         run: |-
           curl -o other/docker-compose.json https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
@@ -140,7 +126,6 @@ jobs:
           EOF
 
           python3 -c "import requests, yaml, json; print(json.dumps(yaml.safe_load(requests.get('https://raw.githubusercontent.com/borgmatic-collective/borgmatic/main/borgmatic/config/schema.yaml').text), indent=2))" > other/borgmatic.config.json
-
       # yamllint enable rule:line-length
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
