@@ -2880,19 +2880,24 @@
           "description": "Command to use instead of \"keepassxc-cli\".\n",
           "example": "/usr/local/bin/keepassxc-cli"
         },
+        "secret_tool_command": {
+          "type": "string",
+          "description": "Command to use instead of \"secret-tool\".\n",
+          "example": "/usr/local/bin/secret-tool"
+        },
         "ask_for_password": {
           "type": "boolean",
-          "description": "Whether keepassxc-cli should prompt the user for a password.\nDisabling this is only really useful if you're unlocking\nyour KeePassXC database with a key file instead of a\npassword. Defaults to true.\n",
+          "description": "Whether keepassxc-cli should prompt the user for a password.\nDisabling this is only really useful if you're unlocking\nyour KeePassXC database with a key file instead of a\npassword. Ignored when using KeePassXC's secret service\nintegration. Defaults to true.\n",
           "example": false
         },
         "key_file": {
           "type": "string",
-          "description": "Path to a key file for unlocking the KeePassXC database.\n",
+          "description": "Path to a key file for unlocking the KeePassXC database.\nIgnored when using KeePassXC's secret service integration.\n",
           "example": "/path/to/keyfile"
         },
         "yubikey": {
           "type": "string",
-          "description": "YubiKey slot and optional serial number used to access the\nKeePassXC database. The format is \"<slot[:serial]>\", where:\n * <slot> is the YubiKey slot number (e.g., `1` or `2`).\n * <serial> (optional) is the YubiKey's serial number (e.g.,\n   `7370001`).\n",
+          "description": "YubiKey slot and optional serial number used to access the\nKeePassXC database. Ignored when using KeePassXC's secret\nservice integration. The format is \"<slot[:serial]>\", where:\n * <slot> is the YubiKey slot number (e.g., `1` or `2`).\n * <serial> (optional) is the YubiKey's serial number (e.g.,\n   `7370001`).\n",
           "example": "1:7370001"
         }
       },
