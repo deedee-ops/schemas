@@ -396,7 +396,7 @@
     },
     "umask": {
       "type": "integer",
-      "description": "Umask used for when executing Borg or calling hooks. Defaults to\n0077 for Borg or the umask that borgmatic is run with for hooks.\n",
+      "description": "Umask used for when executing Borg or calling hooks. Defaults to\n0077 for Borg or the umask that borgmatic is run with for hooks.\nEven though this value is a YAML integer, borgmatic interprets it as\noctal. YAML's \"0o\"-prefixed octal notation is not currently\nsupported.\n",
       "example": 63
     },
     "lock_wait": {
