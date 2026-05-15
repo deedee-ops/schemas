@@ -60,7 +60,10 @@
                 "reconcileStrategy": {
                   "default": "ChartVersion",
                   "description": "Determines what enables the creation of a new artifact. Valid values are\n('ChartVersion', 'Revision').\nSee the documentation of the values for an explanation on their behavior.\nDefaults to ChartVersion when omitted.",
-                  "enum": ["ChartVersion", "Revision"],
+                  "enum": [
+                    "ChartVersion",
+                    "Revision"
+                  ],
                   "type": "string"
                 },
                 "sourceRef": {
@@ -72,7 +75,11 @@
                     },
                     "kind": {
                       "description": "Kind of the referent.",
-                      "enum": ["HelmRepository", "GitRepository", "Bucket"],
+                      "enum": [
+                        "HelmRepository",
+                        "GitRepository",
+                        "Bucket"
+                      ],
                       "type": "string"
                     },
                     "name": {
@@ -88,7 +95,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["name"],
+                  "required": [
+                    "name"
+                  ],
                   "type": "object",
                   "additionalProperties": false
                 },
@@ -105,7 +114,10 @@
                     "provider": {
                       "default": "cosign",
                       "description": "Provider specifies the technology used to sign the OCI Helm chart.",
-                      "enum": ["cosign", "notation"],
+                      "enum": [
+                        "cosign",
+                        "notation"
+                      ],
                       "type": "string"
                     },
                     "secretRef": {
@@ -116,12 +128,16 @@
                           "type": "string"
                         }
                       },
-                      "required": ["name"],
+                      "required": [
+                        "name"
+                      ],
                       "type": "object",
                       "additionalProperties": false
                     }
                   },
-                  "required": ["provider"],
+                  "required": [
+                    "provider"
+                  ],
                   "type": "object",
                   "additionalProperties": false
                 },
@@ -131,12 +147,17 @@
                   "type": "string"
                 }
               },
-              "required": ["chart", "sourceRef"],
+              "required": [
+                "chart",
+                "sourceRef"
+              ],
               "type": "object",
               "additionalProperties": false
             }
           },
-          "required": ["spec"],
+          "required": [
+            "spec"
+          ],
           "type": "object",
           "additionalProperties": false
         },
@@ -149,7 +170,10 @@
             },
             "kind": {
               "description": "Kind of the referent.",
-              "enum": ["OCIRepository", "HelmChart"],
+              "enum": [
+                "OCIRepository",
+                "HelmChart"
+              ],
               "type": "string"
             },
             "name": {
@@ -165,7 +189,10 @@
               "type": "string"
             }
           },
-          "required": ["kind", "name"],
+          "required": [
+            "kind",
+            "name"
+          ],
           "type": "object",
           "additionalProperties": false
         },
@@ -183,7 +210,9 @@
                 "type": "string"
               }
             },
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "type": "object",
             "additionalProperties": false
           },
@@ -240,7 +269,9 @@
                     "additionalProperties": false
                   }
                 },
-                "required": ["paths"],
+                "required": [
+                  "paths"
+                ],
                 "type": "object",
                 "additionalProperties": false
               },
@@ -248,7 +279,11 @@
             },
             "mode": {
               "description": "Mode defines how differences should be handled between the Helm manifest\nand the manifest currently applied to the cluster.\nIf not explicitly set, it defaults to DiffModeDisabled.",
-              "enum": ["enabled", "warn", "disabled"],
+              "enum": [
+                "enabled",
+                "warn",
+                "disabled"
+              ],
               "type": "string"
             }
           },
@@ -260,7 +295,11 @@
           "properties": {
             "crds": {
               "description": "CRDs upgrade CRDs from the Helm Chart's crds directory according\nto the CRD upgrade policy provided here. Valid values are `Skip`,\n`Create` or `CreateReplace`. Default is `Create` and if omitted\nCRDs are installed but not updated.\n\n\nSkip: do neither install nor replace (update) any CRDs.\n\n\nCreate: new CRDs are created, existing CRDs are neither updated nor deleted.\n\n\nCreateReplace: new CRDs are created, existing CRDs are updated (replaced)\nbut not deleted.\n\n\nBy default, CRDs are applied (installed) during Helm install action.\nWith this option users can opt in to CRD replace existing CRDs on Helm\ninstall actions, which is not (yet) natively supported by Helm.\nhttps://helm.sh/docs/chart_best_practices/custom_resource_definitions.",
-              "enum": ["Skip", "Create", "CreateReplace"],
+              "enum": [
+                "Skip",
+                "Create",
+                "CreateReplace"
+              ],
               "type": "string"
             },
             "createNamespace": {
@@ -339,12 +378,16 @@
                   "type": "string"
                 }
               },
-              "required": ["name"],
+              "required": [
+                "name"
+              ],
               "type": "object",
               "additionalProperties": false
             }
           },
-          "required": ["secretRef"],
+          "required": [
+            "secretRef"
+          ],
           "type": "object",
           "additionalProperties": false
         },
@@ -386,7 +429,9 @@
                           "type": "string"
                         }
                       },
-                      "required": ["name"],
+                      "required": [
+                        "name"
+                      ],
                       "type": "object",
                       "additionalProperties": false
                     },
@@ -437,7 +482,9 @@
                           "additionalProperties": false
                         }
                       },
-                      "required": ["patch"],
+                      "required": [
+                        "patch"
+                      ],
                       "type": "object",
                       "additionalProperties": false
                     },
@@ -540,7 +587,9 @@
                     "type": "string"
                   }
                 },
-                "required": ["name"],
+                "required": [
+                  "name"
+                ],
                 "type": "object",
                 "additionalProperties": false
               },
@@ -570,7 +619,11 @@
             "deletionPropagation": {
               "default": "background",
               "description": "DeletionPropagation specifies the deletion propagation policy when\na Helm uninstall is performed.",
-              "enum": ["background", "foreground", "orphan"],
+              "enum": [
+                "background",
+                "foreground",
+                "orphan"
+              ],
               "type": "string"
             },
             "disableHooks": {
@@ -603,7 +656,11 @@
             },
             "crds": {
               "description": "CRDs upgrade CRDs from the Helm Chart's crds directory according\nto the CRD upgrade policy provided here. Valid values are `Skip`,\n`Create` or `CreateReplace`. Default is `Skip` and if omitted\nCRDs are neither installed nor upgraded.\n\n\nSkip: do neither install nor replace (update) any CRDs.\n\n\nCreate: new CRDs are created, existing CRDs are neither updated nor deleted.\n\n\nCreateReplace: new CRDs are created, existing CRDs are updated (replaced)\nbut not deleted.\n\n\nBy default, CRDs are not applied during Helm upgrade action. With this\noption users can opt-in to CRD upgrade, which is not (yet) natively supported by Helm.\nhttps://helm.sh/docs/chart_best_practices/custom_resource_definitions.",
-              "enum": ["Skip", "Create", "CreateReplace"],
+              "enum": [
+                "Skip",
+                "Create",
+                "CreateReplace"
+              ],
               "type": "string"
             },
             "disableHooks": {
@@ -647,7 +704,10 @@
                 },
                 "strategy": {
                   "description": "Strategy to use for failure remediation. Defaults to 'rollback'.",
-                  "enum": ["rollback", "uninstall"],
+                  "enum": [
+                    "rollback",
+                    "uninstall"
+                  ],
                   "type": "string"
                 }
               },
@@ -666,7 +726,7 @@
         "values": {
           "description": "Values holds the values for this Helm release.",
           "x-kubernetes-preserve-unknown-fields": true,
-          "$ref": "https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-5.0.0/charts/library/common/values.schema.json"
+          "$ref": "https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-5.0.1/charts/library/common/values.schema.json"
         },
         "valuesFrom": {
           "description": "ValuesFrom holds references to resources containing Helm values for this HelmRelease,\nand information about how they should be merged.",
@@ -675,7 +735,10 @@
             "properties": {
               "kind": {
                 "description": "Kind of the values referent, valid values are ('Secret', 'ConfigMap').",
-                "enum": ["Secret", "ConfigMap"],
+                "enum": [
+                  "Secret",
+                  "ConfigMap"
+                ],
                 "type": "string"
               },
               "name": {
@@ -701,14 +764,19 @@
                 "type": "string"
               }
             },
-            "required": ["kind", "name"],
+            "required": [
+              "kind",
+              "name"
+            ],
             "type": "object",
             "additionalProperties": false
           },
           "type": "array"
         }
       },
-      "required": ["interval"],
+      "required": [
+        "interval"
+      ],
       "type": "object",
       "x-kubernetes-validations": [
         {
@@ -754,7 +822,11 @@
               },
               "status": {
                 "description": "status of the condition, one of True, False, Unknown.",
-                "enum": ["True", "False", "Unknown"],
+                "enum": [
+                  "True",
+                  "False",
+                  "Unknown"
+                ],
                 "type": "string"
               },
               "type": {
@@ -908,7 +980,10 @@
         },
         "lastAttemptedReleaseAction": {
           "description": "LastAttemptedReleaseAction is the last release action performed for this\nHelmRelease. It is used to determine the active remediation strategy.",
-          "enum": ["install", "upgrade"],
+          "enum": [
+            "install",
+            "upgrade"
+          ],
           "type": "string"
         },
         "lastAttemptedRevision": {
