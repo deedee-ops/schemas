@@ -84,8 +84,9 @@ jobs:
                      https://raw.githubusercontent.com/controlplaneio-fluxcd/charts/refs/heads/main/charts/flux-operator/values.schema.json \
                      https://raw.githubusercontent.com/controlplaneio-fluxcd/charts/refs/heads/main/charts/flux-instance/values.schema.json \
                      https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json \
+                     https://raw.githubusercontent.com/cloudnative-pg/charts/refs/heads/main/charts/cluster/values.schema.json \
                      https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/heads/master/charts/external-dns/values.schema.json; do \
-            sed "s@{{ refURL }}@${ref}@g" .github/hr.template.json > "other/$(echo "${ref}" | sed -E 's@/[^/]+$@@' | awk -F/ '{print $NF}')-hr.json"
+            sed "s@{{ refURL }}@${ref}@g" .github/hr.template.json > "other/$(echo "${ref}" | sed -E 's@/[^/]+$@@' | awk -F/ '{print $NF}' | sed 's@cluster@cloudnative-pg@')-hr.json"
           done
       - name: Build other schemas
         run: |-
