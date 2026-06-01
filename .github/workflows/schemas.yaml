@@ -91,7 +91,7 @@ jobs:
       - name: Build other schemas
         run: |-
           curl -o other/docker-compose.json https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
-          curl -o other/kromgo.config.json https://raw.githubusercontent.com/kashalls/kromgo/main/config.schema.json
+          curl -o other/kromgo.config.json https://raw.githubusercontent.com/home-operations/kromgo/main/config.schema.json
           curl -o other/recyclarr.config.json https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json
           curl -o other/talos.config.json https://raw.githubusercontent.com/siderolabs/talos/refs/heads/main/pkg/machinery/config/schemas/config.schema.json
           curl -o other/markdownlint.config.json https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
