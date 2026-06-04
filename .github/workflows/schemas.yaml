@@ -78,15 +78,21 @@ jobs:
           cp -r /home/runner/.datree/crdSchemas/* .
       - name: Build HelmRelease schemas
         run: |-
+          urlmaps=(
+            "https://raw.githubusercontent.com/cloudnative-pg/charts/refs/heads/main/charts/cluster/values.schema.json cloudnative-pg"
+            "https://code.forgejo.org/forgejo-helm/forgejo-helm/raw/commit/main/values.schema.json forgejo"
+          )
+          for item in "${urlmaps[@]}"; do
+            sed "s@{{ refURL }}@${item% *}@g" .github/hr.template.json > "other/${item#* }-hr.json"
+          done
           curl -o other/app-template-hr.json https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
           for ref in https://raw.githubusercontent.com/cert-manager/cert-manager/refs/heads/master/deploy/charts/cert-manager/values.schema.json \
                      https://raw.githubusercontent.com/external-secrets/external-secrets/refs/heads/main/deploy/charts/external-secrets/values.schema.json \
                      https://raw.githubusercontent.com/controlplaneio-fluxcd/charts/refs/heads/main/charts/flux-operator/values.schema.json \
                      https://raw.githubusercontent.com/controlplaneio-fluxcd/charts/refs/heads/main/charts/flux-instance/values.schema.json \
                      https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json \
-                     https://raw.githubusercontent.com/cloudnative-pg/charts/refs/heads/main/charts/cluster/values.schema.json \
                      https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/heads/master/charts/external-dns/values.schema.json; do \
-            sed "s@{{ refURL }}@${ref}@g" .github/hr.template.json > "other/$(echo "${ref}" | sed -E 's@/[^/]+$@@' | awk -F/ '{print $NF}' | sed 's@cluster@cloudnative-pg@')-hr.json"
+            sed "s@{{ refURL }}@${ref}@g" .github/hr.template.json > "other/$(echo "${ref}" | sed -E 's@/[^/]+$@@' | awk -F/ '{print $NF}')-hr.json"
           done
       - name: Build other schemas
         run: |-
