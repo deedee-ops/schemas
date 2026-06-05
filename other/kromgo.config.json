@@ -129,6 +129,9 @@
         "legend": {
           "type": "boolean"
         },
+        "fill": {
+          "type": "boolean"
+        },
         "theme": {
           "type": "string"
         },
@@ -137,6 +140,18 @@
         },
         "valueExpr": {
           "type": "string"
+        },
+        "yMin": {
+          "type": "number"
+        },
+        "yMax": {
+          "type": "number"
+        },
+        "markLine": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "gallery": {
           "$ref": "#/$defs/GallerySettings"
@@ -160,6 +175,9 @@
         "legend": {
           "type": "boolean"
         },
+        "fill": {
+          "type": "boolean"
+        },
         "theme": {
           "type": "string"
         },
@@ -168,6 +186,18 @@
         },
         "valueExpr": {
           "type": "string"
+        },
+        "yMin": {
+          "type": "number"
+        },
+        "yMax": {
+          "type": "number"
+        },
+        "markLine": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "gallery": {
           "$ref": "#/$defs/GallerySettings"
