@@ -81,6 +81,7 @@ jobs:
           urlmaps=(
             "https://raw.githubusercontent.com/cloudnative-pg/charts/refs/heads/main/charts/cluster/values.schema.json cloudnative-pg"
             "https://code.forgejo.org/forgejo-helm/forgejo-helm/raw/commit/main/values.schema.json forgejo"
+            "https://raw.githubusercontent.com/aclerici38/pocket-id-operator/refs/heads/main/dist/chart/values.schema.json pocket-id-operator"
           )
           for item in "${urlmaps[@]}"; do
             sed "s@{{ refURL }}@${item% *}@g" .github/hr.template.json > "other/${item#* }-hr.json"
