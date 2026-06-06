@@ -92,6 +92,7 @@ jobs:
                      https://raw.githubusercontent.com/controlplaneio-fluxcd/charts/refs/heads/main/charts/flux-operator/values.schema.json \
                      https://raw.githubusercontent.com/controlplaneio-fluxcd/charts/refs/heads/main/charts/flux-instance/values.schema.json \
                      https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json \
+                     https://raw.githubusercontent.com/home-operations/kromgo/refs/heads/main/charts/kromgo/values.schema.json \
                      https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/heads/master/charts/external-dns/values.schema.json; do \
             sed "s@{{ refURL }}@${ref}@g" .github/hr.template.json > "other/$(echo "${ref}" | sed -E 's@/[^/]+$@@' | awk -F/ '{print $NF}')-hr.json"
           done
