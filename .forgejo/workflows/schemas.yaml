@@ -97,6 +97,7 @@ jobs:
           curl -o other/talos.config.json https://raw.githubusercontent.com/siderolabs/talos/refs/heads/main/pkg/machinery/config/schemas/config.schema.json
           curl -o other/markdownlint.config.json https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json
           curl -o other/sops.config.json https://raw.githubusercontent.com/chri11g6/sops-schema/refs/heads/master/sops.schema.json
+          curl -o other/zizmor.json https://raw.githubusercontent.com/woodruffw/zizmor/main/support/zizmor.schema.json
 
           cat <<EOF | tee other/labels.json
           {
