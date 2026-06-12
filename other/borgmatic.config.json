@@ -876,7 +876,7 @@
     },
     "quick_statistics": {
       "type": "boolean",
-      "description": "Display statistics for an archive when running supported actions,\nskipping the repository-wide \"All archives\" and chunk index\nstatistics to save some time. Corresponds to the \"--quick-stats\"\nflag on those actions. Defaults to false. (This option is supported \nfor Borg 1.4.5+ only.)\n",
+      "description": "Display statistics for an archive when running supported actions,\nskipping the repository-wide \"All archives\" and chunk index\nstatistics to save some time. Corresponds to the \"--quick-stats\"\nflag on those actions. Defaults to false. (This option is supported\nfor Borg 1.4.5+ only for the \"create\" action and for Borg >= 1.4.5\nand < Borg 2 for the \"prune\" action.)\n",
       "example": true
     },
     "list_details": {
