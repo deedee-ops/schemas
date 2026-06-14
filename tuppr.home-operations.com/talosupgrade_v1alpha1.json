@@ -3946,12 +3946,17 @@
               "type": "boolean"
             },
             "placement": {
-              "default": "soft",
-              "description": "Placement controls how strictly upgrade jobs avoid the target node\nhard: required avoidance (job will fail if can't avoid target node)\nsoft: preferred avoidance (job prefers to avoid but can run on target node)",
+              "default": "hard",
+              "description": "Placement controls how strictly upgrade jobs avoid the target node\nhard: required avoidance, degrades to preferred on single-node clusters\nsoft: preferred avoidance (job prefers to avoid but can run on target node)",
               "enum": [
                 "hard",
                 "soft"
               ],
+              "type": "string"
+            },
+            "priorityClassName": {
+              "default": "system-node-critical",
+              "description": "PriorityClassName for the upgrade job pod; set a preempting class to displace lower-priority pods under resource pressure.",
               "type": "string"
             },
             "rebootMode": {
