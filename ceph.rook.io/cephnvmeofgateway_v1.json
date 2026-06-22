@@ -37,7 +37,8 @@
           "type": "boolean"
         },
         "image": {
-          "description": "Image is the container image to use for the NVMe-oF gateway daemon.\nFor example, quay.io/ceph/nvmeof:1.5",
+          "description": "Image is the container image to use for the NVMe-oF gateway daemon.\nFor example, quay.io/ceph/nvmeof:1.5\nIf not specified, the image is fetched from the Ceph mon config store\n(mgr/cephadm/container_image_nvmeof).",
+          "maxLength": 1024,
           "minLength": 1,
           "type": "string"
         },
@@ -1121,7 +1122,6 @@
       },
       "required": [
         "group",
-        "image",
         "instances",
         "pool"
       ],

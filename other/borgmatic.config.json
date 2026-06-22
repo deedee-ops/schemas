@@ -409,15 +409,15 @@
       "description": "Name of the archive to create. Borg placeholders can be used. See\nthe output of \"borg help placeholders\" for details. Defaults to\n\"{hostname}-{now:%Y-%m-%dT%H:%M:%S.%f}\" with Borg 1 and\n\"{hostname}\" with Borg 2, as Borg 2 does not require unique\narchive names; identical archive names form a common \"series\" that\ncan be targeted together. When running actions like repo-list,\ninfo, or check, borgmatic automatically tries to match only\narchives created with this name format.\n",
       "example": "{hostname}-documents-{now}"
     },
-    "archive_hostname": {
-      "type": "string",
-      "description": "Hostname to use when creating an archive, e.g. via the \"{hostname}\"\nplaceholder in \"archive_name_format\". Defaults to the system\nhostname. (This option is supported for Borg 1.4.5+ only.)\n",
-      "example": "example.org"
-    },
     "match_archives": {
       "type": "string",
       "description": "A Borg pattern for filtering down the archives used by borgmatic\nactions that operate on multiple archives. For Borg 1.x, use a shell\npattern here and see the output of \"borg help placeholders\" for\ndetails. For Borg 2.x, see the output of \"borg help match-archives\".\nIf match_archives is not specified, borgmatic defaults to deriving\nthe match_archives value from archive_name_format.\n",
       "example": "sh:{hostname}-*"
+    },
+    "archive_hostname": {
+      "type": "string",
+      "description": "Hostname to use for the \"{hostname}\" placeholder in\n\"archive_name_format\", \"match_archives\", etc. Defaults to the system\nhostname. (This option is supported for Borg 1.4.5+ only.)\n",
+      "example": "example.org"
     },
     "file_list_format": {
       "type": "string",
@@ -1543,6 +1543,21 @@
             "description": "Whether to TLS-encrypt data transmitted between the\nclient and restore server. The default varies based on\nthe MariaDB version.\n",
             "example": false
           },
+          "events": {
+            "type": "boolean",
+            "description": "Whether to include scheduled events within the dump.\nDisable if your database user doesn't have the\npermissions to dump events. Defaults to true.\n",
+            "example": false
+          },
+          "routines": {
+            "type": "boolean",
+            "description": "Whether to include stored routines within the dump.\nDisable if your user database doesn't have the\npermissions to dump routines. Defaults to true.\n",
+            "example": false
+          },
+          "tablespaces": {
+            "type": "boolean",
+            "description": "Whether to include tablespaces within the dump. Disable\nif your database user doesn't have the permissions to\ndump tablespaces. Defaults to true.\n",
+            "example": false
+          },
           "mariadb_dump_command": {
             "type": "string",
             "description": "Command to use instead of \"mariadb-dump\". But set any\nadditional command-line flags in \"options\", not here.\nThis command can be used to run a specific mariadb_dump\nversion (e.g., one inside a running container). If you\nrun it from within a container, make sure to mount the\npath in the \"user_runtime_directory\" option from the\nhost into the container at the same location. Defaults\nto \"mariadb-dump\".\n",
@@ -1696,6 +1711,21 @@
           "restore_tls": {
             "type": "boolean",
             "description": "Whether to TLS-encrypt data transmitted between the\nclient and restore server. The default varies based on\nthe MySQL installation.\n",
+            "example": false
+          },
+          "events": {
+            "type": "boolean",
+            "description": "Whether to include scheduled events within the dump.\nDisable if your database user doesn't have the\npermissions to dump events. Defaults to true.\n",
+            "example": false
+          },
+          "routines": {
+            "type": "boolean",
+            "description": "Whether to include stored routines within the dump.\nDisable if your database user doesn't have the\npermissions to dump routines. Defaults to true.\n",
+            "example": false
+          },
+          "tablespaces": {
+            "type": "boolean",
+            "description": "Whether to include tablespaces within the dump. Disable\nif your database user doesn't have the permissions to\ndump tablespaces. Defaults to true.\n",
             "example": false
           },
           "mysql_dump_command": {
