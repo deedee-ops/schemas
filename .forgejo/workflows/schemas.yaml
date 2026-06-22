@@ -27,9 +27,9 @@ jobs:
         with:
           persist-credentials: true
       - name: Install kubectl
-        uses: https://github.com/azure/setup-kubectl@829323503d1be3d00ca8346e5391ca0b07a9ab0d # v5.1.0
+        uses: azure/setup-kubectl@829323503d1be3d00ca8346e5391ca0b07a9ab0d # v5.1.0
       - name: Install uv
-        uses: https://github.com/astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
         with:
           enable-cache: false
       - name: Setup Python
@@ -132,7 +132,7 @@ jobs:
           python3 -c "import requests, yaml, json; print(json.dumps(yaml.safe_load(requests.get('https://raw.githubusercontent.com/borgmatic-collective/borgmatic/main/borgmatic/config/schema.yaml').text), indent=2))" > other/borgmatic.config.json
       # yamllint enable rule:line-length
       - name: Commit Changes
-        uses: https://github.com/stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
+        uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
         with:
           commit_message: "feat: update schemas"
           commit_user_name: "RoboDexo2000[bot]"
