@@ -3978,6 +3978,11 @@
               "description": "Timeout for the per-node talosctl upgrade command",
               "pattern": "^([0-9]+[smh])+$",
               "type": "string"
+            },
+            "waitForVolumeDetach": {
+              "default": false,
+              "description": "WaitForVolumeDetach makes tuppr drain the node and wait for its CSI volumes to\ndetach before the Talos reboot (upgrading with Talos drain disabled), avoiding a\nMulti-Attach error when a fast reboot orphans a mount. No-op on single-node.",
+              "type": "boolean"
             }
           },
           "type": "object",
