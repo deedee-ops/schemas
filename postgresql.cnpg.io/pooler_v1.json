@@ -27,6 +27,12 @@
             "name"
           ],
           "type": "object",
+          "x-kubernetes-validations": [
+            {
+              "message": "cluster reference is immutable after creation",
+              "rule": "self == oldSelf"
+            }
+          ],
           "additionalProperties": false
         },
         "deploymentStrategy": {
@@ -78,15 +84,15 @@
           "type": "integer"
         },
         "monitoring": {
-          "description": "The configuration of the monitoring infrastructure of this pooler.\n\nDeprecated: This feature will be removed in an upcoming release. If\nyou need this functionality, you can create a PodMonitor manually.",
+          "description": "The configuration of the monitoring infrastructure of this pooler.",
           "properties": {
             "enablePodMonitor": {
               "default": false,
-              "description": "Enable or disable the `PodMonitor`",
+              "description": "Enable or disable the `PodMonitor`\n\nDeprecated: This feature will be removed in an upcoming release. If\nyou need this functionality, you can create a PodMonitor manually.",
               "type": "boolean"
             },
             "podMonitorMetricRelabelings": {
-              "description": "The list of metric relabelings for the `PodMonitor`. Applied to samples before ingestion.",
+              "description": "The list of metric relabelings for the `PodMonitor`. Applied to samples before ingestion.\n\nDeprecated: This feature will be removed in an upcoming release. If\nyou need this functionality, you can create a PodMonitor manually.",
               "items": {
                 "description": "RelabelConfig allows dynamic rewriting of the label set for targets, alerts,\nscraped samples and remote write samples.\n\nMore info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config",
                 "properties": {
@@ -155,7 +161,7 @@
               "type": "array"
             },
             "podMonitorRelabelings": {
-              "description": "The list of relabelings for the `PodMonitor`. Applied to samples before scraping.",
+              "description": "The list of relabelings for the `PodMonitor`. Applied to samples before scraping.\n\nDeprecated: This feature will be removed in an upcoming release. If\nyou need this functionality, you can create a PodMonitor manually.",
               "items": {
                 "description": "RelabelConfig allows dynamic rewriting of the label set for targets, alerts,\nscraped samples and remote write samples.\n\nMore info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config",
                 "properties": {
@@ -222,6 +228,18 @@
                 "additionalProperties": false
               },
               "type": "array"
+            },
+            "tls": {
+              "description": "Configure TLS communication for the metrics endpoint.\nChanging tls.enabled option will force a rollout of all instances.",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "description": "Enable TLS for the monitoring endpoint.\nChanging this option will force a rollout of all instances.",
+                  "type": "boolean"
+                }
+              },
+              "type": "object",
+              "additionalProperties": false
             }
           },
           "type": "object",
@@ -274,6 +292,51 @@
                 "name"
               ],
               "type": "object",
+              "additionalProperties": false
+            },
+            "image": {
+              "description": "Image is the pgbouncer container image to use. When set, it takes\nprecedence over ImageCatalogRef and the operator default, but is\noverridden by an explicit image set in the pod template.",
+              "type": "string"
+            },
+            "imageCatalogRef": {
+              "description": "ImageCatalogRef points to an entry in an ImageCatalog or ClusterImageCatalog.\nMutually exclusive with Image.",
+              "properties": {
+                "apiGroup": {
+                  "description": "APIGroup is the group for the resource being referenced.\nIf APIGroup is not specified, the specified Kind must be in the core API group.\nFor any other third-party types, APIGroup is required.",
+                  "type": "string"
+                },
+                "key": {
+                  "description": "Key identifies the entry within the catalog's componentImages list.",
+                  "maxLength": 63,
+                  "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+                  "type": "string"
+                },
+                "kind": {
+                  "description": "Kind is the type of resource being referenced",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "Name is the name of resource being referenced",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "key",
+                "kind",
+                "name"
+              ],
+              "type": "object",
+              "x-kubernetes-map-type": "atomic",
+              "x-kubernetes-validations": [
+                {
+                  "message": "Only ImageCatalog and ClusterImageCatalog are supported",
+                  "rule": "self.kind == 'ImageCatalog' || self.kind == 'ClusterImageCatalog'"
+                },
+                {
+                  "message": "apiGroup must be postgresql.cnpg.io",
+                  "rule": "self.apiGroup == 'postgresql.cnpg.io'"
+                }
+              ],
               "additionalProperties": false
             },
             "parameters": {
@@ -334,6 +397,12 @@
             }
           },
           "type": "object",
+          "x-kubernetes-validations": [
+            {
+              "message": "image and imageCatalogRef are mutually exclusive",
+              "rule": "!(has(self.image) && has(self.imageCatalogRef))"
+            }
+          ],
           "additionalProperties": false
         },
         "serviceAccountName": {
@@ -7805,10 +7874,32 @@
     "status": {
       "description": "Most recently observed status of the Pooler. This data may not be up to\ndate. Populated by the system. Read-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
       "properties": {
+        "error": {
+          "description": "Error is the latest admission validation error",
+          "type": "string"
+        },
+        "image": {
+          "description": "Image is the resolved pgbouncer container image that the operator is\nusing for this Pooler, including any override coming from spec.template.\nWhile Phase is Active or Paused this field reflects what the Deployment\nactually runs; while Phase is Inactive or Failed it may carry the last\nsuccessfully resolved value (or be empty if the Pooler has never reconciled\nsuccessfully).",
+          "type": "string"
+        },
         "instances": {
           "description": "The number of pods trying to be scheduled",
           "format": "int32",
           "type": "integer"
+        },
+        "phase": {
+          "description": "Phase summarizes the overall lifecycle state of the Pooler.",
+          "enum": [
+            "active",
+            "paused",
+            "inactive",
+            "failed"
+          ],
+          "type": "string"
+        },
+        "phaseReason": {
+          "description": "PhaseReason is a human-readable explanation of the current Phase.",
+          "type": "string"
         },
         "secrets": {
           "description": "The resource version of the config object",
