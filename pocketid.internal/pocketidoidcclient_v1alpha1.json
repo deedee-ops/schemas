@@ -35,7 +35,7 @@
           "type": "array"
         },
         "callbackUrls": {
-          "description": "Callback URLs for the client\nNote: a feature of pocket-id is to autosave the callback URL based on the url params passed by the client.",
+          "description": "Callback URLs for the client",
           "items": {
             "type": "string"
           },
@@ -109,6 +109,11 @@
         },
         "darkLogoUrl": {
           "description": "Dark logo URL for the client\nDeprecated: Use spec.logo.darkLogoUrl instead.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description is an optional description for the client",
+          "maxLength": 150,
           "type": "string"
         },
         "federatedIdentities": {
@@ -369,6 +374,11 @@
           },
           "type": "object",
           "additionalProperties": false
+        },
+        "skipConsent": {
+          "default": false,
+          "description": "Skips the consent screen on initial authorization for this client",
+          "type": "boolean"
         }
       },
       "type": "object",
@@ -500,6 +510,10 @@
         "name": {
           "description": "Name is the resolved name from Pocket-ID",
           "type": "string"
+        },
+        "pkceSupported": {
+          "description": "PKCESupported indicates Pocket-ID observed the client using PKCE during an\nauthorization flow while spec.pkceEnabled is false, signalling PKCE can be enabled.",
+          "type": "boolean"
         },
         "scimProviderID": {
           "description": "SCIMProviderID is the pocket-id ID of the SCIM service provider for this client, if configured.",

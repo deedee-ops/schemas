@@ -1053,7 +1053,7 @@
           "type": "boolean"
         },
         "image": {
-          "default": "ghcr.io/pocket-id/pocket-id:v2.9.0-distroless@sha256:968866bdb73c67ce7d75baf2b992b9b33db385668822e936625dc5116f372d2c",
+          "default": "ghcr.io/pocket-id/pocket-id:v2.10.0-distroless@sha256:244c5d2613b1b89b18a8fee07e47e9a43907a09009c6280236131fccf1ba5f9f",
           "description": "Container image to run. Defaults to the latest distroless version at time of operator release",
           "type": "string"
         },
@@ -1763,6 +1763,11 @@
         "podTemplate": {
           "description": "Pod template to merge with the operator-built pod spec.\nOperator-managed fields including the pocket-id container always take precedence.",
           "x-kubernetes-preserve-unknown-fields": true
+        },
+        "rateLimiting": {
+          "default": false,
+          "description": "Enable Pocket-ID's built-in rate limiting. Disabled by default.",
+          "type": "boolean"
         },
         "readinessProbe": {
           "description": "Readiness probe configuration",
@@ -2620,8 +2625,15 @@
           "type": "string"
         },
         "tracing": {
-          "description": "OpenTelemetry tracing configuration\nWhen present, tracing is automatically enabled\nConfigure exporter-specific OTEL_* variables via the env escape hatch",
-          "type": "object"
+          "description": "OpenTelemetry tracing configuration\nWhen present, tracing is automatically enabled\nConfigure additional exporter-specific OTEL_* variables via the env escape hatch",
+          "properties": {
+            "endpoint": {
+              "description": "OTLP traces endpoint including path, e.g. http://collector:4318/v1/traces\n(sets OTEL_EXPORTER_OTLP_TRACES_ENDPOINT)",
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "additionalProperties": false
         },
         "ui": {
           "description": "UI configuration\nThe operator automatically sets UI_CONFIG_DISABLED=true when this section is configured",
