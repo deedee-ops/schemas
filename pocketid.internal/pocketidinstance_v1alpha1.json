@@ -1053,7 +1053,7 @@
           "type": "boolean"
         },
         "image": {
-          "default": "ghcr.io/pocket-id/pocket-id:v2.10.0-distroless@sha256:244c5d2613b1b89b18a8fee07e47e9a43907a09009c6280236131fccf1ba5f9f",
+          "default": "ghcr.io/pocket-id/pocket-id:v2.11.0-distroless@sha256:446624a84743c29f93db2ffbbe19f9059fd9741e0cb2516d31efcc764e131835",
           "description": "Container image to run. Defaults to the latest distroless version at time of operator release",
           "type": "string"
         },
@@ -1764,9 +1764,9 @@
           "description": "Pod template to merge with the operator-built pod spec.\nOperator-managed fields including the pocket-id container always take precedence.",
           "x-kubernetes-preserve-unknown-fields": true
         },
-        "rateLimiting": {
+        "rateLimitingDisabled": {
           "default": false,
-          "description": "Enable Pocket-ID's built-in rate limiting. Disabled by default.",
+          "description": "Disable Pocket-ID's built-in rate limiting. Enabled by default.",
           "type": "boolean"
         },
         "readinessProbe": {
@@ -2632,6 +2632,28 @@
               "type": "string"
             }
           },
+          "type": "object",
+          "additionalProperties": false
+        },
+        "trustedProxies": {
+          "description": "TrustedProxies configures which proxies Pocket-ID trusts for X-Forwarded-* headers\n(sets TRUST_PROXY). When unset, the operator trusts the private/loopback ranges if\nspec.route.enabled is set.",
+          "properties": {
+            "cidrs": {
+              "description": "CIDRs is the list of trusted proxy IPs/CIDRs. Only used when enabled is true.\nWhen empty, TRUST_PROXY is set to \"true\", trusting all upstream sources\nTo restrict trust, list explicit ranges: e.g. the in-cluster gateway network, or a CDN's\npublished ranges when it connects directly to the pod.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "enabled": {
+              "default": false,
+              "description": "Enabled turns on trust of X-Forwarded-* headers.\nWhen false, TRUST_PROXY is set to \"false\".",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
           "type": "object",
           "additionalProperties": false
         },
