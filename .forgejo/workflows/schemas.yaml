@@ -51,6 +51,7 @@ jobs:
           for manifest in clusterrolebinding-rbac-v1.json \
                           clusterrole-rbac-v1.json \
                           configmap-v1.json \
+                          cronjob-batch-v1.json \
                           deployment-apps-v1.json \
                           mutatingadmissionpolicy-admissionregistration-v1.json \
                           mutatingadmissionpolicybinding-admissionregistration-v1.json \
