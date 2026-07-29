@@ -94,6 +94,12 @@ jobs:
           done
       - name: Build other schemas
         run: |-
+          curl -o other/ansible.json https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json
+          curl -o other/ansible-inventory.json https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/inventory.json
+          curl -o other/ansible-meta.json https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/meta.json
+          curl -o other/ansible-requirements.json https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/requirements.json
+          curl -o other/ansible-vars.json https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/vars.json
+          curl -o other/ansible-lint-config.json https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible-lint-config.json
           curl -o other/docker-compose.json https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
           curl -o other/kromgo.config.json https://raw.githubusercontent.com/home-operations/kromgo/main/config.schema.json
           curl -o other/recyclarr.config.json https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json
