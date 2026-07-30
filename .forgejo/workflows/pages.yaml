@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Pages
+'on':
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+permissions:
+  contents: read
+jobs:
+  deploy:
+    name: Deploy manifests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install rclone
+        run: |-
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq rclone
+      - name: Publish
+        env:
+          RCLONE_CONFIG_DUFS_TYPE: webdav
+          RCLONE_CONFIG_DUFS_URL: http://dufs
+          RCLONE_CONFIG_DUFS_VENDOR: other
+          RCLONE_CONFIG_DUFS_USER: ci
+          DUFS_PASSWORD: ${{ secrets.DUFS_PASSWORD }}
+        run: |-
+          export RCLONE_CONFIG_DUFS_PASS="$(rclone obscure "${DUFS_PASSWORD}")"
+          rclone sync . dufs: \
+            --exclude '/.git/**' \
+            --exclude '/.forgejo/**' \
+            --exclude '/.renovaterc.json5' \
+            --stats-one-line -v
