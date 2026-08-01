@@ -266,6 +266,7 @@
                     }
                   },
                   "type": "object",
+                  "x-kubernetes-preserve-unknown-fields": true,
                   "additionalProperties": false
                 },
                 "spec": {
@@ -1753,7 +1754,8 @@
                                 }
                               },
                               "required": [
-                                "containerPort"
+                                "containerPort",
+                                "protocol"
                               ],
                               "type": "object",
                               "additionalProperties": false
@@ -3202,7 +3204,8 @@
                                 }
                               },
                               "required": [
-                                "containerPort"
+                                "containerPort",
+                                "protocol"
                               ],
                               "type": "object",
                               "additionalProperties": false
@@ -4679,7 +4682,8 @@
                                 }
                               },
                               "required": [
-                                "containerPort"
+                                "containerPort",
+                                "protocol"
                               ],
                               "type": "object",
                               "additionalProperties": false
@@ -7592,6 +7596,7 @@
             },
             "strategy": {
               "enum": [
+                "default",
                 "custom",
                 "accurate",
                 "eager"
@@ -7637,10 +7642,6 @@
                   "type": "string"
                 },
                 "type": "object"
-              },
-              "metricType": {
-                "description": "MetricTargetType specifies the type of metric being targeted, and should be either\n\"Value\", \"AverageValue\", or \"Utilization\"",
-                "type": "string"
               },
               "name": {
                 "type": "string"

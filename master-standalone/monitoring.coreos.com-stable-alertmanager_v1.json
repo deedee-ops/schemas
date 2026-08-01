@@ -8291,6 +8291,7 @@
             "getConcurrency": {
               "description": "getConcurrency defines the maximum number of GET requests processed concurrently. This corresponds to the\nAlertmanager's `--web.get-concurrency` flag.",
               "format": "int32",
+              "minimum": 0,
               "type": "integer"
             },
             "httpConfig": {
@@ -8343,6 +8344,7 @@
             "timeout": {
               "description": "timeout for HTTP requests. This corresponds to the Alertmanager's\n`--web.timeout` flag.",
               "format": "int32",
+              "minimum": 0,
               "type": "integer"
             },
             "tlsConfig": {
