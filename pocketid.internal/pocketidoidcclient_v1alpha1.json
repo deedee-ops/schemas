@@ -16,20 +16,46 @@
       "description": "spec defines the desired state of PocketIDOIDCClient",
       "properties": {
         "allowedUserGroups": {
-          "description": "AllowedUserGroups restricts access to the listed PocketIDUserGroups",
+          "description": "AllowedUserGroups restricts access to the listed user groups. Each entry names\neither a PocketIDUserGroup CR or, for groups managed outside this cluster, an\nexisting Pocket-ID group by name or ID.",
           "items": {
-            "description": "NamespacedUserGroupReference references a PocketIDUserGroup by name and namespace.",
+            "description": "NamespacedUserGroupReference selects a Pocket-ID user group, either by the\nPocketIDUserGroup CR that manages it or, for groups managed outside this cluster,\nby their name or ID in Pocket-ID.",
             "properties": {
+              "groupID": {
+                "description": "GroupID is the Pocket-ID ID of an existing user group. Like groupName, the\ngroup itself is left untouched.",
+                "maxLength": 64,
+                "minLength": 1,
+                "type": "string"
+              },
+              "groupName": {
+                "description": "GroupName is the name of an existing user group in Pocket-ID, for groups not\nmanaged by a PocketIDUserGroup in this cluster. The operator only resolves the\ngroup to grant this client access and never modifies the group itself.",
+                "maxLength": 255,
+                "minLength": 2,
+                "type": "string"
+              },
               "name": {
                 "description": "Name is the name of the PocketIDUserGroup CR",
+                "maxLength": 253,
+                "minLength": 1,
                 "type": "string"
               },
               "namespace": {
                 "description": "Namespace is the namespace of the PocketIDUserGroup CR\nDefaults to the PocketIDOIDCClient namespace",
+                "maxLength": 63,
+                "minLength": 1,
                 "type": "string"
               }
             },
             "type": "object",
+            "x-kubernetes-validations": [
+              {
+                "message": "exactly one of name, groupName, or groupID must be set",
+                "rule": "(has(self.name) ? 1 : 0) + (has(self.groupName) ? 1 : 0) + (has(self.groupID) ? 1 : 0) == 1"
+              },
+              {
+                "message": "namespace may only be set together with name",
+                "rule": "!has(self.namespace) || has(self.name)"
+              }
+            ],
             "additionalProperties": false
           },
           "type": "array"
@@ -92,6 +118,30 @@
           "maxLength": 128,
           "minLength": 2,
           "type": "string"
+        },
+        "clientSecretRef": {
+          "description": "ClientSecretRef references a Kubernetes Secret key holding the client secret to set in\nPocket-ID, instead of letting the operator generate one. The value must be at least 16\nprintable ASCII characters. While set, the operator never generates or rotates the secret:\nclientSecretRotation cannot be enabled and the regenerate-client-secret annotation is\nignored. Requires Pocket-ID v2.12.0 or newer.",
+          "properties": {
+            "key": {
+              "description": "The key of the secret to select from.  Must be a valid secret key.",
+              "type": "string"
+            },
+            "name": {
+              "default": "",
+              "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+              "type": "string"
+            },
+            "optional": {
+              "description": "Specify whether the Secret or its key must be defined",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "key"
+          ],
+          "type": "object",
+          "x-kubernetes-map-type": "atomic",
+          "additionalProperties": false
         },
         "clientSecretRotation": {
           "description": "ClientSecretRotation configures automatic, scheduled regeneration of the client secret.\nWhen unset the secret is only regenerated on create/adopt, on self-heal,\nor when the regenerate-client-secret annotation is set.",
@@ -447,6 +497,14 @@
         {
           "message": "clientPermissions require a confidential client (isPublic must be false)",
           "rule": "!self.isPublic || !has(self.apiAccess) || self.apiAccess.all(a, !has(a.clientPermissions) || size(a.clientPermissions) == 0)"
+        },
+        {
+          "message": "clientSecretRef requires a confidential client (isPublic must be false)",
+          "rule": "!has(self.clientSecretRef) || !self.isPublic"
+        },
+        {
+          "message": "clientSecretRotation cannot be enabled when clientSecretRef is set",
+          "rule": "!has(self.clientSecretRef) || !has(self.clientSecretRotation) || !self.clientSecretRotation.enabled"
         }
       ],
       "additionalProperties": false
@@ -470,6 +528,10 @@
         },
         "clientID": {
           "description": "ClientID is the ID assigned by Pocket-ID",
+          "type": "string"
+        },
+        "clientSecretSourceVersion": {
+          "description": "ClientSecretSourceVersion identifies the spec.clientSecretRef source last pushed to\nPocket-ID. Pocket-ID stores the secret hashed and never returns it, so this is how the\noperator detects that the referenced Secret changed and needs pushing again.",
           "type": "string"
         },
         "conditions": {
