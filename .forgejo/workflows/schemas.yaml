@@ -53,6 +53,7 @@ jobs:
                           configmap-v1.json \
                           cronjob-batch-v1.json \
                           deployment-apps-v1.json \
+                          horizontalpodautoscaler-autoscaling-v2.json \
                           mutatingadmissionpolicy-admissionregistration-v1.json \
                           mutatingadmissionpolicybinding-admissionregistration-v1.json \
                           namespace-v1.json \
