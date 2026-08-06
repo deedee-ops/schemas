@@ -229,6 +229,11 @@
                 "description": "JWKS is the URL or JSON for the identity's JWKS",
                 "type": "string"
               },
+              "replayProtection": {
+                "default": false,
+                "description": "ReplayProtection requires client assertions to carry a jti and rejects replays",
+                "type": "boolean"
+              },
               "subject": {
                 "description": "Subject is the subject for the identity",
                 "type": "string"
@@ -336,6 +341,11 @@
         "pkceEnabled": {
           "default": false,
           "description": "Enables PKCE for the client",
+          "type": "boolean"
+        },
+        "requiresPushedAuthorizationRequests": {
+          "default": false,
+          "description": "Requires the client to use pushed authorization requests (PAR)",
           "type": "boolean"
         },
         "requiresReauthentication": {
