@@ -3,9 +3,9 @@
   extends: [
     ":timezone(Europe/Warsaw)",
 
-    "github>home-operations/renovate-presets//config/baseConfig.json5#6.0.0",
-    "github>home-operations/renovate-presets//config/dependencyDashboard.json5#6.0.0",
-    "github>home-operations/renovate-presets//policies/semanticCommits.json5#6.0.0",
+    "github>home-operations/renovate-presets//config/baseConfig.json5#7.0.0",
+    "github>home-operations/renovate-presets//config/dependencyDashboard.json5#7.0.0",
+    "github>home-operations/renovate-presets//policies/semanticCommits.json5#7.0.0",
   ],
   automerge: false,
 }
