@@ -1926,7 +1926,7 @@
           },
           "mongodump_command": {
             "type": "string",
-            "description": "Command to use instead of \"mongodump\". This can be used\nto run a specific mongodump version (e.g., one inside a\nrunning container). If you run it from within a\ncontainer, make sure to mount the path in the\n\"user_runtime_directory\" option from the host into the\ncontainer at the same location.  Defaults to\n\"mongodump\".\n",
+            "description": "Command to use instead of \"mongodump\". This can be used\nto run a specific mongodump version (e.g., one inside a\nrunning container). If you run it from within a\ncontainer, make sure to mount the path in the\n\"user_runtime_directory\" option from the host into the\ncontainer at the same location. Defaults to \"mongodump\".\n",
             "example": "docker exec mongodb_container mongodump"
           },
           "mongorestore_command": {
@@ -2692,21 +2692,6 @@
       },
       "description": "Configuration for a monitoring integration with PagerDuty. Create an\naccount at https://www.pagerduty.com if you'd like to use this\nservice. See borgmatic monitoring documentation for details.\n"
     },
-    "cronhub": {
-      "type": "object",
-      "required": [
-        "ping_url"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "ping_url": {
-          "type": "string",
-          "description": "Cronhub ping URL to notify when a backup begins,\nends, or errors.\n",
-          "example": "https://cronhub.io/ping/1f5e3410-254c-5587"
-        }
-      },
-      "description": "Configuration for a monitoring integration with Cronhub. Create an\naccount at https://cronhub.io if you'd like to use this service. See\nborgmatic monitoring documentation for details.\n"
-    },
     "loki": {
       "type": "object",
       "required": [
@@ -2799,6 +2784,58 @@
         }
       },
       "description": "Configuration for a monitoring integration with Sentry. You can use\na self-hosted instance via https://develop.sentry.dev/self-hosted/\nor create a cloud-hosted account at https://sentry.io. See borgmatic\nmonitoring documentation for details.\n"
+    },
+    "watchgoose": {
+      "type": "object",
+      "required": [
+        "ping_url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ping_url": {
+          "type": "string",
+          "description": "Watchgoose ping URL or UUID to notify when a backup\nbegins, ends, errors, or to send only logs.\n",
+          "example": "https://watchgoose.com/your-uuid-here"
+        },
+        "verify_tls": {
+          "type": "boolean",
+          "description": "Verify the TLS certificate of the ping URL host. Defaults to\ntrue.\n",
+          "example": false
+        },
+        "send_logs": {
+          "type": "boolean",
+          "description": "Send borgmatic logs to Watchgoose as part of the \"finish\",\n\"fail\", and \"log\" states. Defaults to false.\n",
+          "example": true
+        },
+        "ping_body_limit": {
+          "type": "integer",
+          "description": "Number of bytes of borgmatic logs to send to Watchgoose. Set\nto 0 to send all logs and disable this truncation on the\nclient. Defaults to 10000, Watchgoose's current server-side\nlimit.\n",
+          "example": 0
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "start",
+              "finish",
+              "fail",
+              "log"
+            ],
+            "uniqueItems": true
+          },
+          "description": "List of one or more monitoring states to ping for: \"start\",\n\"finish\", \"fail\", and/or \"log\". Defaults to pinging for all\nstates.\n",
+          "example": [
+            "finish"
+          ]
+        },
+        "create_slug": {
+          "type": "boolean",
+          "description": "Create the check if it does not exist. Only works with the\nslug URL scheme (https://watchgoose.com/<ping-key>/<slug> as\nopposed to https://watchgoose.com/<uuid>). Defaults to\nfalse.\n",
+          "example": true
+        }
+      },
+      "description": "Configuration for a monitoring integration with Watchgoose. Create\nan account at https://watchgoose.com if you'd like to use this\nservice. See borgmatic monitoring documentation for details.\n"
     },
     "zfs": {
       "type": [
