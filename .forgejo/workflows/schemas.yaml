@@ -58,6 +58,7 @@ jobs:
                           mutatingadmissionpolicybinding-admissionregistration-v1.json \
                           namespace-v1.json \
                           persistentvolumeclaim-v1.json \
+                          priorityclass-scheduling-v1.json \
                           resourceclaimtemplate-resource-v1.json \
                           rolebinding-rbac-v1.json \
                           role-rbac-v1.json \
