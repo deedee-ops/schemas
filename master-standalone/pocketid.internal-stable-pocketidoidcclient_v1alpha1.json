@@ -15,6 +15,14 @@
     "spec": {
       "description": "spec defines the desired state of PocketIDOIDCClient",
       "properties": {
+        "accessTokenDurationMinutes": {
+          "default": 60,
+          "description": "How long access tokens issued to this client stay valid, in minutes",
+          "format": "int64",
+          "maximum": 525600,
+          "minimum": 1,
+          "type": "integer"
+        },
         "allowedUserGroups": {
           "description": "AllowedUserGroups restricts access to the listed user groups. Each entry names\neither a PocketIDUserGroup CR or, for groups managed outside this cluster, an\nexisting Pocket-ID group by name or ID.",
           "items": {
@@ -114,8 +122,8 @@
           "type": "array"
         },
         "clientID": {
-          "description": "ClientID is the optional OIDC client ID to use instead of a generated one\nThe Client ID is immutable and cannot be changed once the oidc client is created",
-          "maxLength": 128,
+          "description": "ClientID is the optional OIDC client ID to use instead of a generated one.\nThe Client ID is immutable and cannot be changed once the oidc client is created.\nAn https:// URL marks the client as an OAuth Client ID Metadata Document (CIMD)\nclient, which the operator adopts but never creates and only partially manages.",
+          "maxLength": 512,
           "minLength": 2,
           "type": "string"
         },
@@ -343,6 +351,14 @@
           "description": "Enables PKCE for the client",
           "type": "boolean"
         },
+        "refreshTokenDurationMinutes": {
+          "default": 43200,
+          "description": "How long refresh tokens issued to this client stay valid, in minutes",
+          "format": "int64",
+          "maximum": 525600,
+          "minimum": 1,
+          "type": "integer"
+        },
         "requiresPushedAuthorizationRequests": {
           "default": false,
           "description": "Requires the client to use pushed authorization requests (PAR)",
@@ -515,6 +531,22 @@
         {
           "message": "clientSecretRotation cannot be enabled when clientSecretRef is set",
           "rule": "!has(self.clientSecretRef) || !has(self.clientSecretRotation) || !self.clientSecretRotation.enabled"
+        },
+        {
+          "message": "clientID must be at most 128 characters unless it is a client ID metadata document URL",
+          "rule": "!has(self.clientID) || self.clientID.startsWith('https://') || self.clientID.size() <= 128"
+        },
+        {
+          "message": "name, callbackUrls, logoutCallbackUrls, federatedIdentities, isPublic, and pkceEnabled are owned by the client ID metadata document and must not be set on a CIMD client",
+          "rule": "!(has(self.clientID) && self.clientID.startsWith('https://')) || (!has(self.name) && !has(self.callbackUrls) && !has(self.logoutCallbackUrls) && !has(self.federatedIdentities) && !self.isPublic && !self.pkceEnabled)"
+        },
+        {
+          "message": "a CIMD client is always public and has no client secret, so clientSecretRef and clientSecretRotation are not supported",
+          "rule": "!(has(self.clientID) && self.clientID.startsWith('https://')) || (!has(self.clientSecretRef) && (!has(self.clientSecretRotation) || !self.clientSecretRotation.enabled))"
+        },
+        {
+          "message": "clientPermissions require a confidential client, and a CIMD client is always public",
+          "rule": "!(has(self.clientID) && self.clientID.startsWith('https://')) || !has(self.apiAccess) || self.apiAccess.all(a, !has(a.clientPermissions) || size(a.clientPermissions) == 0)"
         }
       ],
       "additionalProperties": false
@@ -542,6 +574,10 @@
         },
         "clientSecretSourceVersion": {
           "description": "ClientSecretSourceVersion identifies the spec.clientSecretRef source last pushed to\nPocket-ID. Pocket-ID stores the secret hashed and never returns it, so this is how the\noperator detects that the referenced Secret changed and needs pushing again.",
+          "type": "string"
+        },
+        "clientType": {
+          "description": "ClientType is how the client was registered in Pocket-ID: \"standard\" or \"cimd\".\nFor a \"cimd\" client the operator manages only the fields Pocket-ID persists on an\nadmin update; the rest are owned by its OAuth Client ID Metadata Document.",
           "type": "string"
         },
         "conditions": {

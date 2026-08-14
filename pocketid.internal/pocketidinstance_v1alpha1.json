@@ -56,6 +56,13 @@
           "format": "int32",
           "type": "integer"
         },
+        "cimdUrlAllowlist": {
+          "description": "CIMDURLAllowlist restricts which https URLs may be used as OAuth Client ID Metadata\nDocuments. Entries are callback-URL patterns (wildcards allowed). A non-empty list\nenables CIMD; leaving it empty keeps the feature off.\nThe operator automatically sets UI_CONFIG_DISABLED=true when this field is set.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "containerSecurityContext": {
           "description": "Container security context",
           "properties": {
@@ -1053,7 +1060,7 @@
           "type": "boolean"
         },
         "image": {
-          "default": "ghcr.io/pocket-id/pocket-id:v2.12.0-distroless@sha256:b2fad8a82fab26fe4c11797dd13ea55aa6c7d6ea93fe829a139f2e28be2d339d",
+          "default": "ghcr.io/pocket-id/pocket-id:v2.13.0-distroless@sha256:ccb590169770feb5b23ba16d49386514a2c26a77e95bb687b442ae09f17c15da",
           "description": "Container image to run. Defaults to the latest distroless version at time of operator release",
           "type": "string"
         },
@@ -1482,6 +1489,11 @@
                 "error"
               ],
               "type": "string"
+            },
+            "queryArgs": {
+              "default": false,
+              "description": "Include SQL query parameter values in traces and in the query logs emitted\nat the debug level. These values may contain sensitive data.",
+              "type": "boolean"
             }
           },
           "type": "object",
@@ -2624,6 +2636,35 @@
           "description": "Timezone for the Pocket-ID instance (e.g. \"America/New_York\")\nSets the TZ environment variable",
           "type": "string"
         },
+        "tls": {
+          "description": "TLS terminates HTTPS in the Pocket-ID pod from a mounted certificate Secret.",
+          "properties": {
+            "secretRef": {
+              "description": "SecretRef names a kubernetes.io/tls Secret in the instance's namespace holding\ntls.crt and tls.key.",
+              "properties": {
+                "name": {
+                  "default": "",
+                  "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                  "type": "string"
+                }
+              },
+              "type": "object",
+              "x-kubernetes-map-type": "atomic",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "secretRef"
+          ],
+          "type": "object",
+          "x-kubernetes-validations": [
+            {
+              "message": "tls.secretRef.name is required",
+              "rule": "size(self.secretRef.name) > 0"
+            }
+          ],
+          "additionalProperties": false
+        },
         "tracing": {
           "description": "OpenTelemetry tracing configuration\nWhen present, tracing is automatically enabled\nConfigure additional exporter-specific OTEL_* variables via the env escape hatch",
           "properties": {
@@ -2726,6 +2767,34 @@
           "default": false,
           "description": "Disable GitHub version checks",
           "type": "boolean"
+        },
+        "webauthn": {
+          "description": "Passkey restrictions\nThe operator automatically sets UI_CONFIG_DISABLED=true when this section is configured",
+          "properties": {
+            "allowSyncedPasskeys": {
+              "description": "Accept passkeys that are backup-eligible, i.e. synced to a cloud account\nsuch as iCloud Keychain or Google Password Manager",
+              "type": "boolean"
+            },
+            "authenticatorAttachment": {
+              "description": "Authenticator type accepted at registration: platform (device-bound),\ncross-platform (roaming security key), or any",
+              "enum": [
+                "any",
+                "platform",
+                "cross-platform"
+              ],
+              "type": "string"
+            },
+            "userVerification": {
+              "description": "Whether the authenticator must verify the user (PIN, biometric) during login",
+              "enum": [
+                "required",
+                "preferred"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "additionalProperties": false
         }
       },
       "type": "object",
