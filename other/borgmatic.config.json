@@ -53,7 +53,17 @@
           "encryption": {
             "type": "string",
             "description": "The encryption mode with which to create the repository,\nonly used for the repo-create action. To see the\navailable encryption modes, run \"borg init --help\" with\nBorg 1 or \"borg repo-create --help\" with Borg 2.\n",
-            "example": "repokey-blake2"
+            "example": "repokey"
+          },
+          "id_hash": {
+            "type": "string",
+            "description": "Borg ID hash function name. Defaults to \"sha256\". Only\nsupported with Borg 2+.\n",
+            "example": "blake3"
+          },
+          "key_location": {
+            "type": "string",
+            "description": "Where to store the key, \"repokey\" for in the repository\n(default) or \"keyfile\" for on the client. Only supported\nwith Borg 2+.\n",
+            "example": "blake3"
           },
           "append_only": {
             "type": "boolean",
