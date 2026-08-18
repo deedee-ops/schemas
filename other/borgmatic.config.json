@@ -1301,7 +1301,7 @@
           },
           "container": {
             "type": "string",
-            "description": "Container name/id to connect to. When specified the\nhostname is ignored. Requires docker/podman CLI.\n",
+            "description": "Container name/id to connect to. When specified, the\nhostname is ignored. Requires docker/podman CLI.\n",
             "example": "debian_stable"
           },
           "restore_container": {
@@ -1482,7 +1482,7 @@
           },
           "container": {
             "type": "string",
-            "description": "Container name/id to connect to. When specified the\nhostname is ignored. Requires docker/podman CLI.\n",
+            "description": "Container name/id to connect to. When specified, the\nhostname is ignored. Requires docker/podman CLI.\n",
             "example": "debian_stable"
           },
           "restore_container": {
@@ -1652,7 +1652,7 @@
           },
           "container": {
             "type": "string",
-            "description": "Container name/id to connect to. When specified the\nhostname is ignored. Requires docker/podman CLI.\n",
+            "description": "Container name/id to connect to. When specified, the\nhostname is ignored. Requires docker/podman CLI.\n",
             "example": "debian_stable"
           },
           "restore_container": {
@@ -1862,7 +1862,7 @@
           },
           "container": {
             "type": "string",
-            "description": "Container name/id to connect to. When specified the\nhostname is ignored. Requires docker/podman CLI.\n",
+            "description": "Container name/id to connect to. When specified, the\nhostname is ignored. Requires docker/podman CLI.\n",
             "example": "debian_stable"
           },
           "restore_container": {
