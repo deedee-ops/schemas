@@ -1060,8 +1060,7 @@
           "type": "boolean"
         },
         "image": {
-          "default": "ghcr.io/pocket-id/pocket-id:v2.14.0-distroless@sha256:e0f83a42a78d0759b6d2d8c7380ef0fa8a4c95dfa01ad88740a073ae9cc4ba94",
-          "description": "Container image to run. Defaults to the latest distroless version at time of operator release",
+          "description": "Container image to run. When empty the operator supplies the latest distroless\nversion tested against this release.",
           "type": "string"
         },
         "internalAppUrl": {
@@ -2438,7 +2437,7 @@
           "additionalProperties": false
         },
         "serviceTemplate": {
-          "description": "ServiceTemplate is merged with the operator-built Service spec.\nOperator-managed fields (the selector and the http/metrics ports) always take precedence.",
+          "description": "ServiceTemplate is merged with the operator-built Service spec.\nOperator-managed fields (the selector and the number, protocol and appProtocol of\nthe http/metrics ports) always take precedence. A nodePort set on those ports is\nhonoured, as are extra ports and every other field.",
           "x-kubernetes-preserve-unknown-fields": true
         },
         "smtp": {
