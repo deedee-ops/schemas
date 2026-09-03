@@ -219,6 +219,11 @@
               "nullable": true,
               "type": "string"
             },
+            "jitter": {
+              "description": "The deterministic jitter window (Go-style duration, e.g. `10m`) the cron was\nspread by when this slot was pinned. This struct is shared by `nextSchedule`,\n`lastSchedule` and `lastSuccessfulSchedule`, so the field appears on all\nthree, but the controller only ever WRITES it on `nextSchedule` \u2014 it is a\nproperty of a pin the controller may still have to invalidate, not a record\nof a slot that already fired. Recorded for the\nsame reason as the pinned `timezone`: the window may be INHERITED from the\ntarget repository's `scheduleDefaults.jitter`, so a change to that default (or\nto `spec.schedule.jitter`) must invalidate the pinned wall-clock slot and\nrecompute it in the new window \u2014 otherwise the edit would only take effect an\narbitrary slot later. Absent both when no jitter applies and on legacy pins\nwritten before this field existed; an absent recorded window is treated as\n\"unchanged\" so an upgrade never churns an established pin.",
+              "nullable": true,
+              "type": "string"
+            },
             "snapshotRef": {
               "description": "The `Snapshot` CR this slot produced, when one was created.",
               "nullable": true,
@@ -235,7 +240,7 @@
               "additionalProperties": false
             },
             "timezone": {
-              "description": "The IANA timezone the cron was evaluated in when this slot was pinned\n(`nextSchedule` only). Recorded so the controller can detect an\neffective-timezone change \u2014 a `spec.schedule.timezone` edit or a change to\nthe target repository's `scheduleDefaults.timezone` \u2014 and invalidate the\npinned wall-clock slot, recomputing it in the new zone. Absent on legacy\npins written before this field existed (treated as \"unchanged\").",
+              "description": "The IANA timezone the cron was evaluated in when this slot was pinned. This\nstruct is shared by `nextSchedule`, `lastSchedule` and\n`lastSuccessfulSchedule`, so the field appears on all three, but the\ncontroller only ever WRITES it on `nextSchedule` \u2014 it is a property of a pin\nthe controller may still have to invalidate, not a record of a slot that\nalready fired. Recorded so the controller can detect an\neffective-timezone change \u2014 a `spec.schedule.timezone` edit or a change to\nthe target repository's `scheduleDefaults.timezone` \u2014 and invalidate the\npinned wall-clock slot, recomputing it in the new zone. Absent on legacy\npins written before this field existed (treated as \"unchanged\").",
               "nullable": true,
               "type": "string"
             }
@@ -252,6 +257,11 @@
               "nullable": true,
               "type": "string"
             },
+            "jitter": {
+              "description": "The deterministic jitter window (Go-style duration, e.g. `10m`) the cron was\nspread by when this slot was pinned. This struct is shared by `nextSchedule`,\n`lastSchedule` and `lastSuccessfulSchedule`, so the field appears on all\nthree, but the controller only ever WRITES it on `nextSchedule` \u2014 it is a\nproperty of a pin the controller may still have to invalidate, not a record\nof a slot that already fired. Recorded for the\nsame reason as the pinned `timezone`: the window may be INHERITED from the\ntarget repository's `scheduleDefaults.jitter`, so a change to that default (or\nto `spec.schedule.jitter`) must invalidate the pinned wall-clock slot and\nrecompute it in the new window \u2014 otherwise the edit would only take effect an\narbitrary slot later. Absent both when no jitter applies and on legacy pins\nwritten before this field existed; an absent recorded window is treated as\n\"unchanged\" so an upgrade never churns an established pin.",
+              "nullable": true,
+              "type": "string"
+            },
             "snapshotRef": {
               "description": "The `Snapshot` CR this slot produced, when one was created.",
               "nullable": true,
@@ -268,7 +278,7 @@
               "additionalProperties": false
             },
             "timezone": {
-              "description": "The IANA timezone the cron was evaluated in when this slot was pinned\n(`nextSchedule` only). Recorded so the controller can detect an\neffective-timezone change \u2014 a `spec.schedule.timezone` edit or a change to\nthe target repository's `scheduleDefaults.timezone` \u2014 and invalidate the\npinned wall-clock slot, recomputing it in the new zone. Absent on legacy\npins written before this field existed (treated as \"unchanged\").",
+              "description": "The IANA timezone the cron was evaluated in when this slot was pinned. This\nstruct is shared by `nextSchedule`, `lastSchedule` and\n`lastSuccessfulSchedule`, so the field appears on all three, but the\ncontroller only ever WRITES it on `nextSchedule` \u2014 it is a property of a pin\nthe controller may still have to invalidate, not a record of a slot that\nalready fired. Recorded so the controller can detect an\neffective-timezone change \u2014 a `spec.schedule.timezone` edit or a change to\nthe target repository's `scheduleDefaults.timezone` \u2014 and invalidate the\npinned wall-clock slot, recomputing it in the new zone. Absent on legacy\npins written before this field existed (treated as \"unchanged\").",
               "nullable": true,
               "type": "string"
             }
@@ -285,6 +295,11 @@
               "nullable": true,
               "type": "string"
             },
+            "jitter": {
+              "description": "The deterministic jitter window (Go-style duration, e.g. `10m`) the cron was\nspread by when this slot was pinned. This struct is shared by `nextSchedule`,\n`lastSchedule` and `lastSuccessfulSchedule`, so the field appears on all\nthree, but the controller only ever WRITES it on `nextSchedule` \u2014 it is a\nproperty of a pin the controller may still have to invalidate, not a record\nof a slot that already fired. Recorded for the\nsame reason as the pinned `timezone`: the window may be INHERITED from the\ntarget repository's `scheduleDefaults.jitter`, so a change to that default (or\nto `spec.schedule.jitter`) must invalidate the pinned wall-clock slot and\nrecompute it in the new window \u2014 otherwise the edit would only take effect an\narbitrary slot later. Absent both when no jitter applies and on legacy pins\nwritten before this field existed; an absent recorded window is treated as\n\"unchanged\" so an upgrade never churns an established pin.",
+              "nullable": true,
+              "type": "string"
+            },
             "snapshotRef": {
               "description": "The `Snapshot` CR this slot produced, when one was created.",
               "nullable": true,
@@ -301,7 +316,7 @@
               "additionalProperties": false
             },
             "timezone": {
-              "description": "The IANA timezone the cron was evaluated in when this slot was pinned\n(`nextSchedule` only). Recorded so the controller can detect an\neffective-timezone change \u2014 a `spec.schedule.timezone` edit or a change to\nthe target repository's `scheduleDefaults.timezone` \u2014 and invalidate the\npinned wall-clock slot, recomputing it in the new zone. Absent on legacy\npins written before this field existed (treated as \"unchanged\").",
+              "description": "The IANA timezone the cron was evaluated in when this slot was pinned. This\nstruct is shared by `nextSchedule`, `lastSchedule` and\n`lastSuccessfulSchedule`, so the field appears on all three, but the\ncontroller only ever WRITES it on `nextSchedule` \u2014 it is a property of a pin\nthe controller may still have to invalidate, not a record of a slot that\nalready fired. Recorded so the controller can detect an\neffective-timezone change \u2014 a `spec.schedule.timezone` edit or a change to\nthe target repository's `scheduleDefaults.timezone` \u2014 and invalidate the\npinned wall-clock slot, recomputing it in the new zone. Absent on legacy\npins written before this field existed (treated as \"unchanged\").",
               "nullable": true,
               "type": "string"
             }
