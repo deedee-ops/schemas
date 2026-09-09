@@ -1954,6 +1954,49 @@
         }
       ]
     },
+    "openldap_databases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "not": {
+              "enum": [
+                "all"
+              ]
+            },
+            "description": "The suffix (base DN) of the database to dump, given to\nslapcat's \"-b\" flag. Use \"cn=config\" to dump the slapd\nconfiguration database. Unlike the other database hooks,\n\"all\" is not accepted here, as slapcat without a suffix\ndumps only the first configured database rather than\nevery one of them. Note that using this database hook\nimplicitly enables read_special (see above) to support\ndump and restore streaming.\n",
+            "example": "dc=example,dc=com"
+          },
+          "label": {
+            "type": "string",
+            "description": "Label to identify the database dump in the backup.\n",
+            "example": "my_backup_label"
+          },
+          "slapcat_command": {
+            "type": "string",
+            "description": "Command to use instead of \"slapcat\". This can be used to\nrun slapcat from a non-standard path or with additional\nflags. Defaults to \"slapcat\".\n",
+            "example": "/usr/sbin/slapcat"
+          },
+          "slapadd_command": {
+            "type": "string",
+            "description": "Command to run when restoring a database instead of\n\"slapadd\". Defaults to \"slapadd\".\n",
+            "example": "/usr/sbin/slapadd"
+          }
+        }
+      },
+      "description": "List of one or more OpenLDAP databases to dump before creating a\nbackup, run once per configuration file. The database dumps are\nadded to your source directories at runtime and streamed directly to\nBorg. Requires the slapcat and slapadd commands, which read the\nlocal slapd databases directly instead of connecting over the\nnetwork\u2014so borgmatic must run on the LDAP server itself and with\nsufficient permissions to read those databases. See\nhttps://www.openldap.org/software/man.cgi?query=slapcat and\nhttps://www.openldap.org/software/man.cgi?query=slapadd for details.\n",
+      "example": [
+        {
+          "name": "dc=example,dc=com"
+        }
+      ]
+    },
     "ntfy": {
       "type": "object",
       "required": [
