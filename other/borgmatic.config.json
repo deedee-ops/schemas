@@ -1280,6 +1280,107 @@
       },
       "description": "Support for the \"borgmatic bootstrap\" action, used to extract\nborgmatic configuration files from a backup archive.\n"
     },
+    "influxdb_databases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Bucket name to dump (required if using this hook). Or\n\"all\" to dump all buckets on the host. Ignored for\ndumping purposes if \"bucket_id\" is given, but still\nused to identify the dump in the backup.\n",
+            "example": "mybucket"
+          },
+          "bucket_id": {
+            "type": "string",
+            "description": "The ID of the bucket to backup. Takes precedence over\nthe bucket named by the \"name\" option.\n",
+            "example": "3c9bb0c293be4658"
+          },
+          "label": {
+            "type": "string",
+            "description": "Label to identify the database dump in the backup.\n",
+            "example": "my_backup_label"
+          },
+          "influx_command": {
+            "type": "string",
+            "description": "The InfluxDB executable to use, from InfluxDB 2.x.\nInfluxDB 3 is not supported. Defaults to \"influx\".\n",
+            "example": "/usr/local/bin/influx"
+          },
+          "password": {
+            "type": "string",
+            "description": "InfluxDB API token used to authenticate requests. This\noption is named \"password\" rather than \"token\" (which\nwould better suit InfluxDB terminology) so that\nborgmatic's native password handling applies. Omit it\nwhen the token comes from the influx CLI configuration\nselected by \"active_configuration\". Supports the\n\"{credential ...}\" syntax.\n",
+            "example": "trustsome1"
+          },
+          "tls": {
+            "type": "boolean",
+            "description": "Selects if using HTTP (false) or HTTPS (true).\nDefaults to true.\n",
+            "example": false
+          },
+          "hostname": {
+            "type": "string",
+            "description": "InfluxDB hostname/IP to connect to.\nDefaults to localhost.\n",
+            "example": "localhost"
+          },
+          "port": {
+            "type": "integer",
+            "description": "Port to connect to. Defaults to 8086.\n",
+            "example": 8086
+          },
+          "organization_id": {
+            "type": "string",
+            "description": "The ID of the organization.\n",
+            "example": "ccf6258c1e195e27"
+          },
+          "organization_name": {
+            "type": "string",
+            "description": "The name of the organization. Ignored if\n\"organization_id\" is also provided.\n",
+            "example": "my-org"
+          },
+          "configurations_path": {
+            "type": "string",
+            "description": "Path to the influx CLI configurations.\n",
+            "example": "/root/.influxdbv2/configs"
+          },
+          "active_configuration": {
+            "type": "string",
+            "description": "Config name to use for command.\n",
+            "example": "default"
+          },
+          "restore_bucket": {
+            "type": "string",
+            "description": "New name to use for the restored bucket.\n",
+            "example": "mybucket-restored"
+          },
+          "restore_organization": {
+            "type": "string",
+            "description": "New name to use for the restored organization.\n",
+            "example": "my-org-restored"
+          },
+          "verify_tls": {
+            "type": "boolean",
+            "description": "Verify the TLS certificate chain and host name of the\nInfluxDB host. Defaults to true.\n",
+            "example": false
+          },
+          "full_replace": {
+            "type": "boolean",
+            "description": "Fully restore and replace all data on server.\nDefaults to false.\n",
+            "example": true
+          },
+          "compression": {
+            "type": "string",
+            "description": "Compression to use for local backup files, either\n\"none\" or \"gzip\". Defaults to \"gzip\".\n",
+            "enum": [
+              "none",
+              "gzip"
+            ],
+            "example": "none"
+          }
+        }
+      }
+    },
     "postgresql_databases": {
       "type": "array",
       "items": {
