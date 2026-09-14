@@ -293,12 +293,12 @@
     },
     "upload_rate_limit": {
       "type": "integer",
-      "description": "Remote network upload rate limit in kiBytes/second. Defaults to\nunlimited.\n",
+      "description": "Remote network upload rate limit in kiBytes/second. Defaults to\nunlimited. Only supported with Borg 1.x.\n",
       "example": 100
     },
     "upload_buffer_size": {
       "type": "integer",
-      "description": "Size of network upload buffer in MiB. Defaults to no buffer.\n",
+      "description": "Size of network upload buffer in MiB. Defaults to no buffer. Only\nsupported with Borg 1.x.\n",
       "example": 160
     },
     "retries": {
@@ -3141,6 +3141,18 @@
         }
       },
       "description": "Configuration for integration with the KeePassXC password manager.\n"
+    },
+    "onepassword": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "op_command": {
+          "type": "string",
+          "description": "Command to use instead of \"op\".\n",
+          "example": "/usr/local/bin/op"
+        }
+      },
+      "description": "Configuration for integration with the 1Password CLI.\n"
     }
   }
 }
