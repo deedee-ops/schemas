@@ -131,7 +131,7 @@
     },
     "unsafe_skip_path_validation_before_create": {
       "type": "boolean",
-      "description": "Skip pre-backup safety validation: (1) runtime directory exclusion\ndetection, and (2) special file exclusion for database streaming.\nCan significantly improve performance for large filesystems.\n\nUNSAFE because, when this option is enabled, Borg may hang on\nspecial files (named pipes, devices) and data from borgmatic data\nsource hooks may be silently excluded if your excluded patterns\nmatch the runtime directory (see the \"user_runtime_directory\"\noption).\n\nOnly enable if not using data source hooks and you manually verify\nthat your excludes don't affect the runtime directory. Defaults\nto false.\n",
+      "description": "Skip pre-backup safety validation: (1) runtime directory exclusion\ndetection, and (2) special file exclusion for database streaming.\nCan significantly improve performance for large filesystems.\n\nUNSAFE because, when this option is enabled, Borg may hang on\nspecial files (named pipes, devices) and data from borgmatic data\nsource hooks may be silently excluded if your excluded patterns\nmatch the runtime directory. (See the \"user_runtime_directory\"\noption.)\n\nOnly enable if not using data source hooks and you manually verify\nthat your excludes don't affect the runtime directory. Defaults\nto false.\n",
       "example": true
     },
     "flags": {
@@ -2010,6 +2010,15 @@
             "type": "string",
             "description": "Password with which to connect to the restore database.\nDefaults to the \"password\" option. Supports the\n\"{credential ...}\" syntax.\n",
             "example": "trustsome1"
+          },
+          "password_transport": {
+            "type": "string",
+            "enum": [
+              "pipe",
+              "file"
+            ],
+            "description": "How to transmit database passwords from borgmatic to the\nMongoDB client, one of:\n * \"pipe\": Securely transmit passwords via anonymous\n   pipe. Only works if the database client is on the\n   same host as borgmatic. (The server can be\n   somewhere else.) This is the default value.\n * \"file\": Transmit passwords via a temporary file\n   created in the runtime directory. (See the\n   \"user_runtime_directory\" option.) Potentially less\n   secure than a pipe, but necessary when the database\n   client is elsewhere, e.g. when \"mariadb_dump_command\"\n   is configured to \"exec\" into a container and run a\n   client there. (In that case though, you will need to\n   mount the runtime directory into the container.)\n",
+            "example": "file"
           },
           "authentication_database": {
             "type": "string",
