@@ -594,7 +594,7 @@
           "example": "--extra-option"
         }
       },
-      "description": "Additional options to pass directly to particular Borg commands,\nhandy for Borg options that borgmatic does not yet support natively.\nNote that borgmatic does not perform any validation on these\noptions. Running borgmatic with \"--verbosity 2\" shows the exact Borg\ncommand-line invocation.\n"
+      "description": "Additional options to pass directly to particular Borg subcommands,\nhandy for Borg options that borgmatic does not yet support natively.\nNote that borgmatic does not perform any validation on these\noptions. Also be aware that the options configured for a particular\nBorg subcommand get used everywhere borgmatic calls that\nsubcommand\u2014regardless of the borgmatic action. For instance,\nborgmatic's \"check\" action may call Borg with both \"check\" and\n\"create --dry-run\", passing configured \"extra_borg_options\" to each.\nRunning borgmatic with \"--verbosity 2\" shows the exact Borg\ncommand-line invocation that borgmatic is using.\n"
     },
     "keep_within": {
       "type": "string",
@@ -890,13 +890,23 @@
       "example": true
     },
     "statistics": {
-      "type": "boolean",
-      "description": "Display statistics for an archive when running supported actions.\nCorresponds to the \"--stats\" flag on those actions. Defaults to\nfalse.\n",
-      "example": true
+      "type": [
+        "string",
+        "boolean"
+      ],
+      "enum": [
+        "standard",
+        "quick",
+        "none",
+        true,
+        false
+      ],
+      "description": "The type of statistics to display for an archive when running\nsupported actions (corresponding to the \"--stats\" or\n\"--quick-stats\" flags on those actions), one of:\n * \"standard\": Full statistics.\n * \"quick\": Faster statistics, without the repository-wide \"All\n   archives\" and chunk index statistics. (Supported for Borg 1.4.5+\n   only for the \"create\" action and for Borg >= 1.4.5 and < Borg 2\n   for the \"prune\" action.)\n * \"none\": No statistics (the default).\n * true: Deprecated. Same as \"standard\".\n * false: Deprecated. Same as \"none\".\n",
+      "example": "standard"
     },
     "quick_statistics": {
       "type": "boolean",
-      "description": "Display statistics for an archive when running supported actions,\nskipping the repository-wide \"All archives\" and chunk index\nstatistics to save some time. Corresponds to the \"--quick-stats\"\nflag on those actions. Defaults to false. (This option is supported\nfor Borg 1.4.5+ only for the \"create\" action and for Borg >= 1.4.5\nand < Borg 2 for the \"prune\" action.)\n",
+      "description": "Deprecated. Use \"statistics: quick\" instead. Display statistics for\nan archive when running supported actions, skipping the\nrepository-wide \"All archives\" and chunk index statistics to save\nsome time. Corresponds to the \"--quick-stats\" flag on those actions.\nDefaults to false. (This option is supported for Borg 1.4.5+ only\nfor the \"create\" action and for Borg >= 1.4.5 and < Borg 2 for the\n\"prune\" action.)\n",
       "example": true
     },
     "list_details": {
