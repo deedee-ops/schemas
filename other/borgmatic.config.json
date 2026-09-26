@@ -1402,7 +1402,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Database name (required if using this hook). Or \"all\" to\ndump all databases on the host. (Also set the \"format\"\nto dump each database to a separate file instead of one\ncombined file.) Note that using this database hook\nimplicitly enables read_special (see above) to support\ndump and restore streaming.\n",
+            "description": "Database name (required if using this hook). Globs are\nsupported. Or \"all\" to dump all databases on the host.\n(Also set the \"format\" to dump each database to a\nseparate file instead of one combined file.) Note that\nusing this database hook implicitly enables read_special\n(see above) to support dump and restore streaming.\n",
             "example": "users"
           },
           "label": {
@@ -1573,7 +1573,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Database name (required if using this hook). Or \"all\" to\ndump all databases on the host. Note that using this\ndatabase hook implicitly enables read_special (see\nabove) to support dump and restore streaming.\n",
+            "description": "Database name (required if using this hook). Globs are\nsupported. Or \"all\" to dump all databases on the host.\nNote that using this database hook implicitly enables\nread_special (see above) to support dump and restore\nstreaming.\n",
             "example": "users"
           },
           "skip_names": {
@@ -1581,7 +1581,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Database names to skip when dumping \"all\" databases.\nIgnored when the database name is not \"all\".\n",
+            "description": "Database names to skip when dumping \"all\" databases or\nusing a glob in the database name. Ignored otherwise.\n",
             "example": [
               "cache"
             ]
@@ -1699,7 +1699,7 @@
             "enum": [
               "sql"
             ],
-            "description": "Database dump output format. Currently only \"sql\" is\nsupported. Defaults to \"sql\" for a single database. Or,\nwhen database name is \"all\" and format is blank, dumps\nall databases to a single file. But if a format is\nspecified with an \"all\" database name, dumps each\ndatabase to a separate file of that format, allowing\nmore convenient restores of individual databases.\n",
+            "description": "Database dump output format. Currently only \"sql\" is\nsupported. Defaults to \"sql\" for a single database or\nwhen using a glob in the database name. Or, when\ndatabase name is \"all\" and format is blank, dumps all\ndatabases to a single file. But if a format is specified\nwith an \"all\" database name, dumps each database to a\nseparate file of that format, allowing more convenient\nrestores of individual databases.\n",
             "example": "directory"
           },
           "add_drop_database": {
@@ -1743,7 +1743,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Database name (required if using this hook). Or \"all\" to\ndump all databases on the host. Note that using this\ndatabase hook implicitly enables read_special (see\nabove) to support dump and restore streaming.\n",
+            "description": "Database name (required if using this hook). Globs are\nsupported. Or \"all\" to dump all databases on the host.\nNote that using this database hook implicitly enables\nread_special (see above) to support dump and restore\nstreaming.\n",
             "example": "users"
           },
           "skip_names": {
@@ -1751,7 +1751,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Database names to skip when dumping \"all\" databases.\nIgnored when the database name is not \"all\".\n",
+            "description": "Database names to skip when dumping \"all\" databases or\nusing a glob in the database name. Ignored otherwise.\n",
             "example": [
               "cache"
             ]
