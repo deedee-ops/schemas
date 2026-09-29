@@ -107,9 +107,9 @@
         "endpoint": {
           "type": "string",
           "title": "endpoint",
-          "description": "KMS endpoint to Seal/Unseal the key.\n",
-          "markdownDescription": "KMS endpoint to Seal/Unseal the key.",
-          "x-intellij-html-description": "\u003cp\u003eKMS endpoint to Seal/Unseal the key.\u003c/p\u003e\n"
+          "description": "KMS endpoint to Seal/Unseal the key.\n\nThe endpoint should be specified as a URL with an explicit scheme, e.g. https://kms.example.com:4443.\nWith the https:// scheme, the connection to the KMS server is established over TLS, and the server certificate\nis verified against the trusted root CAs.\n\nWARNING: if the scheme is omitted (e.g. kms.example.com:4443) or set to grpc://, the connection\nto the KMS server is established without TLS, and the disk encryption key material is transmitted in plaintext.\nUse plaintext endpoints only on fully trusted networks.\n\nNote: when encrypting the STATE volume, custom trusted root CAs from the machine configuration\nmight not be available when unlocking the volume (as the machine configuration is stored on STATE),\nso the KMS server certificate should be signed by a CA trusted by default.\n",
+          "markdownDescription": "KMS endpoint to Seal/Unseal the key.\n\nThe endpoint should be specified as a URL with an explicit scheme, e.g. `https://kms.example.com:4443`.\nWith the `https://` scheme, the connection to the KMS server is established over TLS, and the server certificate\nis verified against the trusted root CAs.\n\nWARNING: if the scheme is omitted (e.g. `kms.example.com:4443`) or set to `grpc://`, the connection\nto the KMS server is established without TLS, and the disk encryption key material is transmitted in plaintext.\nUse plaintext endpoints only on fully trusted networks.\n\nNote: when encrypting the `STATE` volume, custom trusted root CAs from the machine configuration\nmight not be available when unlocking the volume (as the machine configuration is stored on `STATE`),\nso the KMS server certificate should be signed by a CA trusted by default.",
+          "x-intellij-html-description": "\u003cp\u003eKMS endpoint to Seal/Unseal the key.\u003c/p\u003e\n\n\u003cp\u003eThe endpoint should be specified as a URL with an explicit scheme, e.g. \u003ccode\u003ehttps://kms.example.com:4443\u003c/code\u003e.\nWith the \u003ccode\u003ehttps://\u003c/code\u003e scheme, the connection to the KMS server is established over TLS, and the server certificate\nis verified against the trusted root CAs.\u003c/p\u003e\n\n\u003cp\u003eWARNING: if the scheme is omitted (e.g. \u003ccode\u003ekms.example.com:4443\u003c/code\u003e) or set to \u003ccode\u003egrpc://\u003c/code\u003e, the connection\nto the KMS server is established without TLS, and the disk encryption key material is transmitted in plaintext.\nUse plaintext endpoints only on fully trusted networks.\u003c/p\u003e\n\n\u003cp\u003eNote: when encrypting the \u003ccode\u003eSTATE\u003c/code\u003e volume, custom trusted root CAs from the machine configuration\nmight not be available when unlocking the volume (as the machine configuration is stored on \u003ccode\u003eSTATE\u003c/code\u003e),\nso the KMS server certificate should be signed by a CA trusted by default.\u003c/p\u003e\n"
         }
       },
       "additionalProperties": false,
@@ -2324,6 +2324,13 @@
           "description": "Number of virtual CPUs presented to the guest.\n\nThis is the total vCPU count, not a per-socket or per-core figure: how those vCPUs are\nlaid out into sockets, cores and threads is not configurable.\n",
           "markdownDescription": "Number of virtual CPUs presented to the guest.\n\nThis is the total vCPU count, not a per-socket or per-core figure: how those vCPUs are\nlaid out into sockets, cores and threads is not configurable.",
           "x-intellij-html-description": "\u003cp\u003eNumber of virtual CPUs presented to the guest.\u003c/p\u003e\n\n\u003cp\u003eThis is the total vCPU count, not a per-socket or per-core figure: how those vCPUs are\nlaid out into sockets, cores and threads is not configurable.\u003c/p\u003e\n"
+        },
+        "limit": {
+          "type": "string",
+          "title": "limit",
+          "description": "Host CPU ceiling in millicores for the whole virtual machine, vCPUs and emulator threads\ntogether, mapped onto the domain’s global CFS quota.\n\n1000m is one host core. The ceiling is independent of count: a guest with four\nvCPUs and a 2000m ceiling sees four processors but is scheduled for at most two cores\nof host time.\n\nOptional; omitting it leaves the virtual machine bounded only by its vCPU count.\n",
+          "markdownDescription": "Host CPU ceiling in millicores for the whole virtual machine, vCPUs and emulator threads\ntogether, mapped onto the domain's global CFS quota.\n\n`1000m` is one host core. The ceiling is independent of `count`: a guest with four\nvCPUs and a `2000m` ceiling sees four processors but is scheduled for at most two cores\nof host time.\n\nOptional; omitting it leaves the virtual machine bounded only by its vCPU count.",
+          "x-intellij-html-description": "\u003cp\u003eHost CPU ceiling in millicores for the whole virtual machine, vCPUs and emulator threads\ntogether, mapped onto the domain\u0026rsquo;s global CFS quota.\u003c/p\u003e\n\n\u003cp\u003e\u003ccode\u003e1000m\u003c/code\u003e is one host core. The ceiling is independent of \u003ccode\u003ecount\u003c/code\u003e: a guest with four\nvCPUs and a \u003ccode\u003e2000m\u003c/code\u003e ceiling sees four processors but is scheduled for at most two cores\nof host time.\u003c/p\u003e\n\n\u003cp\u003eOptional; omitting it leaves the virtual machine bounded only by its vCPU count.\u003c/p\u003e\n"
         }
       },
       "additionalProperties": false,
@@ -2331,7 +2338,7 @@
       "required": [
         "count"
       ],
-      "description": "VirtualMachineCPU describes the processors presented to the guest."
+      "description": "VirtualMachineCPU describes the processors presented to the guest and the host time they may consume.\\n\\nThere is deliberately no matching memory ceiling. Guest memory is already fixed by `memory.size`,\\nand libvirt advises against a QEMU memory hard limit: the emulator's own footprint over guest RAM\\nis not predictable, and a limit guessed too low has the kernel kill the virtual machine.\\n"
     },
     "hypervisor.VirtualMachineConfigV1Alpha1": {
       "properties": {
@@ -7760,6 +7767,13 @@
           "description": "Enable workload isolation (run the container plane inside the sandbox namespace).\n",
           "markdownDescription": "Enable workload isolation (run the container plane inside the sandbox namespace).",
           "x-intellij-html-description": "\u003cp\u003eEnable workload isolation (run the container plane inside the sandbox namespace).\u003c/p\u003e\n"
+        },
+        "ignoreCtrlAltDelete": {
+          "type": "boolean",
+          "title": "ignoreCtrlAltDelete",
+          "description": "Ignore Ctrl-Alt-Delete instead of rebooting the machine.\n",
+          "markdownDescription": "Ignore Ctrl-Alt-Delete instead of rebooting the machine.",
+          "x-intellij-html-description": "\u003cp\u003eIgnore Ctrl-Alt-Delete instead of rebooting the machine.\u003c/p\u003e\n"
         }
       },
       "additionalProperties": false,
@@ -7768,7 +7782,7 @@
         "apiVersion",
         "kind"
       ],
-      "description": "SecurityProfileConfig is a node security profile configuration document.\\nThe security profile groups node-level security hardening features. Additional hardening options\\nwill be added to this document over time.\\n\\nCurrently it controls workload isolation: running the container runtime plane (CRI containerd, the\\nkubelet, and all pods) inside a dedicated PID and mount namespace anchored by the `sandboxd` service,\\nisolating them from `machined` (PID 1) and its file descriptors.\\n\\n`talosctl gen config` emits this document with `workloadIsolation: true` for Talos 1.14+, so new\\nclusters are isolated by default; clusters upgraded from older versions do not have the document and\\nkeep the old (non-isolated) behavior unless it is added.\\n\\nNote: with workload isolation enabled, the deprecated in-tree Kubernetes iSCSI volume plugin does not\\nwork (the kubelet cannot reach the host iscsid across the sandbox); use a CSI driver instead.\\n"
+      "description": "SecurityProfileConfig is a node security profile configuration document.\\nThe security profile groups node-level security hardening features. Additional hardening options\\nwill be added to this document over time.\\n\\nWorkload isolation runs the container runtime plane (CRI containerd, the kubelet, and all pods)\\ninside a dedicated PID and mount namespace anchored by the `sandboxd` service, isolating them from\\n`machined` (PID 1) and its file descriptors.\\n\\n`talosctl gen config` emits this document with `workloadIsolation: true` for Talos 1.14+, so new\\nclusters are isolated by default; clusters upgraded from older versions do not have the document and\\nkeep the old (non-isolated) behavior unless it is added.\\n\\nNote: with workload isolation enabled, the deprecated in-tree Kubernetes iSCSI volume plugin does not\\nwork (the kubelet cannot reach the host iscsid across the sandbox); use a CSI driver instead.\\n\\nBy default, Ctrl-Alt-Delete reboots the machine. With `ignoreCtrlAltDelete: true`, Ctrl-Alt-Delete\\nis logged and ignored. Ctrl-Alt-Delete still reboots the machine until a configuration with this\\noption is applied. The option has no effect in container mode.\\n"
     },
     "runtime.SysctlConfigV1Alpha1": {
       "properties": {
