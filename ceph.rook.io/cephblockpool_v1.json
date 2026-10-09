@@ -158,7 +158,7 @@
                 "description": "SnapshotScheduleSpec represents the snapshot scheduling settings of a mirrored pool",
                 "properties": {
                   "interval": {
-                    "description": "Interval represent the periodicity of the snapshot.",
+                    "description": "Interval represents the periodicity of the snapshot.",
                     "type": "string"
                   },
                   "path": {
@@ -184,7 +184,8 @@
           "enum": [
             ".rgw.root",
             ".nfs",
-            ".mgr"
+            ".mgr",
+            ".nvmeof"
           ],
           "type": "string"
         },
@@ -360,7 +361,7 @@
                 "type": "string"
               },
               "type": {
-                "description": "ConditionType represent a resource's status",
+                "description": "ConditionType represents a resource's status",
                 "type": "string"
               }
             },
@@ -588,7 +589,7 @@
           "type": "integer"
         },
         "phase": {
-          "description": "ConditionType represent a resource's status",
+          "description": "ConditionType represents a resource's status",
           "type": "string"
         },
         "poolID": {
