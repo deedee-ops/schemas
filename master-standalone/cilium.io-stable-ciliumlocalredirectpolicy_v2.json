@@ -109,6 +109,7 @@
                 "type": "object",
                 "additionalProperties": false
               },
+              "minItems": 1,
               "type": "array"
             }
           },
