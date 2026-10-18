@@ -65,7 +65,9 @@ jobs:
                           secret-v1.json \
                           serviceaccount-v1.json \
                           service-v1.json \
-                          storageclass-storage-v1.json; do
+                          storageclass-storage-v1.json \
+                          validatingadmissionpolicy-admissionregistration-v1.json \
+                          validatingadmissionpolicybinding-admissionregistration-v1.json; do
             curl -o "${manifest}" "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/master/${manifest}"
           done
       - name: Build k8s CRD manifests schemas
