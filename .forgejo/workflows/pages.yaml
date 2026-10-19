@@ -24,7 +24,7 @@ jobs:
       - name: Publish
         env:
           RCLONE_CONFIG_DUFS_TYPE: webdav
-          RCLONE_CONFIG_DUFS_URL: http://dufs
+          RCLONE_CONFIG_DUFS_URL: http://dufs-schemas
           RCLONE_CONFIG_DUFS_VENDOR: other
           RCLONE_CONFIG_DUFS_USER: ci
           DUFS_PASSWORD: ${{ secrets.DUFS_PASSWORD }}
